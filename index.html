@@ -52,11 +52,13 @@
     }
     .brand-icon {
       width: 48px; height: 48px;
-      background: var(--accent);
       border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px;
       flex-shrink: 0;
+      overflow: hidden;
+    }
+    .brand-icon img {
+      width: 100%; height: 100%;
+      object-fit: cover;
     }
     .brand-text h1 { font-size: 22px; font-weight: 700; letter-spacing: 0.5px; }
     .brand-text p  { font-size: 12px; opacity: 0.7; margin-top: 2px; }
@@ -697,7 +699,7 @@
 <header>
   <div class="header-top">
     <div class="header-brand">
-      <div class="brand-icon">&#127922;</div>
+      <div class="brand-icon"><img src="rfq/logo.jpg" alt="Babipoly logo"></div>
       <div class="brand-text">
         <h1>BABIPOLY</h1>
         <p>Supply Chain Tracker &mdash; Production</p>
@@ -740,7 +742,7 @@
   <button data-tab="timeline">&#128197; Timeline</button>
   <a href="cards/ownership_cards.html">&#127183; Cards</a>
   <a href="cards/chance_community_cards.html">&#127922; Chance &amp; Vie</a>
-  <a href="data/Billet%20de%20banque%20Babipoly.pdf" target="_blank">&#128181; Billets</a>
+  <a href="billets/index.html">&#128181; Billets</a>
   <a href="guide/guide.html">&#128214; Guide</a>
 </nav>
 
@@ -1963,7 +1965,7 @@ function renderSupplierPicker(comp) {
         <div class="s-city">📍 ${s.city}</div>
         <div class="s-spec">${s.specialty}</div>
         <div class="s-contact">✉ ${s.contact} &nbsp;|&nbsp; MOQ: ${s.moq}</div>
-        ${s.website ? `<div class="s-website"><a href="${s.website}" target="_blank" onclick="event.stopPropagation()">🌐 ${s.website.replace(/^https?:\\/\\/(?:www\\.)?/, '').replace(/\\/$/, '')}</a></div>` : ''}
+        ${s.website ? `<div class="s-website"><a href="${s.website}" target="_blank" onclick="event.stopPropagation()">🌐 ${s.website.replace(/^https?:\/\/(?:www\.)?/, '').replace(/\/$/, '')}</a></div>` : ''}
       </div>`).join('')}
     </div>
   </div>`;
@@ -2001,7 +2003,7 @@ function renderSupplierDir() {
             <td>${s.city}</td>
             <td style="color:var(--accent-dark)">${s.specialty}</td>
             <td style="font-size:12px">${s.contact}</td>
-            <td style="font-size:12px">${s.website ? `<a href="${s.website}" target="_blank" style="color:var(--accent)">${s.website.replace(/^https?:\\/\\/(?:www\\.)?/, '').replace(/\\/$/, '')}</a>` : '<span style="color:#ccc">—</span>'}</td>
+            <td style="font-size:12px">${s.website ? `<a href="${s.website}" target="_blank" style="color:var(--accent)">${s.website.replace(/^https?:\/\/(?:www\.)?/, '').replace(/\/$/, '')}</a>` : '<span style="color:#ccc">—</span>'}</td>
             <td>${s.moq}</td>
             <td>${selectedIdx === i ? '<span class="s-check">✓ Selected</span>' : '<span style="color:#ccc">—</span>'}</td>
           </tr>`).join('')}
