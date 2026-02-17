@@ -458,6 +458,9 @@
     .supplier-card .s-city { font-size: 11px; color: var(--text-muted); }
     .supplier-card .s-spec { font-size: 11px; color: var(--accent); margin-top: 6px; }
     .supplier-card .s-contact { font-size: 10px; color: var(--text-muted); margin-top: 4px; font-style: italic; }
+    .supplier-card .s-website { font-size: 10px; margin-top: 4px; }
+    .supplier-card .s-website a { color: var(--accent); text-decoration: none; word-break: break-all; }
+    .supplier-card .s-website a:hover { text-decoration: underline; }
 
     /* ── SUPPLIER DIRECTORY ── */
     .supplier-dir-grid {
@@ -840,6 +843,22 @@ const COMPONENTS = [
         contact: 'wanlida@wanlida.cn',
         moq: '500 units',
       },
+      {
+        name: 'PICA — Imprimerie du Plateau',
+        city: 'Yopougon, Abidjan',
+        specialty: 'Offset industriel, pelliculage, rembordage carton',
+        contact: '(+225) 27 23 46 75 64',
+        moq: 'Sur devis',
+        website: 'http://www.pica-abidjan.net/',
+      },
+      {
+        name: 'Graphicolor SA',
+        city: 'Treichville, Abidjan',
+        specialty: 'Offset 4-6 couleurs, vernis, brochures, packaging',
+        contact: 'info@graphicolor-ci.com',
+        moq: 'Sur devis',
+        website: 'https://graphicolor-ci.com/',
+      },
     ],
     stages: [
       {
@@ -925,6 +944,7 @@ const COMPONENTS = [
         specialty: 'Custom playing cards & complete board games',
         contact: 'info@goldensungame.com',
         moq: '500 sets',
+        website: 'https://goldsunprinting.com/',
       },
       {
         name: 'Hangzhou Heyuan Card Industry Co., Ltd',
@@ -932,6 +952,22 @@ const COMPONENTS = [
         specialty: 'Large format & standard playing cards, black core',
         contact: 'sales@heyuancard.com',
         moq: '1000 sets',
+      },
+      {
+        name: 'Hooda Graphics Imprimerie',
+        city: 'Cocody, Abidjan',
+        specialty: 'Offset jusqu\'à 400g/m², impression couleur, cartes',
+        contact: 'info@hoodagraphics.com',
+        moq: 'Sur devis',
+        website: 'https://www.hoodagraphics.com/',
+      },
+      {
+        name: 'Graphicolor SA',
+        city: 'Treichville, Abidjan',
+        specialty: 'Offset 4-6 couleurs, vernis, impression cartes',
+        contact: 'info@graphicolor-ci.com',
+        moq: 'Sur devis',
+        website: 'https://graphicolor-ci.com/',
       },
     ],
     stages: [
@@ -1011,6 +1047,7 @@ const COMPONENTS = [
         specialty: 'Specialized printing for game money & accessories',
         contact: 'sales@jinhaoprint.com',
         moq: '500 sets',
+        website: 'https://www.jinhaoprint.com/',
       },
       {
         name: 'Guangzhou Meijie Printing Co., Ltd',
@@ -1025,6 +1062,22 @@ const COMPONENTS = [
         specialty: 'Board game money specialist',
         contact: 'xishu@xishupp.com',
         moq: '500 sets',
+      },
+      {
+        name: 'Graphicolor SA',
+        city: 'Treichville, Abidjan',
+        specialty: 'Offset 4-6 couleurs, impression billets de jeu',
+        contact: 'info@graphicolor-ci.com',
+        moq: 'Sur devis',
+        website: 'https://graphicolor-ci.com/',
+      },
+      {
+        name: 'PICA — Imprimerie du Plateau',
+        city: 'Yopougon, Abidjan',
+        specialty: 'Offset industriel, impression papier coloré',
+        contact: '(+225) 27 23 46 75 64',
+        moq: 'Sur devis',
+        website: 'http://www.pica-abidjan.net/',
       },
     ],
     stages: [
@@ -1109,6 +1162,7 @@ const COMPONENTS = [
         specialty: 'Small colored plastic pieces for games',
         contact: 'junye@junyeplastic.com',
         moq: '3000 pcs',
+        website: 'https://www.junye88.com/en',
       },
       {
         name: 'Guangdong Haicheng Plastic Industry Co., Ltd',
@@ -1116,6 +1170,22 @@ const COMPONENTS = [
         specialty: 'Small ABS plastic parts manufacturing',
         contact: 'info@haichengplastic.com',
         moq: '5000 pcs',
+      },
+      {
+        name: 'TAJ PLAST (Coraxel)',
+        city: 'Koumassi, Abidjan',
+        specialty: 'Injection plastique, 50+ presses, articles enfants',
+        contact: 'tajplast@yahoo.fr',
+        moq: 'Sur devis',
+        website: 'https://tajplast.com/',
+      },
+      {
+        name: 'OK PLAST',
+        city: 'Yopougon, Abidjan',
+        specialty: 'Injection plastique, 150+ machines, ISO 9001',
+        contact: 'r.reda@okplast-ci.com',
+        moq: 'Sur devis',
+        website: 'https://okplast-ci.com/',
       },
     ],
     stages: [
@@ -1207,6 +1277,23 @@ const COMPONENTS = [
         specialty: 'Custom game figurines and tokens',
         contact: 'kaka@kakatoys.com',
         moq: '1000 sets',
+        website: 'http://www.kakatoys.com/',
+      },
+      {
+        name: 'Groupe SIMPA',
+        city: 'Abidjan',
+        specialty: 'Injection plastique, articles promotionnels, figurines',
+        contact: 'commercial@simpaci.com',
+        moq: 'Sur devis',
+        website: 'https://www.groupesimpa.com/',
+      },
+      {
+        name: 'IMP SARL + TAJ PLAST',
+        city: 'Koumassi, Abidjan',
+        specialty: 'Fabrication moules + injection figurines',
+        contact: '(+225) 27 21 51 97 42 / tajplast@yahoo.fr',
+        moq: 'Sur devis',
+        website: 'https://tajplast.com/',
       },
     ],
     stages: [
@@ -1301,6 +1388,13 @@ const COMPONENTS = [
         contact: 'diangong@diangongtoy.com',
         moq: '5,000 dice',
       },
+      {
+        name: 'Plasticolle',
+        city: 'Treichville, Abidjan',
+        specialty: 'Jouets plastiques, petites pièces, accessoires',
+        contact: 'superplastci@hotmail.fr',
+        moq: 'Sur devis',
+      },
     ],
     stages: [
       {
@@ -1373,6 +1467,7 @@ const COMPONENTS = [
         specialty: 'Brochures, booklets and quality printing',
         contact: 'sales@jinhaoprint.com',
         moq: '500 booklets',
+        website: 'https://www.jinhaoprint.com/',
       },
       {
         name: 'Guangzhou Artron Color Printing Co., Ltd',
@@ -1380,6 +1475,7 @@ const COMPONENTS = [
         specialty: 'High quality color printing, booklets and brochures',
         contact: 'artron@artronprint.com',
         moq: '1000 booklets',
+        website: 'https://www.artronprint.com/',
       },
       {
         name: 'Dongguan Tuosite Printing Co., Ltd',
@@ -1387,6 +1483,22 @@ const COMPONENTS = [
         specialty: 'Game booklets and presentation brochures',
         contact: 'sales@tuositeprint.com',
         moq: '500 booklets',
+      },
+      {
+        name: 'Hooda Graphics Imprimerie',
+        city: 'Cocody, Abidjan',
+        specialty: 'Brochures, livrets, impression couleur jusqu\'à 400g/m²',
+        contact: 'info@hoodagraphics.com',
+        moq: 'Sur devis',
+        website: 'https://www.hoodagraphics.com/',
+      },
+      {
+        name: 'Imprimerie Grande Marque (IGM)',
+        city: 'Cocody, Abidjan',
+        specialty: 'Offset, impression numérique, livrets',
+        contact: 'Via site web',
+        moq: 'Sur devis',
+        website: 'https://imprimeriegrandemarque.com/',
       },
     ],
     stages: [
@@ -1463,6 +1575,7 @@ const COMPONENTS = [
         specialty: 'Premium rigid boxes, premium packaging',
         contact: 'sales@yutopackaging.com',
         moq: '500 units',
+        website: 'https://www.szyuto.com/',
       },
       {
         name: 'Dongguan Xianglee Printing & Packaging Co., Ltd',
@@ -1470,6 +1583,7 @@ const COMPONENTS = [
         specialty: 'Board game packaging: boxes + thermoformed trays',
         contact: 'xianglee@xiangleepack.com',
         moq: '300 units',
+        website: 'https://www.printing-supplier.com/',
       },
       {
         name: 'Shanghai Birdview Packaging Co., Ltd',
@@ -1477,6 +1591,22 @@ const COMPONENTS = [
         specialty: 'Premium rigid packaging, quality game boxes',
         contact: 'info@birdviewpack.com',
         moq: '500 units',
+      },
+      {
+        name: 'Shuotong Packaging SARL',
+        city: 'Abidjan',
+        specialty: 'Emballage carton sur mesure, boîtes rigides',
+        contact: 'Via site web',
+        moq: 'Sur devis',
+        website: 'https://www.shuotongpackagingci.com/',
+      },
+      {
+        name: 'PICA — Imprimerie du Plateau',
+        city: 'Yopougon, Abidjan',
+        specialty: 'Pelliculage, rembordage, boîtes carton imprimées',
+        contact: '(+225) 27 23 46 75 64',
+        moq: 'Sur devis',
+        website: 'http://www.pica-abidjan.net/',
       },
     ],
     stages: [
@@ -1823,7 +1953,7 @@ function renderSupplierPicker(comp) {
   const selected = state[comp.id].supplier;
   return `
   <div class="supplier-section">
-    <h4>🏭 Recommended Suppliers (China) &mdash; select the chosen supplier:</h4>
+    <h4>🏭 Recommended Suppliers &mdash; select the chosen supplier:</h4>
     <div class="supplier-cards">
       ${comp.suppliers.map((s, i) => `
       <div class="supplier-card ${selected === i ? 'selected' : ''}"
@@ -1833,6 +1963,7 @@ function renderSupplierPicker(comp) {
         <div class="s-city">📍 ${s.city}</div>
         <div class="s-spec">${s.specialty}</div>
         <div class="s-contact">✉ ${s.contact} &nbsp;|&nbsp; MOQ: ${s.moq}</div>
+        ${s.website ? `<div class="s-website"><a href="${s.website}" target="_blank" onclick="event.stopPropagation()">🌐 ${s.website.replace(/^https?:\\/\\/(?:www\\.)?/, '').replace(/\\/$/, '')}</a></div>` : ''}
       </div>`).join('')}
     </div>
   </div>`;
@@ -1858,6 +1989,7 @@ function renderSupplierDir() {
             <th>City / Province</th>
             <th>Specialty</th>
             <th>Contact</th>
+            <th>Website</th>
             <th>MOQ</th>
             <th>Status</th>
           </tr>
@@ -1869,6 +2001,7 @@ function renderSupplierDir() {
             <td>${s.city}</td>
             <td style="color:var(--accent-dark)">${s.specialty}</td>
             <td style="font-size:12px">${s.contact}</td>
+            <td style="font-size:12px">${s.website ? `<a href="${s.website}" target="_blank" style="color:var(--accent)">${s.website.replace(/^https?:\\/\\/(?:www\\.)?/, '').replace(/\\/$/, '')}</a>` : '<span style="color:#ccc">—</span>'}</td>
             <td>${s.moq}</td>
             <td>${selectedIdx === i ? '<span class="s-check">✓ Selected</span>' : '<span style="color:#ccc">—</span>'}</td>
           </tr>`).join('')}
