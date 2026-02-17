@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Babipoly — Cartes Chance Babi &amp; Vie à Abidjan</title>
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #F0F0F0;
+      color: #222;
+      padding: 30px 20px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.2rem;
+      color: #F7941D;
+      letter-spacing: 4px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #888;
+      margin-bottom: 40px;
+    }
+
+    /* ─── Tab Navigation ───────────────────────────────────────────── */
+    .tab-nav {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 36px;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 14px 24px;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .tab-btn:first-child {
+      border-radius: 8px 0 0 8px;
+    }
+
+    .tab-btn:last-child {
+      border-radius: 0 8px 8px 0;
+    }
+
+    .tab-btn.chance {
+      background: #FFF3E0;
+      color: #E65100;
+      border: 2px solid #F7941D;
+    }
+
+    .tab-btn.chance.active {
+      background: linear-gradient(135deg, #F7941D, #E65100);
+      color: #fff;
+      border-color: #E65100;
+      box-shadow: 0 4px 14px rgba(247, 148, 29, 0.4);
+    }
+
+    .tab-btn.community {
+      background: #E0F2F1;
+      color: #00695C;
+      border: 2px solid #00897B;
+    }
+
+    .tab-btn.community.active {
+      background: linear-gradient(135deg, #00897B, #004D40);
+      color: #fff;
+      border-color: #004D40;
+      box-shadow: 0 4px 14px rgba(0, 137, 123, 0.4);
+    }
+
+    .tab-btn:hover:not(.active) {
+      filter: brightness(0.95);
+    }
+
+    .tab-btn .tab-count {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: normal;
+      letter-spacing: 0;
+      text-transform: none;
+      opacity: 0.8;
+      margin-top: 2px;
+    }
+
+    /* ─── Deck Section ─────────────────────────────────────────────── */
+    .deck-section {
+      display: none;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .deck-section.active {
+      display: block;
+    }
+
+    .deck-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 24px;
+      border-radius: 10px 10px 0 0;
+      margin-bottom: 0;
+    }
+
+    .deck-header.chance-header {
+      background: linear-gradient(135deg, #F7941D, #E65100);
+    }
+
+    .deck-header.community-header {
+      background: linear-gradient(135deg, #00897B, #004D40);
+    }
+
+    .deck-header-icon {
+      font-size: 1.8rem;
+    }
+
+    .deck-header-text h2 {
+      font-size: 1.25rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    .deck-header-text p {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.8);
+      margin-top: 2px;
+    }
+
+    /* ─── Cards Grid ───────────────────────────────────────────────── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      padding: 24px;
+      background: #fff;
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    /* ─── Flip Card Container ─────────────────────────────────────── */
+    .flip-card {
+      perspective: 800px;
+      cursor: pointer;
+      min-height: 220px;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 220px;
+      transition: transform 0.6s ease;
+      transform-style: preserve-3d;
+    }
+
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    }
+
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card:hover .flip-card-inner {
+      box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+    }
+
+    .flip-hint {
+      position: absolute;
+      bottom: 6px;
+      right: 8px;
+      font-size: 0.6rem;
+      color: rgba(0,0,0,0.25);
+      letter-spacing: 0.5px;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* ─── Card Back (Verso) ────────────────────────────────────────── */
+    .card-back-face {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    .card-back-face.chance-back {
+      background: linear-gradient(135deg, #F7941D 0%, #E65100 50%, #F7941D 100%);
+      border: 2px solid #E65100;
+      border-radius: 10px;
+    }
+
+    .card-back-face.community-back {
+      background: linear-gradient(135deg, #00897B 0%, #004D40 50%, #00897B 100%);
+      border: 2px solid #004D40;
+      border-radius: 10px;
+    }
+
+    .card-back-face .back-pattern {
+      position: absolute;
+      inset: 8px;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      pointer-events: none;
+    }
+
+    .card-back-face .back-logo {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      z-index: 1;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    }
+
+    .card-back-face .back-brand {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: rgba(255,255,255,0.95);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.25);
+      z-index: 1;
+    }
+
+    .card-back-face .back-divider {
+      width: 60px;
+      height: 2px;
+      background: rgba(255,255,255,0.4);
+      margin: 8px 0;
+      z-index: 1;
+    }
+
+    .card-back-face .back-deck-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      z-index: 1;
+    }
+
+    /* ─── Game Card (Front Face) ──────────────────────────────────── */
+    .game-card {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+      position: relative;
+      height: 100%;
+    }
+
+    /* Chance Card */
+    .game-card.chance-card {
+      border: 2px solid #F7941D;
+      background: #fff;
+    }
+
+    .game-card.chance-card .card-top-bar {
+      background: linear-gradient(135deg, #F7941D, #E65100);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .game-card.chance-card .card-top-bar .card-deck-label {
+      font-size: 0.65rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+    }
+
+    .game-card.chance-card .card-top-bar .card-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      background: rgba(255,255,255,0.25);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 900;
+      border-radius: 50%;
+    }
+
+    /* Community Card */
+    .game-card.community-card {
+      border: 2px solid #00897B;
+      background: #fff;
+    }
+
+    .game-card.community-card .card-top-bar {
+      background: linear-gradient(135deg, #00897B, #004D40);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .game-card.community-card .card-top-bar .card-deck-label {
+      font-size: 0.65rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+    }
+
+    .game-card.community-card .card-top-bar .card-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      background: rgba(255,255,255,0.25);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 900;
+      border-radius: 50%;
+    }
+
+    /* Card Body */
+    .game-card .card-content {
+      padding: 16px;
+      min-height: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .game-card .card-icon {
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+    }
+
+    .game-card .card-title {
+      font-size: 0.9rem;
+      font-weight: 900;
+      color: #1a1a2e;
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    .game-card .card-desc {
+      font-size: 0.82rem;
+      color: #555;
+      line-height: 1.5;
+    }
+
+    /* Amount badges */
+    .amount-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 900;
+      margin-top: 8px;
+    }
+
+    .amount-badge.gain {
+      background: #E8F5E9;
+      color: #2E7D32;
+    }
+
+    .amount-badge.loss {
+      background: #FFEBEE;
+      color: #C62828;
+    }
+
+    .amount-badge.move {
+      background: #E3F2FD;
+      color: #1565C0;
+    }
+
+    .amount-badge.special {
+      background: #FFF3E0;
+      color: #E65100;
+    }
+
+    /* Card footer brand */
+    .game-card .card-brand {
+      text-align: center;
+      padding: 6px;
+      font-size: 0.6rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: #F7941D;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    /* ─── Print Button ─────────────────────────────────────────────── */
+    .print-btn {
+      display: block;
+      margin: 0 auto 30px;
+      padding: 12px 32px;
+      background: #F7941D;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      letter-spacing: 1px;
+    }
+
+    .print-btn:hover { background: #D97706; }
+
+    /* ─── Responsive ───────────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      body { padding: 16px 10px; }
+      .cards-grid { grid-template-columns: 1fr; padding: 16px; }
+      .tab-btn { padding: 12px 16px; font-size: 0.82rem; }
+    }
+
+    /* ─── Print ────────────────────────────────────────────────────── */
+    @media print {
+      body { background: white; padding: 5mm; }
+      .print-btn, .tab-nav { display: none; }
+      h1, .subtitle { display: none; }
+      .flip-hint { display: none; }
+
+      .deck-section { display: block !important; margin-bottom: 20mm; }
+      .deck-section .deck-header {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .flip-card {
+        break-inside: avoid;
+      }
+
+      .flip-card-inner {
+        transform: none !important;
+        transition: none;
+      }
+
+      .flip-card-front,
+      .flip-card-back {
+        position: relative;
+        box-shadow: none;
+      }
+
+      .flip-card-back {
+        transform: none;
+        margin-top: 4px;
+      }
+
+      .game-card {
+        box-shadow: none;
+      }
+
+      .game-card .card-top-bar {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .card-back-face {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        min-height: 80px;
+      }
+
+      .amount-badge {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .cards-grid {
+        box-shadow: none;
+        border: 1px solid #ddd;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Babipoly</h1>
+<p class="subtitle">Cartes Chance Babi &amp; Vie &agrave; Abidjan — 32 cartes au total</p>
+
+<button class="print-btn" onclick="window.print()">Imprimer les cartes</button>
+
+<!-- Tab Navigation -->
+<div class="tab-nav">
+  <button class="tab-btn chance active" onclick="switchTab('chance')">
+    Chance Babi
+    <span class="tab-count">16 cartes</span>
+  </button>
+  <button class="tab-btn community" onclick="switchTab('community')">
+    Vie &agrave; Abidjan
+    <span class="tab-count">16 cartes</span>
+  </button>
+</div>
+
+<!-- Chance Babi Deck -->
+<div id="chance-deck" class="deck-section active">
+  <div class="deck-header chance-header">
+    <div class="deck-header-icon">&#x1F3B2;</div>
+    <div class="deck-header-text">
+      <h2>Chance Babi</h2>
+      <p>16 cartes — Piochez et tentez votre chance !</p>
+    </div>
+  </div>
+  <div id="chance-grid" class="cards-grid"></div>
+</div>
+
+<!-- Vie à Abidjan Deck -->
+<div id="community-deck" class="deck-section">
+  <div class="deck-header community-header">
+    <div class="deck-header-icon">&#x1F3D8;</div>
+    <div class="deck-header-text">
+      <h2>Vie &agrave; Abidjan</h2>
+      <p>16 cartes — La vie communautaire vous r&eacute;serve des surprises !</p>
+    </div>
+  </div>
+  <div id="community-grid" class="cards-grid"></div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   CARD DATA
+═══════════════════════════════════════════════════════════════ */
+const chanceCards = [
+  {
+    icon: "\u27A1\uFE0F",
+    title: "Avancez jusqu'\u00e0 la case AKWABA",
+    desc: "Rendez-vous \u00e0 la case D\u00e9part. Si vous passez par la case D\u00e9part, recevez 10\u202f000 FCFA.",
+    badge: { text: "+10\u202f000 FCFA", type: "gain" }
+  },
+  {
+    icon: "\uD83C\uDFD6\uFE0F",
+    title: "Avancez jusqu'\u00e0 Grand Bassam",
+    desc: "Si vous passez par la case D\u00e9part, recevez 10\u202f000 FCFA.",
+    badge: { text: "D\u00e9placement", type: "move" }
+  },
+  {
+    icon: "\uD83C\uDFE0",
+    title: "Avancez jusqu'\u00e0 Cocody",
+    desc: "Si vous passez par la case D\u00e9part, recevez 10\u202f000 FCFA.",
+    badge: { text: "D\u00e9placement", type: "move" }
+  },
+  {
+    icon: "\u2708\uFE0F",
+    title: "Avancez jusqu'\u00e0 l'A\u00e9roport Houphou\u00ebt-Boigny",
+    desc: "Si vous passez par la case D\u00e9part, recevez 10\u202f000 FCFA.",
+    badge: { text: "D\u00e9placement", type: "move" }
+  },
+  {
+    icon: "\uD83D\uDE8C",
+    title: "Avancez jusqu'\u00e0 la Gare UTB d'Adjam\u00e9",
+    desc: "Si vous passez par la case D\u00e9part, recevez 10\u202f000 FCFA.",
+    badge: { text: "D\u00e9placement", type: "move" }
+  },
+  {
+    icon: "\uD83D\uDE8A",
+    title: "Avancez jusqu'au transport le plus proche",
+    desc: "Payez au propri\u00e9taire le double du loyer normal. Si non poss\u00e9d\u00e9, vous pouvez l'acheter.",
+    badge: { text: "Loyer \u00d72", type: "special" }
+  },
+  {
+    icon: "\u26F5",
+    title: "Rendez-vous \u00e0 la Pinasse de Vridi",
+    desc: "Si vous passez par la case D\u00e9part, recevez 10\u202f000 FCFA.",
+    badge: { text: "D\u00e9placement", type: "move" }
+  },
+  {
+    icon: "\uD83C\uDFE6",
+    title: "La banque vous verse un dividende",
+    desc: "Recevez 2\u202f500 FCFA de la banque.",
+    badge: { text: "+2\u202f500 FCFA", type: "gain" }
+  },
+  {
+    icon: "\uD83D\uDD13",
+    title: "Lib\u00e9r\u00e9 de prison",
+    desc: "Conservez cette carte jusqu'\u00e0 ce que vous en ayez besoin ou que vous la vendiez.",
+    badge: { text: "Carte sp\u00e9ciale", type: "special" }
+  },
+  {
+    icon: "\u2B05\uFE0F",
+    title: "Reculez de 3 cases",
+    desc: "D\u00e9placez votre pion de 3 cases en arri\u00e8re et appliquez l'effet de la case.",
+    badge: { text: "-3 cases", type: "move" }
+  },
+  {
+    icon: "\uD83D\uDEA8",
+    title: "Allez en prison !",
+    desc: "Allez directement en prison. Ne passez pas par la case D\u00e9part. Ne recevez pas 10\u202f000 FCFA.",
+    badge: { text: "Prison", type: "loss" }
+  },
+  {
+    icon: "\uD83D\uDD27",
+    title: "R\u00e9parations de vos b\u00e2timents",
+    desc: "Payez 1\u202f250 FCFA par maison et 5\u202f000 FCFA par h\u00f4tel que vous poss\u00e9dez.",
+    badge: { text: "Co\u00fbt variable", type: "loss" }
+  },
+  {
+    icon: "\uD83D\uDE97",
+    title: "Amende pour exc\u00e8s de vitesse",
+    desc: "Payez 750 FCFA d'amende \u00e0 la banque.",
+    badge: { text: "-750 FCFA", type: "loss" }
+  },
+  {
+    icon: "\uD83D\uDC51",
+    title: "\u00c9lu pr\u00e9sident du conseil",
+    desc: "Payez 2\u202f500 FCFA \u00e0 chaque joueur.",
+    badge: { text: "-2\u202f500 FCFA / joueur", type: "loss" }
+  },
+  {
+    icon: "\uD83D\uDCB0",
+    title: "Votre investissement rapporte",
+    desc: "Recevez 7\u202f500 FCFA de la banque gr\u00e2ce \u00e0 vos placements.",
+    badge: { text: "+7\u202f500 FCFA", type: "gain" }
+  },
+  {
+    icon: "\uD83C\uDFD8\uFE0F",
+    title: "Avancez jusqu'\u00e0 Yopougon",
+    desc: "Si vous passez par la case D\u00e9part, recevez 10\u202f000 FCFA.",
+    badge: { text: "D\u00e9placement", type: "move" }
+  }
+];
+
+const communityCards = [
+  {
+    icon: "\u27A1\uFE0F",
+    title: "Avancez jusqu'\u00e0 la case AKWABA",
+    desc: "Rendez-vous \u00e0 la case D\u00e9part. Recevez 10\u202f000 FCFA.",
+    badge: { text: "+10\u202f000 FCFA", type: "gain" }
+  },
+  {
+    icon: "\uD83C\uDFE6",
+    title: "Erreur de la banque en votre faveur",
+    desc: "Recevez 10\u202f000 FCFA de la banque.",
+    badge: { text: "+10\u202f000 FCFA", type: "gain" }
+  },
+  {
+    icon: "\uD83C\uDFE5",
+    title: "Frais de m\u00e9decin",
+    desc: "Payez 2\u202f500 FCFA \u00e0 la banque pour vos soins m\u00e9dicaux.",
+    badge: { text: "-2\u202f500 FCFA", type: "loss" }
+  },
+  {
+    icon: "\uD83D\uDCE6",
+    title: "Vente de marchandises",
+    desc: "Vous vendez votre stock au march\u00e9. Recevez 2\u202f500 FCFA.",
+    badge: { text: "+2\u202f500 FCFA", type: "gain" }
+  },
+  {
+    icon: "\uD83D\uDD13",
+    title: "Lib\u00e9r\u00e9 de prison",
+    desc: "Conservez cette carte jusqu'\u00e0 ce que vous en ayez besoin ou que vous la vendiez.",
+    badge: { text: "Carte sp\u00e9ciale", type: "special" }
+  },
+  {
+    icon: "\uD83D\uDEA8",
+    title: "Allez en prison !",
+    desc: "Allez directement en prison. Ne passez pas par la case D\u00e9part. Ne recevez pas 10\u202f000 FCFA.",
+    badge: { text: "Prison", type: "loss" }
+  },
+  {
+    icon: "\uD83C\uDF82",
+    title: "F\u00eate d'anniversaire",
+    desc: "C'est votre anniversaire ! Chaque joueur vous donne 500 FCFA.",
+    badge: { text: "+500 FCFA / joueur", type: "gain" }
+  },
+  {
+    icon: "\uD83D\uDCB8",
+    title: "Remboursement d'imp\u00f4t",
+    desc: "Le tr\u00e9sor public vous rembourse 1\u202f000 FCFA.",
+    badge: { text: "+1\u202f000 FCFA", type: "gain" }
+  },
+  {
+    icon: "\uD83D\uDCDC",
+    title: "H\u00e9ritage",
+    desc: "Un parent \u00e9loign\u00e9 vous l\u00e8gue une somme. Recevez 5\u202f000 FCFA.",
+    badge: { text: "+5\u202f000 FCFA", type: "gain" }
+  },
+  {
+    icon: "\uD83D\uDEE1\uFE0F",
+    title: "Assurance vie",
+    desc: "Votre police d'assurance arrive \u00e0 maturit\u00e9. Recevez 5\u202f000 FCFA.",
+    badge: { text: "+5\u202f000 FCFA", type: "gain" }
+  },
+  {
+    icon: "\uD83C\uDF93",
+    title: "Frais de scolarit\u00e9",
+    desc: "Payez 7\u202f500 FCFA pour l'inscription scolaire de vos enfants.",
+    badge: { text: "-7\u202f500 FCFA", type: "loss" }
+  },
+  {
+    icon: "\uD83C\uDFE5",
+    title: "Frais d'hospitalisation",
+    desc: "Payez 5\u202f000 FCFA de frais d'h\u00f4pital \u00e0 la banque.",
+    badge: { text: "-5\u202f000 FCFA", type: "loss" }
+  },
+  {
+    icon: "\uD83C\uDFC6",
+    title: "Deuxi\u00e8me prix de beaut\u00e9",
+    desc: "Vous avez gagn\u00e9 le deuxi\u00e8me prix au concours. Recevez 500 FCFA.",
+    badge: { text: "+500 FCFA", type: "gain" }
+  },
+  {
+    icon: "\uD83D\uDCB5",
+    title: "Revenu annuel",
+    desc: "Recevez votre revenu annuel de 12\u202f500 FCFA.",
+    badge: { text: "+12\u202f500 FCFA", type: "gain" }
+  },
+  {
+    icon: "\uD83D\uDD27",
+    title: "R\u00e9parations de vos immeubles",
+    desc: "Payez 2\u202f000 FCFA par maison et 5\u202f750 FCFA par h\u00f4tel que vous poss\u00e9dez.",
+    badge: { text: "Co\u00fbt variable", type: "loss" }
+  },
+  {
+    icon: "\uD83D\uDCC8",
+    title: "Votre placement rapporte",
+    desc: "Vos int\u00e9r\u00eats bancaires sont cr\u00e9dit\u00e9s. Recevez 1\u202f250 FCFA.",
+    badge: { text: "+1\u202f250 FCFA", type: "gain" }
+  }
+];
+
+/* ═══════════════════════════════════════════════════════════════
+   RENDER CARDS
+═══════════════════════════════════════════════════════════════ */
+function renderCard(card, index, type) {
+  const cssClass = type === 'chance' ? 'chance-card' : 'community-card';
+  const backClass = type === 'chance' ? 'chance-back' : 'community-back';
+  const deckLabel = type === 'chance' ? 'Chance Babi' : 'Vie \u00e0 Abidjan';
+
+  return `
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="game-card ${cssClass}">
+            <div class="card-top-bar">
+              <span class="card-deck-label">${deckLabel}</span>
+              <span class="card-number">${index + 1}</span>
+            </div>
+            <div class="card-content">
+              <div class="card-icon">${card.icon}</div>
+              <div class="card-title">${card.title}</div>
+              <div class="card-desc">${card.desc}</div>
+              ${card.badge ? `<div><span class="amount-badge ${card.badge.type}">${card.badge.text}</span></div>` : ''}
+            </div>
+            <div class="card-brand">BABIPOLY</div>
+          </div>
+          <span class="flip-hint">cliquer pour retourner</span>
+        </div>
+        <div class="flip-card-back">
+          <div class="card-back-face ${backClass}">
+            <div class="back-pattern"></div>
+            <img class="back-logo" src="../rfq/logo.jpg" alt="Babipoly Logo">
+            <div class="back-brand">BABIPOLY</div>
+            <div class="back-divider"></div>
+            <div class="back-deck-label">${deckLabel}</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderAll() {
+  const chanceGrid = document.getElementById('chance-grid');
+  const communityGrid = document.getElementById('community-grid');
+
+  chanceGrid.innerHTML = chanceCards.map((c, i) => renderCard(c, i, 'chance')).join('');
+  communityGrid.innerHTML = communityCards.map((c, i) => renderCard(c, i, 'community')).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TAB SWITCHING
+═══════════════════════════════════════════════════════════════ */
+function switchTab(tab) {
+  // Update buttons
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelector(`.tab-btn.${tab}`).classList.add('active');
+
+  // Update sections
+  document.querySelectorAll('.deck-section').forEach(s => s.classList.remove('active'));
+  document.getElementById(`${tab}-deck`).classList.add('active');
+}
+
+renderAll();
+</script>
+</body>
+</html>

@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Babipoly — Guide Officiel du Jeu</title>
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #F0F0F0;
+      color: #222;
+      padding: 30px 20px;
+      line-height: 1.6;
+    }
+
+    /* ─── Cover / Header ──────────────────────────────────────────── */
+    .cover {
+      max-width: 700px;
+      margin: 0 auto 50px;
+      text-align: center;
+      padding: 60px 40px;
+      color: #222;
+      background: #fff;
+    }
+
+    .cover .logo {
+      width: 320px;
+      max-width: 90%;
+      height: auto;
+      filter: drop-shadow(0 4px 16px rgba(247,148,29,0.3));
+      position: relative;
+    }
+
+    .cover .guide-label {
+      font-size: 1rem;
+      font-weight: bold;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #666;
+      margin-top: 12px;
+    }
+
+    .cover .divider {
+      width: 80px;
+      height: 3px;
+      background: #F7941D;
+      margin: 24px auto;
+      border-radius: 2px;
+    }
+
+    .cover .tagline {
+      font-size: 1.15rem;
+      font-style: italic;
+      color: #444;
+      line-height: 1.5;
+    }
+
+    .cover .elephant-row {
+      margin-top: 30px;
+      font-size: 1.8rem;
+      letter-spacing: 8px;
+    }
+
+    /* ─── Print Button ────────────────────────────────────────────── */
+    .print-btn {
+      display: block;
+      margin: 0 auto 40px;
+      padding: 12px 32px;
+      background: #F7941D;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      letter-spacing: 1px;
+    }
+
+    .print-btn:hover { background: #D97706; }
+
+    /* ─── Guide Container ─────────────────────────────────────────── */
+    .guide {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* ─── Section ─────────────────────────────────────────────────── */
+    .section {
+      background: #fff;
+      border-radius: 10px;
+      margin-bottom: 28px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 24px;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: #fff;
+    }
+
+    .section-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: #F7941D;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 900;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .section-body {
+      padding: 24px;
+    }
+
+    /* ─── Subsections ─────────────────────────────────────────────── */
+    .subsection {
+      margin-bottom: 22px;
+    }
+
+    .subsection:last-child { margin-bottom: 0; }
+
+    .subsection-title {
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: #1a1a2e;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #F7941D;
+      display: inline-block;
+    }
+
+    .subsection-icon {
+      margin-right: 6px;
+    }
+
+    /* ─── Lists ───────────────────────────────────────────────────── */
+    .rule-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .rule-list li {
+      position: relative;
+      padding: 6px 0 6px 22px;
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .rule-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 13px;
+      width: 8px;
+      height: 8px;
+      background: #F7941D;
+      border-radius: 50%;
+    }
+
+    .numbered-list {
+      list-style: none;
+      padding: 0;
+      counter-reset: step;
+    }
+
+    .numbered-list li {
+      position: relative;
+      padding: 8px 0 8px 36px;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      counter-increment: step;
+    }
+
+    .numbered-list li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 7px;
+      width: 24px;
+      height: 24px;
+      background: #F7941D;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 900;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ─── Money Table ─────────────────────────────────────────────── */
+    .money-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+    }
+
+    .money-table th {
+      text-align: left;
+      padding: 8px 12px;
+      background: #f4f4f4;
+      font-size: 0.8rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #666;
+      border-bottom: 2px solid #ddd;
+    }
+
+    .money-table td {
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .money-table td.amount {
+      text-align: right;
+      font-weight: bold;
+      color: #1a1a2e;
+    }
+
+    .money-table tr.total-row td {
+      font-weight: 900;
+      font-size: 1rem;
+      color: #F7941D;
+      border-top: 2px solid #F7941D;
+      border-bottom: none;
+      padding-top: 12px;
+    }
+
+    /* ─── Info Box ────────────────────────────────────────────────── */
+    .info-box {
+      border-left: 4px solid #F7941D;
+      background: #FFF8F0;
+      padding: 12px 16px;
+      border-radius: 0 6px 6px 0;
+      margin: 14px 0;
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    .info-box.warning {
+      border-left-color: #e74c3c;
+      background: #FFF5F5;
+    }
+
+    .info-box.tip {
+      border-left-color: #27ae60;
+      background: #F0FFF5;
+    }
+
+    .info-box-label {
+      font-weight: 900;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .info-box.warning .info-box-label { color: #e74c3c; }
+    .info-box.tip .info-box-label { color: #27ae60; }
+    .info-box .info-box-label { color: #F7941D; }
+
+    /* ─── Highlight Card ──────────────────────────────────────────── */
+    .highlight-card {
+      background: linear-gradient(135deg, #1a1a2e, #0f3460);
+      color: #fff;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin: 14px 0;
+      text-align: center;
+    }
+
+    .highlight-card .hc-title {
+      font-size: 1rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #F7941D;
+      margin-bottom: 8px;
+    }
+
+    .highlight-card .hc-text {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.9);
+    }
+
+    /* ─── Case Type Grid ──────────────────────────────────────────── */
+    .case-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 12px 0;
+    }
+
+    .case-card {
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 14px 16px;
+      border: 1px solid #eee;
+    }
+
+    .case-card-icon {
+      font-size: 1.4rem;
+      margin-bottom: 6px;
+    }
+
+    .case-card-title {
+      font-size: 0.85rem;
+      font-weight: 900;
+      color: #1a1a2e;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .case-card-desc {
+      font-size: 0.82rem;
+      color: #555;
+      line-height: 1.4;
+    }
+
+    .case-card.full-width {
+      grid-column: 1 / -1;
+    }
+
+    /* ─── Options Row ─────────────────────────────────────────────── */
+    .options-row {
+      display: flex;
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .option-badge {
+      flex: 1;
+      background: #f4f4f4;
+      border-radius: 8px;
+      padding: 14px 12px;
+      text-align: center;
+      border: 1px solid #eee;
+    }
+
+    .option-badge .opt-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      background: #F7941D;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 900;
+      border-radius: 50%;
+      margin-bottom: 8px;
+    }
+
+    .option-badge .opt-text {
+      font-size: 0.82rem;
+      color: #333;
+      line-height: 1.4;
+    }
+
+    /* ─── Box Contents Grid ───────────────────────────────────────── */
+    .box-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .box-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f9f9f9;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #eee;
+    }
+
+    .box-item-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .box-item-text {
+      font-size: 0.85rem;
+      color: #333;
+      line-height: 1.3;
+    }
+
+    .box-item-text strong {
+      display: block;
+      font-size: 0.9rem;
+      color: #1a1a2e;
+    }
+
+    /* ─── Construction Visual ─────────────────────────────────────── */
+    .construction-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px;
+      background: #f9f9f9;
+      border-radius: 8px;
+      margin: 12px 0;
+      font-size: 1.4rem;
+    }
+
+    .construction-arrow {
+      font-size: 1rem;
+      color: #F7941D;
+      font-weight: bold;
+    }
+
+    .construction-label {
+      font-size: 0.75rem;
+      color: #666;
+      text-align: center;
+      display: block;
+    }
+
+    /* ─── Footer ──────────────────────────────────────────────────── */
+    .guide-footer {
+      max-width: 700px;
+      margin: 40px auto 20px;
+      text-align: center;
+      padding: 30px 20px;
+      border-top: 3px solid #F7941D;
+    }
+
+    .guide-footer .footer-logo {
+      width: 200px;
+      max-width: 70%;
+      height: auto;
+    }
+
+    .guide-footer .footer-text {
+      font-size: 0.85rem;
+      color: #888;
+      margin-top: 8px;
+    }
+
+    /* ─── Responsive ──────────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      body { padding: 16px 10px; }
+      .cover { padding: 40px 20px; }
+      .cover .logo { width: 240px; }
+      .section-body { padding: 18px 16px; }
+      .case-grid { grid-template-columns: 1fr; }
+      .box-grid { grid-template-columns: 1fr; }
+      .options-row { flex-direction: column; }
+    }
+
+    /* ─── Print ───────────────────────────────────────────────────── */
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+        font-size: 10pt;
+      }
+
+      .print-btn { display: none; }
+
+      .cover {
+        margin-bottom: 20px;
+        page-break-after: always;
+      }
+
+      .section {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        margin-bottom: 16px;
+        page-break-inside: avoid;
+      }
+
+      .section-header {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .highlight-card {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .guide-footer {
+        page-break-before: always;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     COVER
+═══════════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <img src="../rfq/logo.jpg" alt="BABIPOLY" class="logo">
+  <div class="guide-label">Guide Officiel du Jeu</div>
+  <div class="divider"></div>
+  <div class="tagline">Investissez. N&eacute;gociez. Dominez Abidjan.</div>
+  <div class="elephant-row">&#x1F418; &#x1F418; &#x1F418; &#x1F418;</div>
+</div>
+
+<button class="print-btn" onclick="window.print()">Imprimer le guide</button>
+
+<div class="guide">
+
+<!-- ═══════════════════════════════════════════════════════════════
+     1. MISE EN PLACE
+═══════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">1</div>
+    <div class="section-title">Mise en Place</div>
+  </div>
+  <div class="section-body">
+
+    <!-- Banquier -->
+    <div class="subsection">
+      <div class="subsection-title">Choisissez un banquier</div>
+      <p style="font-size:0.92rem;color:#444;margin-bottom:10px;">Le banquier est responsable de :</p>
+      <ul class="rule-list">
+        <li>La gestion des billets</li>
+        <li>Les titres de propri&eacute;t&eacute;</li>
+        <li>Les maisons et h&ocirc;tels</li>
+        <li>Les ventes aux ench&egrave;res</li>
+        <li>Les hypoth&egrave;ques</li>
+      </ul>
+      <div class="info-box warning">
+        <div class="info-box-label">Attention</div>
+        Le banquier peut aussi jouer, mais doit s&eacute;parer clairement son argent personnel de celui de la banque.
+      </div>
+    </div>
+
+    <!-- Distribution -->
+    <div class="subsection">
+      <div class="subsection-title">Distribution de d&eacute;part</div>
+      <p style="font-size:0.92rem;color:#444;margin-bottom:10px;">Chaque joueur re&ccedil;oit :</p>
+      <table class="money-table">
+        <thead>
+          <tr>
+            <th>Quantit&eacute;</th>
+            <th style="text-align:right;">Valeur</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>5 billets</td><td class="amount">1 000 FCFA</td></tr>
+          <tr><td>1 billet</td><td class="amount">2 000 FCFA</td></tr>
+          <tr><td>2 billets</td><td class="amount">5 000 FCFA</td></tr>
+          <tr><td>1 billet</td><td class="amount">10 000 FCFA</td></tr>
+          <tr><td>1 billet</td><td class="amount">20 000 FCFA</td></tr>
+          <tr><td>4 billets</td><td class="amount">50 000 FCFA</td></tr>
+          <tr><td>2 billets</td><td class="amount">100 000 FCFA</td></tr>
+          <tr class="total-row"><td>Total de d&eacute;part</td><td class="amount">447 000 FCFA</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Préparation -->
+    <div class="subsection">
+      <div class="subsection-title">Pr&eacute;paration du plateau</div>
+      <ul class="rule-list">
+        <li>M&eacute;langez les cartes <strong>Chance Babi</strong></li>
+        <li>M&eacute;langez les cartes <strong>Vie &agrave; Abidjan</strong></li>
+        <li>Placez-les face cach&eacute;e sur les emplacements pr&eacute;vus</li>
+      </ul>
+    </div>
+
+    <!-- Chaque joueur -->
+    <div class="subsection">
+      <div class="subsection-title">Chaque joueur</div>
+      <ul class="rule-list">
+        <li>Choisit un pion (&eacute;l&eacute;phant color&eacute;)</li>
+        <li>Le place sur la case <strong>D&Eacute;PART</strong></li>
+        <li>Les d&eacute;s sont plac&eacute;s pr&egrave;s du plateau</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     2. OBJECTIF DU JEU
+═══════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">2</div>
+    <div class="section-title">Objectif du Jeu</div>
+  </div>
+  <div class="section-body">
+
+    <div class="highlight-card">
+      <div class="hc-title">Objectif</div>
+      <div class="hc-text">Devenir le dernier joueur solvable.</div>
+    </div>
+
+    <p style="font-size:0.92rem;color:#444;margin:14px 0 10px;">Pour gagner :</p>
+    <ul class="rule-list">
+      <li>Achetez des quartiers</li>
+      <li>Construisez des maisons et des h&ocirc;tels</li>
+      <li>Faites payer des loyers</li>
+      <li>G&eacute;rez vos dettes intelligemment</li>
+    </ul>
+
+    <div class="info-box tip">
+      <div class="info-box-label">Victoire</div>
+      Quand tous les autres joueurs sont en faillite, vous remportez la partie.
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     3. DÉROULEMENT D'UN TOUR
+═══════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">3</div>
+    <div class="section-title">D&eacute;roulement d'un Tour</div>
+  </div>
+  <div class="section-body">
+
+    <div class="subsection">
+      <div class="subsection-title">Qui commence ?</div>
+      <p style="font-size:0.92rem;color:#444;line-height:1.6;">
+        Chaque joueur lance les deux d&eacute;s.<br>
+        Le plus grand total commence.<br>
+        Le jeu continue vers la gauche.
+      </p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">&Agrave; votre tour</div>
+      <ol class="numbered-list">
+        <li>Lancez les deux d&eacute;s.</li>
+        <li>Avancez votre pion du nombre de cases indiqu&eacute;.</li>
+        <li>Appliquez l'action de la case.</li>
+        <li>Votre tour se termine.</li>
+      </ol>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Double ?</div>
+      <ul class="rule-list">
+        <li>Si vous faites un double : <strong>rejouez imm&eacute;diatement</strong>.</li>
+        <li>Trois doubles cons&eacute;cutifs = direction <strong>PRISON</strong>.</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     4. LES CASES DU PLATEAU
+═══════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">4</div>
+    <div class="section-title">Les Cases du Plateau</div>
+  </div>
+  <div class="section-body">
+
+    <div class="case-grid">
+      <div class="case-card">
+        <div class="case-card-icon">&#x1F3D8;</div>
+        <div class="case-card-title">Propri&eacute;t&eacute;s</div>
+        <div class="case-card-desc">
+          Si libre : achetez au prix indiqu&eacute; ou mise aux ench&egrave;res.<br>
+          Si occup&eacute;e : payez le loyer au propri&eacute;taire.
+        </div>
+      </div>
+      <div class="case-card">
+        <div class="case-card-icon">&#x1F686;</div>
+        <div class="case-card-title">Transports</div>
+        <div class="case-card-desc">
+          Le loyer augmente selon le nombre de transports poss&eacute;d&eacute;s par le propri&eacute;taire.
+        </div>
+      </div>
+      <div class="case-card">
+        <div class="case-card-icon">&#x26A1;</div>
+        <div class="case-card-title">Services</div>
+        <div class="case-card-desc">
+          Le loyer d&eacute;pend du r&eacute;sultat des d&eacute;s multipli&eacute; par un coefficient.
+        </div>
+      </div>
+      <div class="case-card">
+        <div class="case-card-icon">&#x1F3B4;</div>
+        <div class="case-card-title">Chance Babi / Vie &agrave; Abidjan</div>
+        <div class="case-card-desc">
+          Piochez la carte du dessus et appliquez son effet.
+        </div>
+      </div>
+      <div class="case-card">
+        <div class="case-card-icon">&#x1F4B8;</div>
+        <div class="case-card-title">Taxes</div>
+        <div class="case-card-desc">
+          Payez le montant indiqu&eacute; &agrave; la banque.
+        </div>
+      </div>
+      <div class="case-card">
+        <div class="case-card-icon">&#x1F3D6;</div>
+        <div class="case-card-title">Parc D&eacute;tente</div>
+        <div class="case-card-desc">
+          Case neutre. Rien ne se passe. Reposez-vous !
+        </div>
+      </div>
+    </div>
+
+    <!-- Prison -->
+    <div class="subsection" style="margin-top:20px;">
+      <div class="subsection-title">Prison</div>
+      <p style="font-size:0.92rem;color:#444;margin-bottom:10px;">Vous allez en prison si :</p>
+      <ul class="rule-list">
+        <li>Vous tombez sur la case correspondante</li>
+        <li>Vous tirez une carte l'indiquant</li>
+        <li>Vous faites trois doubles cons&eacute;cutifs</li>
+      </ul>
+
+      <p style="font-size:0.92rem;color:#444;margin:16px 0 10px;font-weight:bold;">Comment sortir ?</p>
+      <div class="options-row">
+        <div class="option-badge">
+          <div class="opt-num">1</div>
+          <div class="opt-text">Payer l'amende fix&eacute;e</div>
+        </div>
+        <div class="option-badge">
+          <div class="opt-num">2</div>
+          <div class="opt-text">Utiliser une carte &laquo; Lib&eacute;r&eacute; de prison &raquo;</div>
+        </div>
+        <div class="option-badge">
+          <div class="opt-num">3</div>
+          <div class="opt-text">Faire un double dans les 3 tours suivants</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     5. CONSTRUCTION
+═══════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">5</div>
+    <div class="section-title">Construction</div>
+  </div>
+  <div class="section-body">
+
+    <div class="subsection">
+      <div class="subsection-title">Maisons</div>
+      <p style="font-size:0.92rem;color:#444;margin-bottom:10px;">Pour construire :</p>
+      <ul class="rule-list">
+        <li>Vous devez poss&eacute;der <strong>toutes les propri&eacute;t&eacute;s</strong> d'un m&ecirc;me groupe de couleur.</li>
+        <li>Les constructions doivent &ecirc;tre <strong>&eacute;quilibr&eacute;es</strong> (m&ecirc;me nombre de maisons par propri&eacute;t&eacute;).</li>
+        <li>Maximum <strong>4 maisons</strong> par propri&eacute;t&eacute;.</li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">H&ocirc;tels</div>
+      <div class="construction-visual">
+        <span>&#x1F3E0;&#x1F3E0;&#x1F3E0;&#x1F3E0;</span>
+        <span class="construction-arrow">&#x27A1;</span>
+        <span>&#x1F3E8;</span>
+      </div>
+      <div style="text-align:center;margin-bottom:12px;">
+        <span class="construction-label">4 maisons &rarr; 1 h&ocirc;tel</span>
+      </div>
+      <ul class="rule-list">
+        <li>N&eacute;cessite <strong>4 maisons</strong> sur chaque propri&eacute;t&eacute; du groupe.</li>
+        <li>Remplace les 4 maisons.</li>
+        <li>Un seul h&ocirc;tel par propri&eacute;t&eacute;.</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     6. MANQUE DE LIQUIDITÉS
+═══════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">6</div>
+    <div class="section-title">Manque de Liquidit&eacute;s</div>
+  </div>
+  <div class="section-body">
+
+    <p style="font-size:0.92rem;color:#444;margin-bottom:14px;">Si vous ne pouvez pas payer :</p>
+
+    <div class="subsection">
+      <div class="subsection-title">1. Vendez des b&acirc;timents</div>
+      <ul class="rule-list">
+        <li>Les maisons sont revendues &agrave; la banque &agrave; <strong>moiti&eacute; prix</strong>.</li>
+        <li>M&ecirc;me r&egrave;gle pour les h&ocirc;tels.</li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">2. Hypoth&eacute;quez une propri&eacute;t&eacute;</div>
+      <ul class="rule-list">
+        <li>Retournez la carte.</li>
+        <li>Recevez le montant indiqu&eacute;.</li>
+        <li>Une propri&eacute;t&eacute; hypoth&eacute;qu&eacute;e <strong>ne rapporte plus de loyer</strong>.</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     7. FAILLITE
+═══════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">7</div>
+    <div class="section-title">Faillite</div>
+  </div>
+  <div class="section-body">
+
+    <p style="font-size:0.92rem;color:#444;margin-bottom:10px;">
+      Si apr&egrave;s avoir vendu et hypoth&eacute;qu&eacute; vous ne pouvez toujours pas payer :
+    </p>
+    <ul class="rule-list">
+      <li>Vous &ecirc;tes d&eacute;clar&eacute; en <strong>faillite</strong>.</li>
+      <li>Vos biens sont transf&eacute;r&eacute;s au cr&eacute;ancier.</li>
+      <li>Vous &ecirc;tes &eacute;limin&eacute; de la partie.</li>
+    </ul>
+
+    <div class="highlight-card" style="margin-top:16px;">
+      <div class="hc-title">Fin de partie</div>
+      <div class="hc-text">La partie continue jusqu'&agrave; ce qu'il ne reste qu'un joueur.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     8. TRANSACTIONS ENTRE JOUEURS
+═══════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">8</div>
+    <div class="section-title">Transactions entre Joueurs</div>
+  </div>
+  <div class="section-body">
+
+    <p style="font-size:0.92rem;color:#444;margin-bottom:10px;">Les joueurs peuvent :</p>
+    <ul class="rule-list">
+      <li>Vendre des propri&eacute;t&eacute;s</li>
+      <li>&Eacute;changer</li>
+      <li>N&eacute;gocier librement</li>
+      <li>Vendre des cartes sp&eacute;ciales</li>
+    </ul>
+
+    <div class="info-box warning">
+      <div class="info-box-label">Important</div>
+      Les b&acirc;timents doivent &ecirc;tre vendus &agrave; la banque avant de vendre une propri&eacute;t&eacute; d'un groupe complet.
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     9. CONSEILS OFFICIELS
+═══════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">9</div>
+    <div class="section-title">Conseils Officiels Babipoly</div>
+  </div>
+  <div class="section-body">
+
+    <p style="font-size:0.92rem;color:#444;margin-bottom:10px;">Pour une partie rapide et strat&eacute;gique :</p>
+    <ul class="rule-list">
+      <li>Ne cr&eacute;ez pas de r&egrave;gles maison.</li>
+      <li>Faites toujours les ench&egrave;res.</li>
+      <li>Ne pr&ecirc;tez pas d'argent sans contrat clair.</li>
+      <li>La n&eacute;gociation est la cl&eacute; du jeu.</li>
+    </ul>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     CONTENU DE LA BOÎTE
+═══════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number" style="background:#1a1a2e;border:2px solid #F7941D;">&#x1F4E6;</div>
+    <div class="section-title">Contenu de la Bo&icirc;te Babipoly</div>
+  </div>
+  <div class="section-body">
+
+    <div class="box-grid">
+      <div class="box-item">
+        <div class="box-item-icon">&#x1F5FA;</div>
+        <div class="box-item-text"><strong>1 plateau de jeu</strong>Abidjan Edition</div>
+      </div>
+      <div class="box-item">
+        <div class="box-item-icon">&#x1F418;</div>
+        <div class="box-item-text"><strong>8 pions &eacute;l&eacute;phants</strong>Color&eacute;s</div>
+      </div>
+      <div class="box-item">
+        <div class="box-item-icon">&#x1F3E0;</div>
+        <div class="box-item-text"><strong>28 titres</strong>de propri&eacute;t&eacute;</div>
+      </div>
+      <div class="box-item">
+        <div class="box-item-icon">&#x1F0CF;</div>
+        <div class="box-item-text"><strong>16 cartes</strong>Chance Babi</div>
+      </div>
+      <div class="box-item">
+        <div class="box-item-icon">&#x1F3B4;</div>
+        <div class="box-item-text"><strong>16 cartes</strong>Vie &agrave; Abidjan</div>
+      </div>
+      <div class="box-item">
+        <div class="box-item-icon">&#x1F3E0;</div>
+        <div class="box-item-text"><strong>32 maisons</strong></div>
+      </div>
+      <div class="box-item">
+        <div class="box-item-icon">&#x1F3E8;</div>
+        <div class="box-item-text"><strong>12 h&ocirc;tels</strong></div>
+      </div>
+      <div class="box-item">
+        <div class="box-item-icon">&#x1F3B2;</div>
+        <div class="box-item-text"><strong>2 d&eacute;s</strong></div>
+      </div>
+      <div class="box-item" style="grid-column: 1 / -1;">
+        <div class="box-item-icon">&#x1F4B5;</div>
+        <div class="box-item-text"><strong>Liasse de billets Babipoly</strong></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- /guide -->
+
+<!-- ═══════════════════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════════════════ -->
+<div class="guide-footer">
+  <img src="../rfq/logo.jpg" alt="BABIPOLY" class="footer-logo">
+  <div class="footer-text">Investissez. N&eacute;gociez. Dominez Abidjan.</div>
+</div>
+
+</body>
+</html>
