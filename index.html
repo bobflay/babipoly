@@ -685,9 +685,128 @@
       .acc-body { display: block !important; }
       .task-list { display: block !important; }
     }
+
+    /* ── AUTH OVERLAY ── */
+    #auth-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
+    #auth-overlay.hidden { display: none; }
+    .auth-box {
+      background: var(--primary-light);
+      border-radius: 16px;
+      padding: 40px 48px;
+      text-align: center;
+      width: 100%;
+      max-width: 360px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+    }
+    .auth-box img {
+      width: 72px;
+      height: 72px;
+      object-fit: cover;
+      border-radius: 14px;
+      margin-bottom: 16px;
+    }
+    .auth-box h2 {
+      color: #fff;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+    .auth-box p {
+      color: rgba(255,255,255,0.5);
+      font-size: 12px;
+      margin-bottom: 28px;
+    }
+    .auth-box input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.07);
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+    .auth-box input::placeholder { color: rgba(255,255,255,0.3); }
+    .auth-box input:focus { border-color: var(--accent); }
+    .auth-box button {
+      width: 100%;
+      padding: 12px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: background 0.2s;
+    }
+    .auth-box button:hover { background: var(--accent-dark); }
+    .auth-error {
+      color: var(--danger);
+      font-size: 12px;
+      margin-top: 10px;
+      min-height: 16px;
+    }
   </style>
+  <script>
+    (function() {
+      if (sessionStorage.getItem('babipoly_auth') === '1') {
+        document.addEventListener('DOMContentLoaded', function() {
+          var el = document.getElementById('auth-overlay');
+          if (el) el.classList.add('hidden');
+        });
+      }
+    })();
+  </script>
 </head>
 <body>
+
+<!-- ── AUTH OVERLAY ── -->
+<div id="auth-overlay">
+  <div class="auth-box">
+    <img src="rfq/logo.jpg" alt="Babipoly">
+    <h2>BABIPOLY</h2>
+    <p>Supply Chain Tracker</p>
+    <input type="password" id="auth-input" placeholder="Enter password" autocomplete="current-password">
+    <button onclick="checkAuth()">Unlock</button>
+    <div class="auth-error" id="auth-error"></div>
+  </div>
+</div>
+<script>
+  function checkAuth() {
+    var val = document.getElementById('auth-input').value;
+    if (val === 'babipoly@2026') {
+      sessionStorage.setItem('babipoly_auth', '1');
+      document.getElementById('auth-overlay').classList.add('hidden');
+    } else {
+      var err = document.getElementById('auth-error');
+      err.textContent = 'Incorrect password.';
+      document.getElementById('auth-input').value = '';
+      document.getElementById('auth-input').focus();
+    }
+  }
+  document.getElementById('auth-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') checkAuth();
+  });
+  if (sessionStorage.getItem('babipoly_auth') !== '1') {
+    document.getElementById('auth-overlay').classList.remove('hidden');
+    document.getElementById('auth-input').focus();
+  } else {
+    document.getElementById('auth-overlay').classList.add('hidden');
+  }
+</script>
 
 <!-- ── LOADING OVERLAY ── -->
 <div id="loading-overlay">
