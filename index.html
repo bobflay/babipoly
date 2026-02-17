@@ -121,6 +121,18 @@
     }
     nav.tabs button:hover  { color: rgba(255,255,255,0.9); }
     nav.tabs button.active { color: #fff; border-bottom-color: var(--accent); }
+    nav.tabs a {
+      color: rgba(255,255,255,0.6);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 13px 18px;
+      text-decoration: none;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -3px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    nav.tabs a:hover { color: rgba(255,255,255,0.9); }
 
     /* ── MAIN CONTENT ── */
     main { max-width: 1200px; margin: 0 auto; padding: 28px 24px; }
@@ -723,6 +735,8 @@
   <button data-tab="components">&#9881;&#65039; Components</button>
   <button data-tab="suppliers">&#127981; Suppliers</button>
   <button data-tab="timeline">&#128197; Timeline</button>
+  <a href="cards/ownership_cards.html">&#127183; Cards</a>
+  <a href="guide/guide.html">&#128214; Guide</a>
 </nav>
 
 <main>
