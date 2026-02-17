@@ -2172,11 +2172,35 @@ function saveState() {
 
 // ── REAL-TIME LISTENER ─────────────────────────────────────────────────────
 let _firstLoad = true;
+
+function hideOverlayAndRender() {
+  if (!_firstLoad) return;
+  _firstLoad = false;
+  const overlay = document.getElementById('loading-overlay');
+  if (overlay) {
+    overlay.classList.add('hidden');
+    setTimeout(() => overlay.remove(), 450);
+  }
+  fullRender();
+}
+
+// Timeout fallback: render with local/empty state if Firebase doesn't respond in 4s
+const _fbTimeout = setTimeout(() => {
+  if (_firstLoad) {
+    try {
+      const local = localStorage.getItem('babipoly_sc_v2');
+      if (local) state = JSON.parse(local);
+    } catch (e) {}
+    setSyncStatus('offline', 'Offline');
+    hideOverlayAndRender();
+  }
+}, 4000);
+
 stateRef.on('value', snapshot => {
+  clearTimeout(_fbTimeout);
   state = snapshot.val() || {};
 
   if (_firstLoad) {
-    _firstLoad = false;
     // Migrate any existing localStorage data if Firebase is empty
     if (Object.keys(state).length === 0) {
       try {
@@ -2187,13 +2211,7 @@ stateRef.on('value', snapshot => {
         }
       } catch (e) {}
     }
-    // Hide loading overlay
-    const overlay = document.getElementById('loading-overlay');
-    if (overlay) {
-      overlay.classList.add('hidden');
-      setTimeout(() => overlay.remove(), 450);
-    }
-    fullRender();
+    hideOverlayAndRender();
   } else {
     // Remote update from another device — re-render
     updateAll();
