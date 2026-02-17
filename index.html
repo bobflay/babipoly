@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Babipoly — Suivi Chaîne d'Approvisionnement</title>
+  <title>Babipoly — Supply Chain Tracker</title>
   <style>
     :root {
       --primary: #1a2332;
@@ -675,7 +675,7 @@
 <!-- ── LOADING OVERLAY ── -->
 <div id="loading-overlay">
   <div style="color:#fff;font-size:20px;font-weight:800;letter-spacing:1px;">BABIPOLY</div>
-  <div style="color:rgba(255,255,255,0.55);font-size:13px;">Connexion à la base de données...</div>
+  <div style="color:rgba(255,255,255,0.55);font-size:13px;">Connecting to database...</div>
   <div class="spinner"></div>
 </div>
 
@@ -685,31 +685,31 @@
       <div class="brand-icon">&#127922;</div>
       <div class="brand-text">
         <h1>BABIPOLY</h1>
-        <p>Suivi de la Cha&icirc;ne d&apos;Approvisionnement &mdash; Production</p>
+        <p>Supply Chain Tracker &mdash; Production</p>
       </div>
     </div>
     <div class="header-stats">
       <div class="stat-pill">
         <div class="val" id="hdr-pct">0%</div>
-        <div class="lbl">Progression globale</div>
+        <div class="lbl">Overall Progress</div>
       </div>
       <div class="stat-pill">
         <div class="val" id="hdr-tasks">0/0</div>
-        <div class="lbl">T&acirc;ches termin&eacute;es</div>
+        <div class="lbl">Tasks Completed</div>
       </div>
       <div class="stat-pill">
         <div class="val" id="hdr-comps">0/8</div>
-        <div class="lbl">Composants actifs</div>
+        <div class="lbl">Active Components</div>
       </div>
       <div id="sync-status">
         <div id="sync-dot"></div>
-        <span id="sync-label">En ligne</span>
+        <span id="sync-label">Online</span>
       </div>
     </div>
   </div>
   <div class="header-progress">
     <div class="progress-bar-row">
-      <span class="progress-label">Avancement total du projet</span>
+      <span class="progress-label">Total Project Progress</span>
       <div class="progress-track">
         <div class="progress-fill" id="global-bar" style="width:0%"></div>
       </div>
@@ -719,10 +719,10 @@
 </header>
 
 <nav class="tabs" id="main-tabs">
-  <button class="active" data-tab="overview">&#128202; Vue d&apos;ensemble</button>
-  <button data-tab="components">&#9881;&#65039; Composants</button>
-  <button data-tab="suppliers">&#127981; Fournisseurs</button>
-  <button data-tab="timeline">&#128197; Calendrier</button>
+  <button class="active" data-tab="overview">&#128202; Overview</button>
+  <button data-tab="components">&#9881;&#65039; Components</button>
+  <button data-tab="suppliers">&#127981; Suppliers</button>
+  <button data-tab="timeline">&#128197; Timeline</button>
 </nav>
 
 <main>
@@ -730,51 +730,51 @@
   <!-- ══ TAB: OVERVIEW ══ -->
   <section class="tab-section active" id="tab-overview">
     <div class="stats-row" id="stats-row">
-      <div class="stat-card s-total"><div class="num">8</div><div class="txt">Composants total</div></div>
-      <div class="stat-card s-active"><div class="num" id="stat-active">0</div><div class="txt">En cours</div></div>
-      <div class="stat-card s-done"><div class="num" id="stat-done">0</div><div class="txt">Termin&eacute;s</div></div>
-      <div class="stat-card s-tasks"><div class="num" id="stat-tasks">0%</div><div class="txt">T&acirc;ches valid&eacute;es</div></div>
+      <div class="stat-card s-total"><div class="num">8</div><div class="txt">Total Components</div></div>
+      <div class="stat-card s-active"><div class="num" id="stat-active">0</div><div class="txt">In Progress</div></div>
+      <div class="stat-card s-done"><div class="num" id="stat-done">0</div><div class="txt">Completed</div></div>
+      <div class="stat-card s-tasks"><div class="num" id="stat-tasks">0%</div><div class="txt">Tasks Validated</div></div>
     </div>
 
-    <div class="section-title">&#127775; Statut par composant</div>
+    <div class="section-title">&#127775; Component Status</div>
     <div class="overview-grid" id="overview-grid"></div>
   </section>
 
   <!-- ══ TAB: COMPONENTS ══ -->
   <section class="tab-section" id="tab-components">
-    <div class="section-title">&#9881;&#65039; Composants &amp; T&acirc;ches de production</div>
+    <div class="section-title">&#9881;&#65039; Components &amp; Production Tasks</div>
     <div class="comp-accordion" id="comp-accordion"></div>
   </section>
 
   <!-- ══ TAB: SUPPLIERS ══ -->
   <section class="tab-section" id="tab-suppliers">
-    <div class="section-title">&#127981; R&eacute;pertoire des fournisseurs (Chine)</div>
+    <div class="section-title">&#127981; Supplier Directory (China)</div>
     <div class="supplier-dir-grid" id="supplier-dir"></div>
   </section>
 
   <!-- ══ TAB: TIMELINE ══ -->
   <section class="tab-section" id="tab-timeline">
-    <div class="section-title">&#128197; Tableau de bord &mdash; Avancement par &eacute;tape</div>
+    <div class="section-title">&#128197; Dashboard &mdash; Progress by Stage</div>
     <div class="timeline-table-wrap">
       <table class="timeline-table" id="timeline-table">
         <thead>
           <tr>
-            <th style="width:200px">Composant</th>
+            <th style="width:200px">Component</th>
             <th class="th-design">Design</th>
-            <th class="th-rfq">RFQ &amp; Devis</th>
+            <th class="th-rfq">RFQ &amp; Quotes</th>
             <th class="th-sample">Prototype</th>
             <th class="th-prod">Production</th>
-            <th class="th-qc">Contr&ocirc;le QC</th>
-            <th class="th-ship">Exp&eacute;dition</th>
+            <th class="th-qc">QC Inspection</th>
+            <th class="th-ship">Shipping</th>
           </tr>
         </thead>
         <tbody id="timeline-body"></tbody>
       </table>
     </div>
     <p class="text-muted mt-16">
-      <span class="tl-cell tl-done">&check; Termin&eacute;</span>&nbsp;
-      <span class="tl-cell tl-active">&#9654; En cours</span>&nbsp;
-      <span class="tl-cell tl-todo">&ndash; &Agrave; faire</span>
+      <span class="tl-cell tl-done">&check; Completed</span>&nbsp;
+      <span class="tl-cell tl-active">&#9654; In Progress</span>&nbsp;
+      <span class="tl-cell tl-todo">&ndash; To Do</span>
     </p>
   </section>
 
@@ -786,103 +786,103 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 const STAGES = [
-  { id: 'design',     label: 'Design',      icon: '✏️', color: '#8e44ad' },
-  { id: 'rfq',        label: 'RFQ & Devis', icon: '📋', color: '#2980b9' },
-  { id: 'sample',     label: 'Prototype',   icon: '🔬', color: '#d35400' },
-  { id: 'production', label: 'Production',  icon: '🏭', color: '#16a085' },
-  { id: 'qc',         label: 'Contrôle QC', icon: '✅', color: '#c0392b' },
-  { id: 'shipping',   label: 'Expédition',  icon: '🚢', color: '#27ae60' },
+  { id: 'design',     label: 'Design',       icon: '✏️', color: '#8e44ad' },
+  { id: 'rfq',        label: 'RFQ & Quotes', icon: '📋', color: '#2980b9' },
+  { id: 'sample',     label: 'Prototype',    icon: '🔬', color: '#d35400' },
+  { id: 'production', label: 'Production',   icon: '🏭', color: '#16a085' },
+  { id: 'qc',         label: 'QC Inspection',icon: '✅', color: '#c0392b' },
+  { id: 'shipping',   label: 'Shipping',     icon: '🚢', color: '#27ae60' },
 ];
 
 const COMPONENTS = [
   {
     id: 'board',
-    name: 'Plateau de Jeu',
+    name: 'Game Board',
     nameEn: 'Game Board',
     icon: '🗺️',
-    specs: '500×500mm ouvert — pliage 4x (croix) — greyboard 2mm — laminage mat',
+    specs: '500×500mm open — 4-fold design (cross) — 2mm greyboard — matte laminate',
     category: 'print',
     suppliers: [
       {
         name: 'Dongguan Shenghua Printing Co., Ltd',
         city: 'Dongguan, Guangdong',
-        specialty: 'Spécialiste jeux de société, impression offset',
+        specialty: 'Board game specialist, offset printing',
         contact: 'sales@shenghuaprinting.com',
-        moq: '500 unités',
+        moq: '500 units',
       },
       {
         name: 'Guangzhou Raynna Paper Products Co., Ltd',
         city: 'Guangzhou, Guangdong',
-        specialty: 'Jeux de plateau personnalisés & emballages',
+        specialty: 'Custom board games & packaging',
         contact: 'info@raynnaprinting.com',
-        moq: '300 unités',
+        moq: '300 units',
       },
       {
         name: 'Yancheng Wanlida Toy & Gift Co., Ltd',
         city: 'Yancheng, Jiangsu',
-        specialty: 'Fabrication complète de jeux de société',
+        specialty: 'Complete board game manufacturing',
         contact: 'wanlida@wanlida.cn',
-        moq: '500 unités',
+        moq: '500 units',
       },
     ],
     stages: [
       {
         id: 'design',
         tasks: [
-          'Finaliser le design graphique du plateau 500×500mm',
-          'Préparer les fichiers d\'impression PDF haute résolution (CMYK, 300dpi)',
-          'Valider les zones de pliage 4x (structure en croix)',
-          'Envoyer les fichiers pour épreuve couleur (colour proof)',
-          'Approbation finale du design — signature',
+          'Finalize 500×500mm game board graphic design',
+          'Prepare high-resolution PDF print files (CMYK, 300dpi)',
+          'Validate 4-fold zones (cross structure)',
+          'Send files for color proof',
+          'Final design approval — sign off',
         ],
       },
       {
         id: 'rfq',
         tasks: [
-          'Envoyer le RFQ avec specs complètes à 3+ imprimeurs',
-          'Recevoir et comparer les devis (prix FOB, délais)',
-          'Négocier le prix et les conditions de paiement',
-          'Sélectionner le fournisseur final',
-          'Signer le bon de commande (PO)',
+          'Send RFQ with full specs to 3+ printers',
+          'Receive and compare quotes (FOB price, lead times)',
+          'Negotiate price and payment terms',
+          'Select final supplier',
+          'Sign purchase order (PO)',
         ],
       },
       {
         id: 'sample',
         tasks: [
-          'Commander un prototype d\'impression (pre-production sample)',
-          'Recevoir le prototype physique',
-          'Tester la solidité du pliage (pas de craquelures)',
-          'Vérifier la qualité d\'impression et du laminage mat',
-          'Approuver le prototype (ou demander corrections)',
+          'Order a pre-production print sample',
+          'Receive physical prototype',
+          'Test fold durability (no cracking)',
+          'Check print quality and matte lamination',
+          'Approve prototype (or request corrections)',
         ],
       },
       {
         id: 'production',
         tasks: [
-          'Verser l\'acompte de production (30-50%)',
-          'Confirmer le lancement de la production',
-          'Recevoir le rapport de suivi mi-production',
-          'Production terminée — recevoir la notification de l\'usine',
+          'Pay production deposit (30-50%)',
+          'Confirm production launch',
+          'Receive mid-production progress report',
+          'Production complete — receive factory notification',
         ],
       },
       {
         id: 'qc',
         tasks: [
-          'Mandater une inspection QC tierce partie (ex: QIMA, Bureau Veritas)',
-          'Recevoir et analyser le rapport d\'inspection',
-          'Vérifier : aucune craquelure aux plis du plateau',
-          'Vérifier : aucune bulle de laminage',
-          'Approuver l\'expédition',
+          'Commission third-party QC inspection (e.g. QIMA, Bureau Veritas)',
+          'Receive and analyze inspection report',
+          'Verify: no cracks at board folds',
+          'Verify: no lamination bubbles',
+          'Approve shipment',
         ],
       },
       {
         id: 'shipping',
         tasks: [
-          'Réserver le transitaire / agent fret',
-          'Recevoir facture commerciale et liste de colisage',
-          'Confirmer le chargement des marchandises',
-          'Suivre l\'expédition (numéro de tracking)',
-          'Confirmer la livraison à l\'entrepôt destination',
+          'Book freight forwarder / shipping agent',
+          'Receive commercial invoice and packing list',
+          'Confirm goods loading',
+          'Track shipment (tracking number)',
+          'Confirm delivery to destination warehouse',
         ],
       },
     ],
@@ -890,92 +890,92 @@ const COMPONENTS = [
 
   {
     id: 'cards',
-    name: 'Cartes de Jeu',
+    name: 'Playing Cards',
     nameEn: 'Playing Cards',
     icon: '🃏',
-    specs: '60 cartes (16 Chance + 16 Communauté + 28 Propriétés) — 63×88mm — 300gsm black core',
+    specs: '60 cards (16 Chance + 16 Community Chest + 28 Property) — 63×88mm — 300gsm black core',
     category: 'print',
     suppliers: [
       {
         name: 'Wuhu Xinqi Printing & Packaging Co., Ltd',
         city: 'Wuhu, Anhui',
-        specialty: 'Spécialiste cartes de jeu, black core, finition mat/brillant',
+        specialty: 'Playing card specialist, black core, matte/glossy finish',
         contact: 'xinqi@xinqiprint.com',
-        moq: '1000 jeux',
+        moq: '1000 sets',
       },
       {
         name: 'Shenzhen Goldensun Game & Gift Co., Ltd',
         city: 'Shenzhen, Guangdong',
-        specialty: 'Jeux de cartes personnalisés & jeux de société complets',
+        specialty: 'Custom playing cards & complete board games',
         contact: 'info@goldensungame.com',
-        moq: '500 jeux',
+        moq: '500 sets',
       },
       {
         name: 'Hangzhou Heyuan Card Industry Co., Ltd',
         city: 'Hangzhou, Zhejiang',
-        specialty: 'Cartes de jeu grand format & standard, black core',
+        specialty: 'Large format & standard playing cards, black core',
         contact: 'sales@heyuancard.com',
-        moq: '1000 jeux',
+        moq: '1000 sets',
       },
     ],
     stages: [
       {
         id: 'design',
         tasks: [
-          'Finaliser l\'artwork des 3 types de cartes (16 Chance + 16 Communauté + 28 Propriétés)',
-          'Préparer les fichiers 63×88mm recto-verso avec fond perdu (bleed 3mm)',
-          'Valider tous les textes en français',
-          'Envoyer pour épreuve couleur',
-          'Approbation finale des designs',
+          'Finalize artwork for all 3 card types (16 Chance + 16 Community + 28 Property)',
+          'Prepare 63×88mm double-sided files with bleed (3mm bleed)',
+          'Validate all French text on cards',
+          'Send for color proof',
+          'Final design approval',
         ],
       },
       {
         id: 'rfq',
         tasks: [
-          'Envoyer RFQ: 60 cartes, 300gsm black core, finition mat, coins carrés',
-          'Préciser: impression recto-verso CMYK',
-          'Recevoir minimum 3 devis',
-          'Vérifier spécification "black core" (opacité totale)',
-          'Sélectionner fournisseur et envoyer le PO',
+          'Send RFQ: 60 cards, 300gsm black core, matte finish, square corners',
+          'Specify: double-sided CMYK printing',
+          'Receive at least 3 quotes',
+          'Verify "black core" spec (full opacity)',
+          'Select supplier and send PO',
         ],
       },
       {
         id: 'sample',
         tasks: [
-          'Commander 1 jeu sample complet (60 cartes)',
-          'Vérifier la netteté de coupe et les coins carrés',
-          'Tester l\'opacité du black core (pas de transparence)',
-          'Vérifier la finition mat et la qualité d\'impression',
-          'Approuver les samples',
+          'Order 1 complete sample set (60 cards)',
+          'Check cut quality and square corners',
+          'Test black core opacity (no transparency)',
+          'Check matte finish and print quality',
+          'Approve samples',
         ],
       },
       {
         id: 'production',
         tasks: [
-          'Verser l\'acompte de production',
-          'Lancer la production (60 cartes × quantité commandée)',
-          'Suivi de production — rapport usine',
-          'Production terminée — confirmée par l\'usine',
+          'Pay production deposit',
+          'Launch production (60 cards × ordered quantity)',
+          'Production follow-up — factory report',
+          'Production complete — confirmed by factory',
         ],
       },
       {
         id: 'qc',
         tasks: [
-          'Inspection: vérifier coupe propre et alignement',
-          'Vérifier opacité du black core sur chaque type de carte',
-          'Compter les quantités exactes (16+16+28 par jeu)',
-          'Vérifier finition mat uniforme',
-          'Approuver l\'expédition',
+          'Inspection: check clean cut and alignment',
+          'Check black core opacity on each card type',
+          'Count exact quantities (16+16+28 per set)',
+          'Check uniform matte finish',
+          'Approve shipment',
         ],
       },
       {
         id: 'shipping',
         tasks: [
-          'Grouper l\'expédition avec les autres composants imprimés',
-          'Réserver le transitaire',
-          'Documents d\'expédition prêts',
-          'Confirmer le chargement',
-          'Confirmer la livraison à l\'entrepôt',
+          'Group shipment with other printed components',
+          'Book freight forwarder',
+          'Shipping documents ready',
+          'Confirm loading',
+          'Confirm delivery to warehouse',
         ],
       },
     ],
@@ -983,90 +983,90 @@ const COMPONENTS = [
 
   {
     id: 'money',
-    name: 'Billets de Banque',
+    name: 'Paper Money',
     nameEn: 'Paper Money',
     icon: '💵',
-    specs: '240 billets — 4 coupures (1000F / 2000F / 5000F / 10000F) — 155×65mm — 80gsm offset',
+    specs: '240 bills — 4 denominations (1000F / 2000F / 5000F / 10000F) — 155×65mm — 80gsm offset',
     category: 'print',
     suppliers: [
       {
         name: 'Shenzhen Jinhao Printing Co., Ltd',
         city: 'Shenzhen, Guangdong',
-        specialty: 'Impression spécialisée billets de jeu & accessoires',
+        specialty: 'Specialized printing for game money & accessories',
         contact: 'sales@jinhaoprint.com',
-        moq: '500 jeux',
+        moq: '500 sets',
       },
       {
         name: 'Guangzhou Meijie Printing Co., Ltd',
         city: 'Guangzhou, Guangdong',
-        specialty: 'Impression offset sur papier coloré, billets de jeu',
+        specialty: 'Offset printing on colored paper, game bills',
         contact: 'meijie@meijieprint.com',
-        moq: '1000 jeux',
+        moq: '1000 sets',
       },
       {
         name: 'Yiwu Xishu Paper Products Co., Ltd',
         city: 'Yiwu, Zhejiang',
-        specialty: 'Spécialiste billets de jeux de société',
+        specialty: 'Board game money specialist',
         contact: 'xishu@xishupp.com',
-        moq: '500 jeux',
+        moq: '500 sets',
       },
     ],
     stages: [
       {
         id: 'design',
         tasks: [
-          'Finaliser l\'artwork des 4 coupures (1000F, 2000F, 5000F, 10000F)',
-          'Format 155×65mm — impression recto sur papier de couleur',
-          'Valider les montants, textes français et éléments graphiques',
-          'Choisir les couleurs de fond pour chaque coupure',
-          'Approbation finale des billets',
+          'Finalize artwork for 4 denominations (1000F, 2000F, 5000F, 10000F)',
+          'Format 155×65mm — single-sided print on colored paper',
+          'Validate amounts, text and graphic elements',
+          'Choose background colors for each denomination',
+          'Final bill approval',
         ],
       },
       {
         id: 'rfq',
         tasks: [
-          'Envoyer RFQ: 240 billets, 4 coupures, 60 de chaque',
-          'Préciser papier 80gsm offset, fond coloré par coupure',
-          'Demander devis pour les 4 couleurs de papier',
-          'Recevoir minimum 3 devis',
-          'Sélectionner fournisseur et envoyer PO',
+          'Send RFQ: 240 bills, 4 denominations, 60 of each',
+          'Specify 80gsm offset paper, colored background per denomination',
+          'Request quotes for the 4 paper colors',
+          'Receive at least 3 quotes',
+          'Select supplier and send PO',
         ],
       },
       {
         id: 'sample',
         tasks: [
-          'Commander un sample des 4 coupures',
-          'Vérifier la couleur du papier de fond pour chaque coupure',
-          'Vérifier la lisibilité des valeurs et textes',
-          'Vérifier la qualité de coupe (155×65mm)',
-          'Approuver les samples',
+          'Order a sample of all 4 denominations',
+          'Check background paper color for each denomination',
+          'Verify readability of values and text',
+          'Check cut quality (155×65mm)',
+          'Approve samples',
         ],
       },
       {
         id: 'production',
         tasks: [
-          'Verser l\'acompte',
-          'Lancer production: 240 billets × quantité commandée',
-          'Confirmer la répartition des coupures (60×4)',
-          'Production terminée — confirmée',
+          'Pay deposit',
+          'Launch production: 240 bills × ordered quantity',
+          'Confirm denomination split (60×4)',
+          'Production complete — confirmed',
         ],
       },
       {
         id: 'qc',
         tasks: [
-          'Vérifier quantités exactes par coupure (60 × 4)',
-          'Vérifier qualité impression et couleurs de fond',
-          'Vérifier dimensions 155×65mm',
-          'Approuver l\'expédition',
+          'Verify exact quantities per denomination (60 × 4)',
+          'Check print quality and background colors',
+          'Verify dimensions 155×65mm',
+          'Approve shipment',
         ],
       },
       {
         id: 'shipping',
         tasks: [
-          'Grouper avec les autres composants imprimés',
-          'Documents d\'expédition prêts',
-          'Confirmer le chargement',
-          'Confirmer la livraison à l\'entrepôt',
+          'Group with other printed components',
+          'Shipping documents ready',
+          'Confirm loading',
+          'Confirm delivery to warehouse',
         ],
       },
     ],
@@ -1074,30 +1074,30 @@ const COMPONENTS = [
 
   {
     id: 'pieces',
-    name: 'Maisons & Hôtels',
+    name: 'Houses & Hotels',
     nameEn: 'Houses & Hotels',
     icon: '🏠',
-    specs: '30 maisons vertes + 15 hôtels rouges — ABS plastique — injection moulée',
+    specs: '30 green houses + 15 red hotels — ABS plastic — injection molded',
     category: 'plastic',
     suppliers: [
       {
         name: 'Dongguan Yisheng Plastic Products Co., Ltd',
         city: 'Dongguan, Guangdong',
-        specialty: 'Pièces ABS injection moulées, accessoires jeux de société',
+        specialty: 'Injection molded ABS parts, board game accessories',
         contact: 'sales@yishengplastic.com',
         moq: '5000 pcs',
       },
       {
         name: 'Shenzhen Junye Plastic Industrial Co., Ltd',
         city: 'Shenzhen, Guangdong',
-        specialty: 'Petites pièces plastiques colorées pour jeux',
+        specialty: 'Small colored plastic pieces for games',
         contact: 'junye@junyeplastic.com',
         moq: '3000 pcs',
       },
       {
         name: 'Guangdong Haicheng Plastic Industry Co., Ltd',
         city: 'Foshan, Guangdong',
-        specialty: 'Fabrication pièces ABS petites dimensions',
+        specialty: 'Small ABS plastic parts manufacturing',
         contact: 'info@haichengplastic.com',
         moq: '5000 pcs',
       },
@@ -1106,58 +1106,58 @@ const COMPONENTS = [
       {
         id: 'design',
         tasks: [
-          'Valider les dimensions (équivalent Monopoly standard)',
-          'Confirmer que les hôtels sont plus grands que les maisons',
-          'Vérifier si un moule standard existant peut être utilisé',
-          'Finaliser la spécification couleur (vert / rouge vif)',
+          'Validate dimensions (standard Monopoly equivalent)',
+          'Confirm that hotels are larger than houses',
+          'Check if an existing standard mold can be used',
+          'Finalize color spec (green / bright red)',
         ],
       },
       {
         id: 'rfq',
         tasks: [
-          'Envoyer RFQ: 30 maisons vertes + 15 hôtels rouges, ABS, injection',
-          'Demander si moule existant disponible (économise coût)',
-          'Recevoir devis avec et sans coût de moule',
-          'Sélectionner fournisseur pièces plastiques',
-          'Envoyer PO avec spécifications couleur précises',
+          'Send RFQ: 30 green houses + 15 red hotels, ABS, injection molded',
+          'Ask if existing mold is available (saves cost)',
+          'Receive quotes with and without mold cost',
+          'Select plastic parts supplier',
+          'Send PO with precise color specifications',
         ],
       },
       {
         id: 'sample',
         tasks: [
-          'Commander samples maisons et hôtels',
-          'Vérifier dimensions et solidité de l\'ABS',
-          'Tester la stabilité des pièces sur le plateau de jeu',
-          'Vérifier les couleurs (vert / rouge)',
-          'Approuver ou demander corrections',
+          'Order house and hotel samples',
+          'Check dimensions and ABS durability',
+          'Test piece stability on the game board',
+          'Check colors (green / red)',
+          'Approve or request corrections',
         ],
       },
       {
         id: 'production',
         tasks: [
-          'Verser l\'acompte de production',
-          'Lancer la production injection moulage',
-          'Confirmer: 30 maisons × Q + 15 hôtels × Q par lot',
-          'Production terminée — confirmée',
+          'Pay production deposit',
+          'Launch injection molding production',
+          'Confirm: 30 houses × Q + 15 hotels × Q per batch',
+          'Production complete — confirmed',
         ],
       },
       {
         id: 'qc',
         tasks: [
-          'Vérifier absence de bavures d\'injection',
-          'Vérifier conformité des couleurs (vert / rouge)',
-          'Compter les quantités (30 maisons + 15 hôtels par jeu)',
-          'Vérifier solidité des pièces (pas de cassures)',
-          'Approuver l\'expédition',
+          'Check for injection flash/burrs',
+          'Verify color compliance (green / red)',
+          'Count quantities (30 houses + 15 hotels per set)',
+          'Check piece durability (no breakage)',
+          'Approve shipment',
         ],
       },
       {
         id: 'shipping',
         tasks: [
-          'Réserver transitaire (peut être combiné avec les tokens)',
-          'Documents d\'expédition prêts',
-          'Confirmer le chargement',
-          'Confirmer la livraison à l\'entrepôt',
+          'Book freight forwarder (can be combined with tokens)',
+          'Shipping documents ready',
+          'Confirm loading',
+          'Confirm delivery to warehouse',
         ],
       },
     ],
@@ -1165,92 +1165,92 @@ const COMPONENTS = [
 
   {
     id: 'tokens',
-    name: 'Pions Éléphants',
+    name: 'Player Tokens',
     nameEn: 'Player Tokens',
     icon: '🐘',
-    specs: '8 pions éléphant ABS — 20-25mm hauteur — 8 couleurs — moule sur mesure (propriété Babipoly)',
+    specs: '8 elephant tokens ABS — 20-25mm height — 8 colors — custom mold (Babipoly property)',
     category: 'plastic',
     suppliers: [
       {
         name: 'Dongguan Zhonghe Model Co., Ltd',
         city: 'Dongguan, Guangdong',
-        specialty: 'Moules sur mesure & figurines plastiques pour jeux',
+        specialty: 'Custom molds & plastic figurines for games',
         contact: 'sales@zhonghemold.com',
-        moq: 'Moule + 1000 jeux',
+        moq: 'Mold + 1000 sets',
       },
       {
         name: 'Shenzhen Weilian Plastic Technology Co., Ltd',
         city: 'Shenzhen, Guangdong',
-        specialty: 'Conception et fabrication de moules ABS personnalisés',
+        specialty: 'Custom ABS mold design and manufacturing',
         contact: 'weilian@weilianplastic.com',
-        moq: 'Moule + 500 jeux',
+        moq: 'Mold + 500 sets',
       },
       {
         name: 'Guangzhou Kaka Toys Co., Ltd',
         city: 'Guangzhou, Guangdong',
-        specialty: 'Figurines et pions de jeux personnalisés',
+        specialty: 'Custom game figurines and tokens',
         contact: 'kaka@kakatoys.com',
-        moq: '1000 jeux',
+        moq: '1000 sets',
       },
     ],
     stages: [
       {
         id: 'design',
         tasks: [
-          'Finaliser le design 3D du pion éléphant (20-25mm de hauteur)',
-          'Créer le fichier technique 3D (STL / STEP) ou dessin coté',
-          'Valider la liste des 8 couleurs ABS',
-          'Confirmer que le moule sera la propriété de Babipoly',
-          'Approbation finale du design 3D',
+          'Finalize 3D design of elephant token (20-25mm height)',
+          'Create technical 3D file (STL / STEP) or dimensioned drawing',
+          'Validate list of 8 ABS colors',
+          'Confirm that the mold will be Babipoly property',
+          'Final 3D design approval',
         ],
       },
       {
         id: 'rfq',
         tasks: [
-          'Envoyer RFQ avec fichier 3D ou dessin technique',
-          'Demander devis moule sur mesure + coût par pion',
-          'Confirmer propriété légale du moule (clause contractuelle)',
-          'Recevoir minimum 3 devis',
-          'Sélectionner le fabricant de moule',
-          'Signer le contrat incluant la clause de propriété du moule',
+          'Send RFQ with 3D file or technical drawing',
+          'Request quote for custom mold + cost per token',
+          'Confirm legal mold ownership (contractual clause)',
+          'Receive at least 3 quotes',
+          'Select mold manufacturer',
+          'Sign contract including mold ownership clause',
         ],
       },
       {
         id: 'sample',
         tasks: [
-          'Commander les samples T1 du moule (1ère passe)',
-          'Vérifier forme et proportions du pion éléphant',
-          'Tester les 8 couleurs sur les samples',
-          'Demander les corrections si nécessaire (T2, T3)',
-          'Approbation finale du moule — Green Light production',
+          'Order T1 mold samples (first pass)',
+          'Check shape and proportions of elephant token',
+          'Test all 8 colors on samples',
+          'Request corrections if necessary (T2, T3)',
+          'Final mold approval — Green Light for production',
         ],
       },
       {
         id: 'production',
         tasks: [
-          'Verser l\'acompte de production',
-          'Lancer l\'injection des 8 couleurs',
-          'Confirmer: 8 pions par jeu (1 par couleur)',
-          'Production terminée — confirmée',
+          'Pay production deposit',
+          'Launch injection of 8 colors',
+          'Confirm: 8 tokens per set (1 per color)',
+          'Production complete — confirmed',
         ],
       },
       {
         id: 'qc',
         tasks: [
-          'Vérifier absence de bavures sur chaque pion',
-          'Vérifier les 8 couleurs exactes',
-          'Compter les quantités par jeu (8 pions × Q jeux)',
-          'Vérifier la taille (20-25mm)',
-          'Approuver l\'expédition',
+          'Check for injection burrs on each token',
+          'Verify exact 8 colors',
+          'Count quantities per set (8 tokens × Q sets)',
+          'Check size (20-25mm)',
+          'Approve shipment',
         ],
       },
       {
         id: 'shipping',
         tasks: [
-          'Réserver transitaire',
-          'Documents avec déclaration du moule (si expédition séparée)',
-          'Confirmer le chargement',
-          'Confirmer la livraison à l\'entrepôt',
+          'Book freight forwarder',
+          'Documents with mold declaration (if shipped separately)',
+          'Confirm loading',
+          'Confirm delivery to warehouse',
         ],
       },
     ],
@@ -1258,86 +1258,86 @@ const COMPONENTS = [
 
   {
     id: 'dice',
-    name: 'Dés',
+    name: 'Dice',
     nameEn: 'Dice',
     icon: '🎲',
-    specs: '2 dés — 16mm — acrylique blanc — points noirs',
+    specs: '2 dice — 16mm — white acrylic — black pips',
     category: 'accessories',
     suppliers: [
       {
         name: 'Dongguan Kaika Acrylic Products Co., Ltd',
         city: 'Dongguan, Guangdong',
-        specialty: 'Dés acryliques standard et personnalisés',
+        specialty: 'Standard and custom acrylic dice',
         contact: 'kaika@kaikaacrylic.com',
-        moq: '10 000 dés',
+        moq: '10,000 dice',
       },
       {
         name: 'Ningbo Zhixin Toys Co., Ltd',
         city: 'Ningbo, Zhejiang',
-        specialty: 'Accessoires jeux de société: dés, jetons, pièces',
+        specialty: 'Board game accessories: dice, chips, pieces',
         contact: 'sales@zhixintoys.com',
-        moq: '5 000 dés',
+        moq: '5,000 dice',
       },
       {
         name: 'Yiwu Diangong Toy Co., Ltd',
         city: 'Yiwu, Zhejiang',
-        specialty: 'Dés et accessoires jeux — fabricant volume',
+        specialty: 'Dice and game accessories — volume manufacturer',
         contact: 'diangong@diangongtoy.com',
-        moq: '5 000 dés',
+        moq: '5,000 dice',
       },
     ],
     stages: [
       {
         id: 'design',
         tasks: [
-          'Confirmer les specs: 16mm, acrylique, blanc avec points noirs',
-          'Valider qu\'aucun design personnalisé n\'est nécessaire (standard)',
-          'Confirmer la quantité: 2 dés par jeu × Q jeux',
+          'Confirm specs: 16mm, acrylic, white with black pips',
+          'Validate that no custom design is required (standard)',
+          'Confirm quantity: 2 dice per set × Q sets',
         ],
       },
       {
         id: 'rfq',
         tasks: [
-          'Envoyer RFQ: dés 16mm, acrylique blanc, points noirs',
-          'Demander à regrouper avec un autre fournisseur si possible',
-          'Comparer les devis (prix/unité)',
-          'Sélectionner le fournisseur',
-          'Envoyer le PO',
+          'Send RFQ: 16mm dice, white acrylic, black pips',
+          'Ask to bundle with another supplier if possible',
+          'Compare quotes (price per unit)',
+          'Select supplier',
+          'Send PO',
         ],
       },
       {
         id: 'sample',
         tasks: [
-          'Commander un sample de dés 16mm acrylique',
-          'Tester l\'équilibre des dés (roulé aléatoire)',
-          'Vérifier la netteté des points noirs',
-          'Approuver les samples',
+          'Order a sample of 16mm acrylic dice',
+          'Test dice balance (random roll)',
+          'Check sharpness of black pips',
+          'Approve samples',
         ],
       },
       {
         id: 'production',
         tasks: [
-          'Confirmer la commande (2 dés × Q jeux)',
-          'Lancer la production',
-          'Production terminée — confirmée',
+          'Confirm order (2 dice × Q sets)',
+          'Launch production',
+          'Production complete — confirmed',
         ],
       },
       {
         id: 'qc',
         tasks: [
-          'Vérifier la netteté des points (1 à 6)',
-          'Vérifier la qualité acrylique (pas de bulles)',
-          'Compter les quantités (2 dés par jeu)',
-          'Approuver l\'expédition',
+          'Check pip clarity (1 to 6)',
+          'Check acrylic quality (no bubbles)',
+          'Count quantities (2 dice per set)',
+          'Approve shipment',
         ],
       },
       {
         id: 'shipping',
         tasks: [
-          'Grouper avec les autres composants accessoires',
-          'Documents d\'expédition prêts',
-          'Confirmer le chargement',
-          'Confirmer la livraison à l\'entrepôt',
+          'Group with other accessory components',
+          'Shipping documents ready',
+          'Confirm loading',
+          'Confirm delivery to warehouse',
         ],
       },
     ],
@@ -1345,89 +1345,89 @@ const COMPONENTS = [
 
   {
     id: 'booklet',
-    name: 'Livret de Règles',
+    name: 'Instruction Booklet',
     nameEn: 'Instruction Booklet',
     icon: '📖',
-    specs: '4 pages A5 (148×210mm) — 157gsm art paper — CMYK recto-verso — reliure agrafée',
+    specs: '4-page A5 (148×210mm) — 157gsm art paper — CMYK double-sided — saddle-stitched',
     category: 'print',
     suppliers: [
       {
         name: 'Shenzhen Jinhao Printing Co., Ltd',
         city: 'Shenzhen, Guangdong',
-        specialty: 'Brochures, livrets et impressions de qualité',
+        specialty: 'Brochures, booklets and quality printing',
         contact: 'sales@jinhaoprint.com',
-        moq: '500 livrets',
+        moq: '500 booklets',
       },
       {
         name: 'Guangzhou Artron Color Printing Co., Ltd',
         city: 'Guangzhou, Guangdong',
-        specialty: 'Impression couleur haute qualité, livrets et brochures',
+        specialty: 'High quality color printing, booklets and brochures',
         contact: 'artron@artronprint.com',
-        moq: '1000 livrets',
+        moq: '1000 booklets',
       },
       {
         name: 'Dongguan Tuosite Printing Co., Ltd',
         city: 'Dongguan, Guangdong',
-        specialty: 'Livrets de jeux et brochures de présentation',
+        specialty: 'Game booklets and presentation brochures',
         contact: 'sales@tuositeprint.com',
-        moq: '500 livrets',
+        moq: '500 booklets',
       },
     ],
     stages: [
       {
         id: 'design',
         tasks: [
-          'Rédiger les règles complètes du jeu Babipoly en français',
-          'Mise en page A5 (148×210mm), 4 pages (2 feuilles agrafées)',
-          'Intégrer illustrations et design graphique',
-          'Relecture finale et validation des règles par l\'équipe',
-          'Approbation finale du livret',
+          'Write complete Babipoly game rules',
+          'Layout A5 (148×210mm), 4 pages (2 saddle-stitched sheets)',
+          'Integrate illustrations and graphic design',
+          'Final proofreading and rule validation by the team',
+          'Final booklet approval',
         ],
       },
       {
         id: 'rfq',
         tasks: [
-          'Envoyer RFQ: livret A5, 4pp, 157gsm art paper, CMYK recto-verso',
-          'Préciser: reliure agrafée (saddle stitch), finition mat',
-          'Peut être groupé avec le fournisseur du plateau',
-          'Recevoir minimum 2 devis',
-          'Sélectionner fournisseur — envoyer PO',
+          'Send RFQ: A5 booklet, 4pp, 157gsm art paper, CMYK double-sided',
+          'Specify: saddle stitch binding, matte finish',
+          'Can be grouped with board supplier',
+          'Receive at least 2 quotes',
+          'Select supplier — send PO',
         ],
       },
       {
         id: 'sample',
         tasks: [
-          'Commander un sample du livret imprimé',
-          'Vérifier la lisibilité des textes (taille police, contraste)',
-          'Vérifier la qualité des illustrations',
-          'Vérifier la reliure agrafée (solide)',
-          'Approuver le sample',
+          'Order a printed booklet sample',
+          'Check text readability (font size, contrast)',
+          'Check illustration quality',
+          'Check saddle-stitch binding (secure)',
+          'Approve sample',
         ],
       },
       {
         id: 'production',
         tasks: [
-          'Verser l\'acompte',
-          'Lancer la production des livrets',
-          'Production terminée — confirmée',
+          'Pay deposit',
+          'Launch booklet production',
+          'Production complete — confirmed',
         ],
       },
       {
         id: 'qc',
         tasks: [
-          'Vérifier la reliure agrafée sur un échantillon',
-          'Vérifier lisibilité et qualité couleur',
-          'Compter les quantités',
-          'Approuver l\'expédition',
+          'Check saddle-stitch binding on a sample',
+          'Check readability and color quality',
+          'Count quantities',
+          'Approve shipment',
         ],
       },
       {
         id: 'shipping',
         tasks: [
-          'Grouper avec les composants imprimés',
-          'Documents d\'expédition prêts',
-          'Confirmer le chargement',
-          'Confirmer la livraison à l\'entrepôt',
+          'Group with printed components',
+          'Shipping documents ready',
+          'Confirm loading',
+          'Confirm delivery to warehouse',
         ],
       },
     ],
@@ -1435,93 +1435,93 @@ const COMPONENTS = [
 
   {
     id: 'packaging',
-    name: 'Boîte de Jeu',
+    name: 'Game Box',
     nameEn: 'Game Box',
     icon: '📦',
-    specs: '270×270×60mm — Boîte rigide télescope — greyboard 2mm — laminage mat — plateau thermoformé',
+    specs: '270×270×60mm — Rigid telescope box — 2mm greyboard — matte laminate — thermoformed tray',
     category: 'print',
     suppliers: [
       {
         name: 'Shenzhen Yuto Packaging Technology Co., Ltd',
         city: 'Shenzhen, Guangdong',
-        specialty: 'Boîtes rigides haut de gamme, emballage premium',
+        specialty: 'Premium rigid boxes, premium packaging',
         contact: 'sales@yutopackaging.com',
-        moq: '500 unités',
+        moq: '500 units',
       },
       {
         name: 'Dongguan Xianglee Printing & Packaging Co., Ltd',
         city: 'Dongguan, Guangdong',
-        specialty: 'Packaging jeux de société: boîtes + plateaux thermoformés',
+        specialty: 'Board game packaging: boxes + thermoformed trays',
         contact: 'xianglee@xiangleepack.com',
-        moq: '300 unités',
+        moq: '300 units',
       },
       {
         name: 'Shanghai Birdview Packaging Co., Ltd',
         city: 'Shanghai',
-        specialty: 'Emballages premium rigides, boîtes jeux de qualité',
+        specialty: 'Premium rigid packaging, quality game boxes',
         contact: 'info@birdviewpack.com',
-        moq: '500 unités',
+        moq: '500 units',
       },
     ],
     stages: [
       {
         id: 'design',
         tasks: [
-          'Finaliser l\'artwork pour le couvercle et la base de la boîte',
-          'Format 270×270×60mm — boîte télescope (lid & base)',
-          'Concevoir le plateau thermoformé (calage de tous les composants)',
-          'Prévoir l\'espace pour le code-barres (EAN)',
-          'Approbation finale du design packaging',
+          'Finalize artwork for box lid and base',
+          'Format 270×270×60mm — telescope box (lid & base)',
+          'Design thermoformed tray (fitting all components)',
+          'Include space for barcode (EAN)',
+          'Final packaging design approval',
         ],
       },
       {
         id: 'rfq',
         tasks: [
-          'Envoyer RFQ: boîte rigide télescope 270×270×60mm, greyboard 2mm + papier 157gsm',
-          'Préciser: finition mat + shrink wrap + espace code-barres',
-          'Demander devis séparé pour le plateau thermoformé',
-          'Recevoir minimum 3 devis',
-          'Sélectionner fabricant packaging — envoyer PO',
+          'Send RFQ: rigid telescope box 270×270×60mm, 2mm greyboard + 157gsm paper',
+          'Specify: matte finish + shrink wrap + EAN barcode space',
+          'Request separate quote for thermoformed tray',
+          'Receive at least 3 quotes',
+          'Select packaging manufacturer — send PO',
         ],
       },
       {
         id: 'sample',
         tasks: [
-          'Commander une maquette / sample de boîte complète',
-          'Vérifier la solidité de la structure (greyboard 2mm)',
-          'Tester le plateau thermoformé avec tous les composants physiques',
-          'Vérifier la fermeture du couvercle (télescope bien ajusté)',
-          'Vérifier la qualité du laminage mat et de l\'impression',
-          'Approuver le sample packaging',
+          'Order a complete box mockup / sample',
+          'Check structural strength (2mm greyboard)',
+          'Test thermoformed tray with all physical components',
+          'Check lid closure (telescope well fitted)',
+          'Check matte lamination quality and printing',
+          'Approve packaging sample',
         ],
       },
       {
         id: 'production',
         tasks: [
-          'Verser l\'acompte',
-          'Lancer production boîtes + plateaux thermoformés',
-          'Recevoir rapport de suivi mi-production',
-          'Production terminée — confirmée',
+          'Pay deposit',
+          'Launch production: boxes + thermoformed trays',
+          'Receive mid-production progress report',
+          'Production complete — confirmed',
         ],
       },
       {
         id: 'qc',
         tasks: [
-          'Vérifier la structure solide (pas de déformation)',
-          'Vérifier: aucune bulle de laminage',
-          'Tester l\'assemblage complet du jeu dans la boîte',
-          'Vérifier le shrink wrap et la présence de l\'espace EAN',
-          'Approuver l\'expédition',
+          'Check solid structure (no deformation)',
+          'Verify: no lamination bubbles',
+          'Test complete game assembly in box',
+          'Check shrink wrap and presence of EAN space',
+          'Approve shipment',
         ],
       },
       {
         id: 'shipping',
         tasks: [
-          'Coordonner l\'assemblage final (tous composants dans la boîte)',
-          'Réserver le transitaire pour envoi final',
-          'Documents d\'expédition complets prêts',
-          'Confirmer le chargement du lot complet',
-          'Confirmer la livraison à l\'entrepôt destination',
+          'Coordinate final assembly (all components in box)',
+          'Book freight forwarder for final shipment',
+          'Complete shipping documents ready',
+          'Confirm loading of complete batch',
+          'Confirm delivery to destination warehouse',
         ],
       },
     ],
@@ -1668,7 +1668,7 @@ function renderOverviewGrid() {
     const status = compStatus(comp);
     const aStage = STAGES.find(s => s.id === activeStage(comp));
     const badgeClass = status === 'done' ? 'badge-done' : status === 'active' ? 'badge-active' : 'badge-todo';
-    const badgeText = status === 'done' ? '✓ Terminé' : status === 'active' ? `↗ ${aStage.label}` : '— À démarrer';
+    const badgeText = status === 'done' ? '✓ Completed' : status === 'active' ? `↗ ${aStage.label}` : '— Not Started';
     return `
     <div class="comp-card status-${status}" onclick="switchToComp('${comp.id}')">
       <div class="comp-card-header">
@@ -1680,7 +1680,7 @@ function renderOverviewGrid() {
       </div>
       <div class="comp-card-progress">
         <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted)">
-          <span>Progression</span><strong style="color:var(--text)">${pct}%</strong>
+          <span>Progress</span><strong style="color:var(--text)">${pct}%</strong>
         </div>
         <div class="mini-track"><div class="mini-fill" style="width:${pct}%"></div></div>
       </div>
@@ -1721,7 +1721,7 @@ function renderAccordion() {
         </div>
         <div class="acc-meta">
           <span class="stage-badge ${status === 'done' ? 'badge-done' : status === 'active' ? 'badge-active' : 'badge-todo'}">
-            ${status === 'done' ? '✓ Terminé' : status === 'active' ? '↗ En cours' : '— À démarrer'}
+            ${status === 'done' ? '✓ Completed' : status === 'active' ? '↗ In Progress' : '— Not Started'}
           </span>
           <div class="acc-pct">${pct}%</div>
           <div class="acc-chevron">▾</div>
@@ -1735,8 +1735,8 @@ function renderAccordion() {
         ${renderTaskSections(comp)}
         ${renderSupplierPicker(comp)}
         <div class="actions-row">
-          <button class="btn btn-danger-outline" onclick="if(confirm('Réinitialiser ${comp.name} ?')) resetComp('${comp.id}')">
-            ✕ Réinitialiser
+          <button class="btn btn-danger-outline" onclick="if(confirm('Reset ${comp.name}?')) resetComp('${comp.id}')">
+            ✕ Reset
           </button>
         </div>
       </div>
@@ -1777,7 +1777,7 @@ function renderTaskSections(comp) {
         <div class="task-stage-header" onclick="toggleTaskStage('${comp.id}','${st.id}')">
           <div class="task-stage-dot" style="background:${dotColor}"></div>
           <h4>${stage.icon} ${stage.label}</h4>
-          <span class="task-stage-count">${done}/${total} tâches</span>
+          <span class="task-stage-count">${done}/${total} tasks</span>
           <span class="task-stage-chevron">▾</span>
         </div>
         <div class="task-list">
@@ -1807,12 +1807,12 @@ function renderSupplierPicker(comp) {
   const selected = state[comp.id].supplier;
   return `
   <div class="supplier-section">
-    <h4>🏭 Fournisseurs recommandés (Chine) &mdash; sélectionner le fournisseur retenu :</h4>
+    <h4>🏭 Recommended Suppliers (China) &mdash; select the chosen supplier:</h4>
     <div class="supplier-cards">
       ${comp.suppliers.map((s, i) => `
       <div class="supplier-card ${selected === i ? 'selected' : ''}"
            onclick="setSupplier('${comp.id}', ${i})">
-        ${selected === i ? '<span class="supplier-selected-badge">✓ Retenu</span>' : ''}
+        ${selected === i ? '<span class="supplier-selected-badge">✓ Selected</span>' : ''}
         <h5>${s.name}</h5>
         <div class="s-city">📍 ${s.city}</div>
         <div class="s-spec">${s.specialty}</div>
@@ -1833,17 +1833,17 @@ function renderSupplierDir() {
       <div class="supplier-dir-comp-header">
         <span class="d-icon">${comp.icon}</span>
         <h3>${comp.name} <span style="opacity:0.6;font-weight:400;font-size:13px">(${comp.nameEn})</span></h3>
-        ${selectedIdx !== null ? `<span class="info-chip">✓ Fournisseur sélectionné</span>` : ''}
+        ${selectedIdx !== null ? `<span class="info-chip">✓ Supplier selected</span>` : ''}
       </div>
       <table class="supplier-table">
         <thead>
           <tr>
-            <th>Fournisseur</th>
-            <th>Ville / Province</th>
-            <th>Spécialité</th>
+            <th>Supplier</th>
+            <th>City / Province</th>
+            <th>Specialty</th>
             <th>Contact</th>
             <th>MOQ</th>
-            <th>Statut</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -1854,7 +1854,7 @@ function renderSupplierDir() {
             <td style="color:var(--accent-dark)">${s.specialty}</td>
             <td style="font-size:12px">${s.contact}</td>
             <td>${s.moq}</td>
-            <td>${selectedIdx === i ? '<span class="s-check">✓ Retenu</span>' : '<span style="color:#ccc">—</span>'}</td>
+            <td>${selectedIdx === i ? '<span class="s-check">✓ Selected</span>' : '<span style="color:#ccc">—</span>'}</td>
           </tr>`).join('')}
         </tbody>
       </table>
@@ -1874,6 +1874,7 @@ function renderTimeline() {
         let cls = 'tl-todo', txt = '—';
         if (status === 'done')   { cls = 'tl-done';   txt = `✓ ${done}/${total}`; }
         if (status === 'active') { cls = 'tl-active';  txt = `▶ ${done}/${total}`; }
+        // tl-todo stays as '—'
         return `<td><span class="tl-cell ${cls}">${txt}</span></td>`;
       }).join('')}
     </tr>`;
@@ -1908,7 +1909,7 @@ function updateAll() {
       const badge = accEl.querySelector('.acc-meta .stage-badge');
       if (badge) {
         badge.className = `stage-badge ${status === 'done' ? 'badge-done' : status === 'active' ? 'badge-active' : 'badge-todo'}`;
-        badge.textContent = status === 'done' ? '✓ Terminé' : status === 'active' ? '↗ En cours' : '— À démarrer';
+        badge.textContent = status === 'done' ? '✓ Completed' : status === 'active' ? '↗ In Progress' : '— Not Started';
       }
       // update individual checkboxes and task items
       comp.stages.forEach(st => {
@@ -1923,7 +1924,7 @@ function updateAll() {
         const tsb = document.getElementById(`tsb-${comp.id}-${st.id}`);
         if (tsb) {
           const cnt = tsb.querySelector('.task-stage-count');
-          if (cnt) cnt.textContent = `${done}/${total} tâches`;
+          if (cnt) cnt.textContent = `${done}/${total} tasks`;
           const dot = tsb.querySelector('.task-stage-dot');
           if (dot) {
             const sstatus = stageStatus(comp, st.id);
@@ -2002,9 +2003,9 @@ function setSyncStatus(mode, label) {
 
 db.ref('.info/connected').on('value', snap => {
   if (snap.val()) {
-    setSyncStatus('online', 'En ligne');
+    setSyncStatus('online', 'Online');
   } else {
-    setSyncStatus('offline', 'Hors ligne');
+    setSyncStatus('offline', 'Offline');
   }
 });
 
@@ -2015,8 +2016,8 @@ function saveState() {
   clearTimeout(_saveTimer);
   _saveTimer = setTimeout(() => {
     stateRef.set(state)
-      .then(() => setSyncStatus('online', 'En ligne'))
-      .catch(() => setSyncStatus('offline', 'Erreur'));
+      .then(() => setSyncStatus('online', 'Online'))
+      .catch(() => setSyncStatus('offline', 'Error'));
   }, 400);
 }
 

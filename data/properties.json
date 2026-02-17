@@ -1,0 +1,456 @@
+{
+  "game": "Babipoly",
+  "currency": "FCFA",
+  "go_reward": 10000,
+  "notes": "Loyers et coûts de maisons sont des estimations — à vérifier avec les règles officielles du jeu. Les couleurs du groupe 'marron' (Abobo/Daloa) semblent visuellement similaires à l'orange sur le plateau — à confirmer.",
+  "color_groups": [
+    {
+      "id": "jaune",
+      "name": "Jaune",
+      "color": "#F5C518",
+      "text_color": "#333333",
+      "house_cost": 1000,
+      "properties": [
+        {
+          "position": 1,
+          "name": "Plateau",
+          "price": 3000,
+          "mortgage": 1500,
+          "rent": {
+            "base": 150,
+            "h1": 600,
+            "h2": 1800,
+            "h3": 3000,
+            "h4": 4500,
+            "hotel": 6000
+          }
+        },
+        {
+          "position": 3,
+          "name": "Cocody",
+          "price": 3000,
+          "mortgage": 1500,
+          "rent": {
+            "base": 300,
+            "h1": 600,
+            "h2": 1800,
+            "h3": 3000,
+            "h4": 4500,
+            "hotel": 6000
+          }
+        }
+      ]
+    },
+    {
+      "id": "rouge",
+      "name": "Rouge",
+      "color": "#CC0000",
+      "text_color": "#FFFFFF",
+      "house_cost": 2000,
+      "properties": [
+        {
+          "position": 6,
+          "name": "Marcory",
+          "price": 5000,
+          "mortgage": 2500,
+          "rent": {
+            "base": 250,
+            "h1": 1000,
+            "h2": 3000,
+            "h3": 5000,
+            "h4": 7500,
+            "hotel": 10000
+          }
+        },
+        {
+          "position": 8,
+          "name": "Zone 4",
+          "price": 6000,
+          "mortgage": 3000,
+          "rent": {
+            "base": 300,
+            "h1": 1500,
+            "h2": 4000,
+            "h3": 6000,
+            "h4": 9000,
+            "hotel": 12000
+          }
+        },
+        {
+          "position": 9,
+          "name": "Treichville",
+          "price": 5000,
+          "mortgage": 2500,
+          "rent": {
+            "base": 250,
+            "h1": 1000,
+            "h2": 3000,
+            "h3": 5000,
+            "h4": 7500,
+            "hotel": 10000
+          }
+        }
+      ]
+    },
+    {
+      "id": "orange",
+      "name": "Orange",
+      "color": "#F7941D",
+      "text_color": "#FFFFFF",
+      "house_cost": 3000,
+      "properties": [
+        {
+          "position": 13,
+          "name": "Bouaké",
+          "price": 7000,
+          "mortgage": 3500,
+          "rent": {
+            "base": 350,
+            "h1": 2000,
+            "h2": 5500,
+            "h3": 9000,
+            "h4": 12500,
+            "hotel": 17500
+          }
+        },
+        {
+          "position": 15,
+          "name": "Korhogo",
+          "price": 8000,
+          "mortgage": 4000,
+          "rent": {
+            "base": 400,
+            "h1": 2500,
+            "h2": 6000,
+            "h3": 10000,
+            "h4": 14000,
+            "hotel": 20000
+          }
+        },
+        {
+          "position": 16,
+          "name": "Man",
+          "price": 5000,
+          "mortgage": 2500,
+          "rent": {
+            "base": 250,
+            "h1": 1500,
+            "h2": 4000,
+            "h3": 6500,
+            "h4": 9000,
+            "hotel": 12500
+          }
+        }
+      ]
+    },
+    {
+      "id": "marron",
+      "name": "Marron",
+      "color": "#8B4513",
+      "text_color": "#FFFFFF",
+      "house_cost": 4000,
+      "notes": "Couleur à confirmer — visuellement proche de l'orange sur le plateau",
+      "properties": [
+        {
+          "position": 18,
+          "name": "Daloa",
+          "price": 9000,
+          "mortgage": 4500,
+          "rent": {
+            "base": 450,
+            "h1": 2500,
+            "h2": 7000,
+            "h3": 11000,
+            "h4": 16000,
+            "hotel": 22500
+          }
+        },
+        {
+          "position": 19,
+          "name": "Abobo",
+          "price": 10000,
+          "mortgage": 5000,
+          "rent": {
+            "base": 500,
+            "h1": 3000,
+            "h2": 7500,
+            "h3": 12000,
+            "h4": 18000,
+            "hotel": 25000
+          }
+        }
+      ]
+    },
+    {
+      "id": "vert",
+      "name": "Vert",
+      "color": "#00A651",
+      "text_color": "#FFFFFF",
+      "house_cost": 5000,
+      "properties": [
+        {
+          "position": 21,
+          "name": "Yopougon",
+          "price": 11000,
+          "mortgage": 5500,
+          "rent": {
+            "base": 550,
+            "h1": 3000,
+            "h2": 8500,
+            "h3": 13000,
+            "h4": 19000,
+            "hotel": 27500
+          }
+        },
+        {
+          "position": 23,
+          "name": "Koumassi",
+          "price": 11000,
+          "mortgage": 5500,
+          "rent": {
+            "base": 550,
+            "h1": 3000,
+            "h2": 8500,
+            "h3": 13000,
+            "h4": 19000,
+            "hotel": 27500
+          }
+        },
+        {
+          "position": 24,
+          "name": "Adjamé",
+          "price": 12000,
+          "mortgage": 6000,
+          "rent": {
+            "base": 600,
+            "h1": 3500,
+            "h2": 9000,
+            "h3": 14000,
+            "h4": 21000,
+            "hotel": 30000
+          }
+        }
+      ]
+    },
+    {
+      "id": "bleu_clair",
+      "name": "Bleu Clair",
+      "color": "#29ABE2",
+      "text_color": "#FFFFFF",
+      "house_cost": 6000,
+      "properties": [
+        {
+          "position": 26,
+          "name": "Bingerville",
+          "price": 13000,
+          "mortgage": 6500,
+          "rent": {
+            "base": 650,
+            "h1": 4000,
+            "h2": 10000,
+            "h3": 15500,
+            "h4": 23000,
+            "hotel": 32500
+          }
+        },
+        {
+          "position": 27,
+          "name": "Duékoué",
+          "price": 13000,
+          "mortgage": 6500,
+          "rent": {
+            "base": 650,
+            "h1": 4000,
+            "h2": 10000,
+            "h3": 15500,
+            "h4": 23000,
+            "hotel": 32500
+          }
+        },
+        {
+          "position": 29,
+          "name": "Gagnoa",
+          "price": 14000,
+          "mortgage": 7000,
+          "rent": {
+            "base": 700,
+            "h1": 4500,
+            "h2": 11000,
+            "h3": 17000,
+            "h4": 25000,
+            "hotel": 35000
+          }
+        }
+      ]
+    },
+    {
+      "id": "bleu_fonce",
+      "name": "Bleu Foncé",
+      "color": "#1B1464",
+      "text_color": "#FFFFFF",
+      "house_cost": 7000,
+      "properties": [
+        {
+          "position": 31,
+          "name": "Yamoussoukro",
+          "price": 5000,
+          "mortgage": 2500,
+          "rent": {
+            "base": 250,
+            "h1": 1500,
+            "h2": 3500,
+            "h3": 5500,
+            "h4": 8000,
+            "hotel": 11000
+          }
+        },
+        {
+          "position": 33,
+          "name": "Sassandra",
+          "price": 15000,
+          "mortgage": 7500,
+          "rent": {
+            "base": 750,
+            "h1": 5000,
+            "h2": 12000,
+            "h3": 18000,
+            "h4": 27000,
+            "hotel": 37500
+          }
+        },
+        {
+          "position": 34,
+          "name": "San Pedro",
+          "price": 16000,
+          "mortgage": 8000,
+          "rent": {
+            "base": 800,
+            "h1": 5500,
+            "h2": 13000,
+            "h3": 20000,
+            "h4": 29000,
+            "hotel": 40000
+          }
+        }
+      ]
+    },
+    {
+      "id": "violet",
+      "name": "Violet",
+      "color": "#662D91",
+      "text_color": "#FFFFFF",
+      "house_cost": 10000,
+      "properties": [
+        {
+          "position": 37,
+          "name": "Assinie",
+          "price": 17500,
+          "mortgage": 8750,
+          "rent": {
+            "base": 875,
+            "h1": 6000,
+            "h2": 14000,
+            "h3": 21500,
+            "h4": 31000,
+            "hotel": 43500
+          }
+        },
+        {
+          "position": 39,
+          "name": "Grand Bassam",
+          "price": 20000,
+          "mortgage": 10000,
+          "rent": {
+            "base": 1000,
+            "h1": 7000,
+            "h2": 16000,
+            "h3": 24000,
+            "h4": 35000,
+            "hotel": 50000
+          }
+        }
+      ]
+    }
+  ],
+  "transport_stations": [
+    {
+      "position": 5,
+      "name": "Pinasse de Vridi",
+      "price": 10000,
+      "mortgage": 5000,
+      "type": "port",
+      "rent": [2500, 5000, 10000, 20000]
+    },
+    {
+      "position": 14,
+      "name": "Gare de Gbôkas de Treichville",
+      "price": 10000,
+      "mortgage": 5000,
+      "type": "gare",
+      "rent": [2500, 5000, 10000, 20000]
+    },
+    {
+      "position": 25,
+      "name": "Gare UTB d'Adjamé",
+      "price": 10000,
+      "mortgage": 5000,
+      "type": "gare",
+      "rent": [2500, 5000, 10000, 20000]
+    },
+    {
+      "position": 35,
+      "name": "Aéroport Houphouët-Boigny",
+      "price": 10000,
+      "mortgage": 5000,
+      "type": "aeroport",
+      "rent": [2500, 5000, 10000, 20000]
+    }
+  ],
+  "utilities": [
+    {
+      "position": 4,
+      "name": "Petit Café pour Autorité",
+      "price": 10000,
+      "mortgage": 5000,
+      "rent_rule_one": "4× le résultat des dés",
+      "rent_rule_two": "10× le résultat des dés"
+    },
+    {
+      "position": 11,
+      "name": "Threesixty Gym",
+      "price": 10000,
+      "mortgage": 5000,
+      "rent_rule_one": "4× le résultat des dés",
+      "rent_rule_two": "10× le résultat des dés"
+    },
+    {
+      "position": 12,
+      "name": "CIE",
+      "price": 7500,
+      "mortgage": 3750,
+      "rent_rule_one": "4× le résultat des dés",
+      "rent_rule_two": "10× le résultat des dés"
+    },
+    {
+      "position": 28,
+      "name": "SODECI",
+      "price": 7500,
+      "mortgage": 3750,
+      "rent_rule_one": "4× le résultat des dés",
+      "rent_rule_two": "10× le résultat des dés"
+    }
+  ],
+  "special_squares": [
+    { "position": 0, "type": "go", "name": "AKWABA", "description": "Recevez 10 000 FCFA à chaque passage" },
+    { "position": 2, "type": "community_chest", "name": "Caisse de Communauté" },
+    { "position": 7, "type": "chance", "name": "Chance" },
+    { "position": 10, "type": "jail", "name": "Passage Libre" },
+    { "position": 17, "type": "chance", "name": "Chance" },
+    { "position": 20, "type": "free_parking", "name": "Dans la Forêt du Banco", "description": "Promenade Gratuite" },
+    { "position": 22, "type": "community_chest", "name": "Caisse de Communauté" },
+    { "position": 30, "type": "go_to_jail", "name": "Allez dans la Forêt" },
+    { "position": 32, "type": "community_chest", "name": "Caisse de Communauté" },
+    { "position": 36, "type": "chance", "name": "Chance" },
+    { "position": 38, "type": "tax", "name": "Taxe Choco", "amount": 5000 }
+  ]
+}

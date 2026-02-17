@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Babipoly — Cartes de Propriété</title>
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #F0F0F0;
+      color: #222;
+      padding: 30px 20px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.2rem;
+      color: #F7941D;
+      letter-spacing: 4px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #888;
+      margin-bottom: 40px;
+    }
+
+    /* ─── Group Section ─────────────────────────────────────────────── */
+    .group-section { margin-bottom: 50px; }
+
+    .group-title {
+      display: inline-block;
+      padding: 6px 22px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .cards-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    /* ─── Card Pair ─────────────────────────────────────────────────── */
+    .card-pair {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-pair .side-labels {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .card-pair .side-label {
+      font-size: 0.65rem;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      width: 66mm;
+      text-align: center;
+    }
+
+    .card-sides {
+      display: flex;
+      gap: 6px;
+    }
+
+    /* ─── Card Base ─────────────────────────────────────────────────── */
+    .card {
+      width: 66mm;
+      height: 104mm;
+      border-radius: 3mm;
+      border: 0.5mm solid #ccc;
+      overflow: hidden;
+      background: #fff;
+      position: relative;
+      box-shadow: 2px 3px 8px rgba(0,0,0,0.18);
+      flex-shrink: 0;
+    }
+
+    /* ─── Card FRONT ────────────────────────────────────────────────── */
+    .card-front .color-header {
+      height: 26mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3mm 4mm 2mm;
+      text-align: center;
+    }
+
+    .card-front .color-header .group-label {
+      font-size: 6pt;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.85;
+      margin-bottom: 2mm;
+    }
+
+    .card-front .color-header .prop-name {
+      font-size: 14pt;
+      font-weight: 900;
+      line-height: 1.1;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .card-front .card-body {
+      padding: 2.5mm 4mm;
+      font-size: 7pt;
+    }
+
+    .card-type-label {
+      text-align: center;
+      font-size: 6.5pt;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #444;
+      border-bottom: 0.5mm solid #ddd;
+      padding-bottom: 2mm;
+      margin-bottom: 2.5mm;
+    }
+
+    /* Rent table */
+    .rent-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2.5mm;
+    }
+
+    .rent-table tr { border-bottom: 0.3mm solid #eee; }
+    .rent-table tr:last-child { border-bottom: none; }
+
+    .rent-table td {
+      padding: 1.2mm 0;
+      font-size: 7pt;
+      line-height: 1.3;
+    }
+
+    .rent-table td.label { color: #333; }
+    .rent-table td.amount {
+      text-align: right;
+      font-weight: bold;
+      color: #111;
+    }
+
+    .rent-table tr.highlight td {
+      color: #CC0000;
+      font-weight: bold;
+    }
+
+    .divider {
+      border: none;
+      border-top: 0.4mm solid #ddd;
+      margin: 2mm 0;
+    }
+
+    .costs-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 6.5pt;
+      color: #444;
+      padding: 1mm 0;
+    }
+
+    .costs-row span { font-weight: bold; color: #111; }
+
+    .mortgage-box {
+      background: #f7f7f7;
+      border: 0.3mm solid #ddd;
+      border-radius: 1mm;
+      padding: 1.5mm 3mm;
+      display: flex;
+      justify-content: space-between;
+      font-size: 6.5pt;
+      color: #444;
+      margin-top: 2mm;
+    }
+
+    .mortgage-box span { font-weight: bold; color: #111; }
+
+    .card-footer {
+      position: absolute;
+      bottom: 2.5mm;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 6pt;
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: #F7941D;
+    }
+
+    /* ─── Transport Card Front ──────────────────────────────────────── */
+    .transport-header {
+      height: 26mm;
+      background: #2C2C2C;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3mm;
+      text-align: center;
+    }
+
+    .transport-header .transport-icon {
+      font-size: 18pt;
+      margin-bottom: 1.5mm;
+    }
+
+    .transport-header .prop-name {
+      font-size: 9pt;
+      font-weight: 900;
+      color: #FFFFFF;
+      line-height: 1.15;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ─── Utility Card Front ────────────────────────────────────────── */
+    .utility-header {
+      height: 26mm;
+      background: #555555;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3mm;
+      text-align: center;
+    }
+
+    .utility-header .utility-icon {
+      font-size: 18pt;
+      margin-bottom: 1.5mm;
+    }
+
+    .utility-header .prop-name {
+      font-size: 10pt;
+      font-weight: 900;
+      color: #FFFFFF;
+      line-height: 1.15;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .rule-box {
+      background: #f5f5f5;
+      border-left: 2mm solid #F7941D;
+      padding: 2mm 3mm;
+      font-size: 7pt;
+      color: #333;
+      margin: 2mm 0;
+      line-height: 1.5;
+    }
+
+    /* ─── Card BACK ─────────────────────────────────────────────────── */
+    .card-back {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      padding: 8mm;
+      text-align: center;
+    }
+
+    .card-back .back-brand {
+      font-size: 20pt;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.95);
+      letter-spacing: 3px;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.25);
+      text-transform: uppercase;
+    }
+
+    .card-back .back-divider {
+      width: 35mm;
+      height: 0.5mm;
+      background: rgba(255, 255, 255, 0.5);
+      margin: 4mm auto;
+    }
+
+    .card-back .back-prop-name {
+      font-size: 10pt;
+      font-weight: bold;
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 0 1px 3px rgba(0,0,0,0.25);
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .card-back .back-group-label {
+      font-size: 7pt;
+      font-weight: bold;
+      color: rgba(255, 255, 255, 0.65);
+      letter-spacing: 2px;
+      margin-top: 3mm;
+      text-transform: uppercase;
+    }
+
+    /* ─── Print ─────────────────────────────────────────────────────── */
+    .print-btn {
+      display: block;
+      margin: 0 auto 40px;
+      padding: 12px 32px;
+      background: #F7941D;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      letter-spacing: 1px;
+    }
+
+    .print-btn:hover { background: #D97706; }
+
+    @media print {
+      body { background: white; padding: 5mm; }
+      .print-btn { display: none; }
+      .group-section { margin-bottom: 10mm; }
+      .card { box-shadow: none; border: 0.5mm solid #ccc; }
+      h1, .subtitle { display: none; }
+
+      /* Force page breaks between groups if needed */
+      .page-break { page-break-before: always; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Babipoly</h1>
+<p class="subtitle">Cartes de Propriété — Aperçu recto/verso &nbsp;|&nbsp; Loyers : valeurs estimées à vérifier</p>
+
+<button class="print-btn" onclick="window.print()">Imprimer les cartes</button>
+
+<div id="output"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   DONNÉES DU PLATEAU
+═══════════════════════════════════════════════════════════════ */
+const data = {
+  colorGroups: [
+    {
+      id: "jaune", name: "Jaune", color: "#F5C518", textColor: "#333333", houseCost: 1000,
+      properties: [
+        { pos: 1, name: "Plateau",  price: 3000, mortgage: 1500, rent: { base: 150, h1: 600,  h2: 1800, h3: 3000,  h4: 4500,  hotel: 6000  } },
+        { pos: 3, name: "Cocody",   price: 3000, mortgage: 1500, rent: { base: 300, h1: 600,  h2: 1800, h3: 3000,  h4: 4500,  hotel: 6000  } }
+      ]
+    },
+    {
+      id: "rouge", name: "Rouge", color: "#CC0000", textColor: "#FFFFFF", houseCost: 2000,
+      properties: [
+        { pos: 6, name: "Marcory",    price: 5000, mortgage: 2500, rent: { base: 250, h1: 1000, h2: 3000, h3: 5000,  h4: 7500,  hotel: 10000 } },
+        { pos: 8, name: "Zone 4",     price: 6000, mortgage: 3000, rent: { base: 300, h1: 1500, h2: 4000, h3: 6000,  h4: 9000,  hotel: 12000 } },
+        { pos: 9, name: "Treichville",price: 5000, mortgage: 2500, rent: { base: 250, h1: 1000, h2: 3000, h3: 5000,  h4: 7500,  hotel: 10000 } }
+      ]
+    },
+    {
+      id: "orange", name: "Orange", color: "#F7941D", textColor: "#FFFFFF", houseCost: 3000,
+      properties: [
+        { pos: 13, name: "Bouaké",  price: 7000, mortgage: 3500, rent: { base: 350, h1: 2000, h2: 5500, h3: 9000,  h4: 12500, hotel: 17500 } },
+        { pos: 15, name: "Korhogo", price: 8000, mortgage: 4000, rent: { base: 400, h1: 2500, h2: 6000, h3: 10000, h4: 14000, hotel: 20000 } },
+        { pos: 16, name: "Man",     price: 5000, mortgage: 2500, rent: { base: 250, h1: 1500, h2: 4000, h3: 6500,  h4: 9000,  hotel: 12500 } }
+      ]
+    },
+    {
+      id: "marron", name: "Marron", color: "#8B4513", textColor: "#FFFFFF", houseCost: 4000,
+      properties: [
+        { pos: 18, name: "Daloa", price: 9000,  mortgage: 4500, rent: { base: 450, h1: 2500, h2: 7000, h3: 11000, h4: 16000, hotel: 22500 } },
+        { pos: 19, name: "Abobo", price: 10000, mortgage: 5000, rent: { base: 500, h1: 3000, h2: 7500, h3: 12000, h4: 18000, hotel: 25000 } }
+      ]
+    },
+    {
+      id: "vert", name: "Vert", color: "#00A651", textColor: "#FFFFFF", houseCost: 5000,
+      properties: [
+        { pos: 21, name: "Yopougon", price: 11000, mortgage: 5500, rent: { base: 550, h1: 3000, h2: 8500,  h3: 13000, h4: 19000, hotel: 27500 } },
+        { pos: 23, name: "Koumassi", price: 11000, mortgage: 5500, rent: { base: 550, h1: 3000, h2: 8500,  h3: 13000, h4: 19000, hotel: 27500 } },
+        { pos: 24, name: "Adjamé",   price: 12000, mortgage: 6000, rent: { base: 600, h1: 3500, h2: 9000,  h3: 14000, h4: 21000, hotel: 30000 } }
+      ]
+    },
+    {
+      id: "bleu_clair", name: "Bleu Clair", color: "#29ABE2", textColor: "#FFFFFF", houseCost: 6000,
+      properties: [
+        { pos: 26, name: "Bingerville", price: 13000, mortgage: 6500, rent: { base: 650, h1: 4000, h2: 10000, h3: 15500, h4: 23000, hotel: 32500 } },
+        { pos: 27, name: "Duékoué",     price: 13000, mortgage: 6500, rent: { base: 650, h1: 4000, h2: 10000, h3: 15500, h4: 23000, hotel: 32500 } },
+        { pos: 29, name: "Gagnoa",      price: 14000, mortgage: 7000, rent: { base: 700, h1: 4500, h2: 11000, h3: 17000, h4: 25000, hotel: 35000 } }
+      ]
+    },
+    {
+      id: "bleu_fonce", name: "Bleu Foncé", color: "#1B1464", textColor: "#FFFFFF", houseCost: 7000,
+      properties: [
+        { pos: 31, name: "Yamoussoukro", price: 5000,  mortgage: 2500, rent: { base: 250, h1: 1500, h2: 3500,  h3: 5500,  h4: 8000,  hotel: 11000 } },
+        { pos: 33, name: "Sassandra",    price: 15000, mortgage: 7500, rent: { base: 750, h1: 5000, h2: 12000, h3: 18000, h4: 27000, hotel: 37500 } },
+        { pos: 34, name: "San Pedro",    price: 16000, mortgage: 8000, rent: { base: 800, h1: 5500, h2: 13000, h3: 20000, h4: 29000, hotel: 40000 } }
+      ]
+    },
+    {
+      id: "violet", name: "Violet", color: "#662D91", textColor: "#FFFFFF", houseCost: 10000,
+      properties: [
+        { pos: 37, name: "Assinie",      price: 17500, mortgage: 8750,  rent: { base: 875,  h1: 6000, h2: 14000, h3: 21500, h4: 31000, hotel: 43500 } },
+        { pos: 39, name: "Grand Bassam", price: 20000, mortgage: 10000, rent: { base: 1000, h1: 7000, h2: 16000, h3: 24000, h4: 35000, hotel: 50000 } }
+      ]
+    }
+  ],
+
+  transportStations: [
+    { pos: 5,  name: "Pinasse de Vridi",              price: 10000, mortgage: 5000, icon: "⛵", type: "Port" },
+    { pos: 14, name: "Gare de Gbôkas\nde Treichville", price: 10000, mortgage: 5000, icon: "🚌", type: "Gare" },
+    { pos: 25, name: "Gare UTB d'Adjamé",              price: 10000, mortgage: 5000, icon: "🚌", type: "Gare" },
+    { pos: 35, name: "Aéroport\nHouphouët-Boigny",     price: 10000, mortgage: 5000, icon: "✈️", type: "Aéroport" }
+  ],
+
+  utilities: [
+    { pos: 4,  name: "Petit Café\npour Autorité", price: 10000, mortgage: 5000, icon: "☕" },
+    { pos: 11, name: "Threesixty Gym",            price: 10000, mortgage: 5000, icon: "🏋️" },
+    { pos: 12, name: "CIE",                       price: 7500,  mortgage: 3750, icon: "⚡" },
+    { pos: 28, name: "SODECI",                    price: 7500,  mortgage: 3750, icon: "💧" }
+  ]
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════════════════════════════ */
+function fmt(n) {
+  return n.toLocaleString('fr-FR') + ' FCFA';
+}
+
+function darken(hex, amount = 40) {
+  let r = parseInt(hex.slice(1,3), 16);
+  let g = parseInt(hex.slice(3,5), 16);
+  let b = parseInt(hex.slice(5,7), 16);
+  r = Math.max(0, r - amount);
+  g = Math.max(0, g - amount);
+  b = Math.max(0, b - amount);
+  return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CARD FRONT — PROPERTY
+═══════════════════════════════════════════════════════════════ */
+function makePropertyFront(prop, group) {
+  const { color, textColor, name: groupName, houseCost } = group;
+  const { name, price, mortgage, rent } = prop;
+
+  return `
+    <div class="card card-front">
+      <div class="color-header" style="background: ${color};">
+        <div class="group-label" style="color: ${textColor};">${groupName}</div>
+        <div class="prop-name" style="color: ${textColor};">${name}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-type-label">Titre de Propriété</div>
+        <table class="rent-table">
+          <tr><td class="label">Loyer</td><td class="amount">${fmt(rent.base)}</td></tr>
+          <tr><td class="label">Avec 1 maison</td><td class="amount">${fmt(rent.h1)}</td></tr>
+          <tr><td class="label">Avec 2 maisons</td><td class="amount">${fmt(rent.h2)}</td></tr>
+          <tr><td class="label">Avec 3 maisons</td><td class="amount">${fmt(rent.h3)}</td></tr>
+          <tr><td class="label">Avec 4 maisons</td><td class="amount">${fmt(rent.h4)}</td></tr>
+          <tr class="highlight"><td class="label">Avec 1 hôtel</td><td class="amount">${fmt(rent.hotel)}</td></tr>
+        </table>
+        <hr class="divider">
+        <div class="costs-row">
+          <span style="color:#888">Maisons :</span>
+          <span>${fmt(houseCost)} / maison</span>
+        </div>
+        <div class="costs-row">
+          <span style="color:#888">Hôtel :</span>
+          <span>${fmt(houseCost)} + 4 maisons</span>
+        </div>
+        <div class="mortgage-box">
+          <span style="color:#888">Hypothèque :</span>
+          <span>${fmt(mortgage)}</span>
+        </div>
+      </div>
+      <div class="card-footer">BABIPOLY</div>
+    </div>`;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CARD FRONT — TRANSPORT
+═══════════════════════════════════════════════════════════════ */
+function makeTransportFront(station) {
+  const { name, price, mortgage, icon, type } = station;
+  const displayName = name.replace(/\n/g, '<br>');
+  return `
+    <div class="card card-front">
+      <div class="transport-header">
+        <div class="transport-icon">${icon}</div>
+        <div class="prop-name">${displayName}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-type-label">${type}</div>
+        <table class="rent-table">
+          <tr>
+            <td class="label" colspan="2" style="font-size:6.5pt;color:#666;padding-bottom:1.5mm;">
+              Loyer selon le nombre<br>de transports possédés :
+            </td>
+          </tr>
+          <tr><td class="label">1 transport</td><td class="amount">2 500 FCFA</td></tr>
+          <tr><td class="label">2 transports</td><td class="amount">5 000 FCFA</td></tr>
+          <tr><td class="label">3 transports</td><td class="amount">10 000 FCFA</td></tr>
+          <tr class="highlight"><td class="label">4 transports</td><td class="amount">20 000 FCFA</td></tr>
+        </table>
+        <hr class="divider">
+        <div class="costs-row">
+          <span style="color:#888">Prix d'achat :</span>
+          <span>${fmt(price)}</span>
+        </div>
+        <div class="mortgage-box">
+          <span style="color:#888">Hypothèque :</span>
+          <span>${fmt(mortgage)}</span>
+        </div>
+      </div>
+      <div class="card-footer">BABIPOLY</div>
+    </div>`;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CARD FRONT — UTILITY
+═══════════════════════════════════════════════════════════════ */
+function makeUtilityFront(utility) {
+  const { name, price, mortgage, icon } = utility;
+  const displayName = name.replace(/\n/g, '<br>');
+  return `
+    <div class="card card-front">
+      <div class="utility-header">
+        <div class="utility-icon">${icon}</div>
+        <div class="prop-name">${displayName}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-type-label">Compagnie / Établissement</div>
+        <div class="rule-box">
+          <strong>Si vous possédez<br>1 seule compagnie :</strong><br>
+          Loyer = <strong>4×</strong> le résultat des dés
+        </div>
+        <div class="rule-box">
+          <strong>Si vous possédez<br>les 2 compagnies :</strong><br>
+          Loyer = <strong>10×</strong> le résultat des dés
+        </div>
+        <hr class="divider">
+        <div class="costs-row">
+          <span style="color:#888">Prix d'achat :</span>
+          <span>${fmt(price)}</span>
+        </div>
+        <div class="mortgage-box">
+          <span style="color:#888">Hypothèque :</span>
+          <span>${fmt(mortgage)}</span>
+        </div>
+      </div>
+      <div class="card-footer">BABIPOLY</div>
+    </div>`;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CARD BACK
+═══════════════════════════════════════════════════════════════ */
+function makeBack(name, bgColor, groupLabel) {
+  const displayName = name.replace(/\n/g, '<br>');
+  return `
+    <div class="card card-back" style="background: ${bgColor};">
+      <div class="back-content" style="text-align:center;">
+        <div class="back-brand">BABIPOLY</div>
+        <div class="back-divider"></div>
+        <div class="back-prop-name" style="font-size:10pt;font-weight:bold;color:rgba(255,255,255,0.9);line-height:1.25;text-shadow:0 1px 3px rgba(0,0,0,0.3);">
+          ${displayName}
+        </div>
+        ${groupLabel ? `<div class="back-group-label" style="font-size:6.5pt;font-weight:bold;color:rgba(255,255,255,0.6);letter-spacing:2px;margin-top:3mm;text-transform:uppercase;">${groupLabel}</div>` : ''}
+      </div>
+    </div>`;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CARD PAIR WRAPPER
+═══════════════════════════════════════════════════════════════ */
+function makeCardPair(frontHTML, backHTML) {
+  return `
+    <div class="card-pair">
+      <div class="card-sides">
+        ${frontHTML}
+        ${backHTML}
+      </div>
+      <div class="side-labels">
+        <div class="side-label">Recto</div>
+        <div class="side-label">Verso</div>
+      </div>
+    </div>`;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════════════════════════ */
+function render() {
+  const out = document.getElementById('output');
+  let html = '';
+
+  /* ── Color groups ── */
+  for (const group of data.colorGroups) {
+    html += `<div class="group-section">`;
+    html += `<div>
+      <span class="group-title" style="background:${group.color};color:${group.textColor};">
+        Groupe ${group.name}
+      </span>
+    </div>`;
+    html += `<div class="cards-row">`;
+
+    for (const prop of group.properties) {
+      const front = makePropertyFront(prop, group);
+      const back  = makeBack(prop.name, group.color, `Groupe ${group.name}`);
+      html += makeCardPair(front, back);
+    }
+
+    html += `</div></div>`;
+  }
+
+  /* ── Transport stations ── */
+  html += `<div class="group-section">`;
+  html += `<div>
+    <span class="group-title" style="background:#2C2C2C;color:#FFFFFF;">
+      Transports
+    </span>
+  </div>`;
+  html += `<div class="cards-row">`;
+
+  for (const station of data.transportStations) {
+    const front = makeTransportFront(station);
+    const back  = makeBack(station.name, '#2C2C2C', station.type);
+    html += makeCardPair(front, back);
+  }
+
+  html += `</div></div>`;
+
+  /* ── Utilities ── */
+  html += `<div class="group-section">`;
+  html += `<div>
+    <span class="group-title" style="background:#555555;color:#FFFFFF;">
+      Compagnies &amp; Établissements
+    </span>
+  </div>`;
+  html += `<div class="cards-row">`;
+
+  for (const utility of data.utilities) {
+    const front = makeUtilityFront(utility);
+    const back  = makeBack(utility.name, '#555555', 'Compagnie');
+    html += makeCardPair(front, back);
+  }
+
+  html += `</div></div>`;
+
+  out.innerHTML = html;
+}
+
+render();
+</script>
+</body>
+</html>
