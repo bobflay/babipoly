@@ -1,0 +1,2054 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Babipoly — Suivi Chaîne d'Approvisionnement</title>
+  <style>
+    :root {
+      --primary: #1a2332;
+      --primary-light: #2c3e50;
+      --accent: #3498db;
+      --accent-dark: #2980b9;
+      --success: #27ae60;
+      --warning: #f39c12;
+      --danger: #e74c3c;
+      --light: #f4f6f9;
+      --border: #dde3ea;
+      --text: #2c3e50;
+      --text-muted: #7f8c8d;
+      --card: #ffffff;
+      --radius: 10px;
+      --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--light);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: #fff;
+      padding: 0;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 32px 16px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand-icon {
+      width: 48px; height: 48px;
+      background: var(--accent);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .brand-text h1 { font-size: 22px; font-weight: 700; letter-spacing: 0.5px; }
+    .brand-text p  { font-size: 12px; opacity: 0.7; margin-top: 2px; }
+
+    .header-stats {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .stat-pill {
+      text-align: center;
+    }
+    .stat-pill .val { font-size: 26px; font-weight: 700; color: #fff; line-height: 1; }
+    .stat-pill .lbl { font-size: 11px; opacity: 0.65; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .header-progress {
+      padding: 12px 32px 0;
+      background: rgba(0,0,0,0.15);
+    }
+    .progress-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 0;
+    }
+    .progress-label { font-size: 13px; opacity: 0.8; white-space: nowrap; }
+    .progress-track {
+      flex: 1;
+      height: 10px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #27ae60, #2ecc71);
+      border-radius: 99px;
+      transition: width 0.5s ease;
+    }
+    .progress-pct { font-size: 14px; font-weight: 700; min-width: 40px; text-align: right; }
+
+    /* ── NAV TABS ── */
+    nav.tabs {
+      background: var(--primary-light);
+      display: flex;
+      padding: 0 32px;
+      gap: 4px;
+      border-bottom: 3px solid var(--primary);
+    }
+    nav.tabs button {
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.6);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 13px 18px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -3px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    nav.tabs button:hover  { color: rgba(255,255,255,0.9); }
+    nav.tabs button.active { color: #fff; border-bottom-color: var(--accent); }
+
+    /* ── MAIN CONTENT ── */
+    main { max-width: 1200px; margin: 0 auto; padding: 28px 24px; }
+    .tab-section { display: none; }
+    .tab-section.active { display: block; }
+
+    /* ── SECTION HEADERS ── */
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: var(--border);
+      border-radius: 1px;
+    }
+
+    /* ── OVERVIEW CARDS GRID ── */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .comp-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      border-left: 4px solid var(--border);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .comp-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+    .comp-card.status-todo    { border-left-color: var(--border); }
+    .comp-card.status-active  { border-left-color: var(--warning); }
+    .comp-card.status-done    { border-left-color: var(--success); }
+
+    .comp-card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .comp-icon {
+      font-size: 28px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .comp-card-header-text h3 { font-size: 15px; font-weight: 700; }
+    .comp-card-header-text p  { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    .comp-card-progress { margin-bottom: 10px; }
+    .mini-track {
+      height: 7px;
+      background: #eef0f3;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+    .mini-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--accent), #27ae60);
+      transition: width 0.4s ease;
+    }
+    .comp-card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .stage-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 99px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-todo    { background: #eef0f3; color: #7f8c8d; }
+    .badge-active  { background: #fef9e7; color: #f39c12; }
+    .badge-done    { background: #eafaf1; color: #27ae60; }
+
+    /* ── SUMMARY STATS ROW ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .stat-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      text-align: center;
+    }
+    .stat-card .num {
+      font-size: 36px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-card .txt { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-card.s-total   .num { color: var(--primary); }
+    .stat-card.s-active  .num { color: var(--warning); }
+    .stat-card.s-done    .num { color: var(--success); }
+    .stat-card.s-tasks   .num { color: var(--accent); }
+
+    /* ── COMPONENT ACCORDION ── */
+    .comp-accordion { display: flex; flex-direction: column; gap: 12px; }
+
+    .acc-item {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .acc-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 20px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s;
+    }
+    .acc-header:hover { background: #f9fafb; }
+
+    .acc-icon { font-size: 24px; flex-shrink: 0; }
+    .acc-title { flex: 1; }
+    .acc-title h3 { font-size: 15px; font-weight: 700; }
+    .acc-title p  { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    .acc-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .acc-pct { font-size: 20px; font-weight: 800; color: var(--primary); min-width: 50px; text-align: right; }
+    .acc-chevron {
+      font-size: 18px;
+      color: var(--text-muted);
+      transition: transform 0.2s;
+      line-height: 1;
+    }
+    .acc-item.open .acc-chevron { transform: rotate(180deg); }
+
+    .acc-progress-bar {
+      height: 4px;
+      background: #eef0f3;
+    }
+    .acc-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--success));
+      transition: width 0.4s;
+    }
+
+    .acc-body {
+      display: none;
+      padding: 0 20px 20px;
+    }
+    .acc-item.open .acc-body { display: block; }
+
+    /* ── STAGE PIPELINE ── */
+    .stage-pipeline {
+      display: flex;
+      gap: 0;
+      margin: 20px 0;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .stage-step {
+      flex: 1;
+      min-width: 110px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .stage-step::before {
+      content: '';
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      right: -50%;
+      height: 2px;
+      background: var(--border);
+      z-index: 0;
+    }
+    .stage-step:last-child::before { display: none; }
+    .stage-step.done::before { background: var(--success); }
+    .stage-step.active::before { background: linear-gradient(90deg, var(--warning), var(--border)); }
+
+    .stage-dot {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 3px solid var(--border);
+      background: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      z-index: 1;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .stage-step.done   .stage-dot { border-color: var(--success); background: var(--success); color: #fff; }
+    .stage-step.active .stage-dot { border-color: var(--warning); background: var(--warning); color: #fff; box-shadow: 0 0 0 4px rgba(243,156,18,0.2); }
+
+    .stage-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-align: center;
+      margin-top: 8px;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+    .stage-step.done   .stage-label { color: var(--success); }
+    .stage-step.active .stage-label { color: var(--warning); }
+
+    /* ── TASKS SECTIONS ── */
+    .tasks-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+
+    .task-stage-block {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .task-stage-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      background: #f8fafc;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s;
+    }
+    .task-stage-header:hover { background: #f0f4f8; }
+    .task-stage-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .task-stage-header h4 { flex: 1; font-size: 13px; font-weight: 700; }
+    .task-stage-count { font-size: 11px; color: var(--text-muted); }
+    .task-stage-chevron { font-size: 12px; color: var(--text-muted); transition: transform 0.2s; }
+    .task-stage-block.open .task-stage-chevron { transform: rotate(180deg); }
+
+    .task-list { display: none; padding: 8px 14px 14px; }
+    .task-stage-block.open .task-list { display: block; }
+
+    .task-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 7px 0;
+      border-bottom: 1px solid #f0f4f8;
+    }
+    .task-item:last-child { border-bottom: none; }
+
+    .task-item input[type="checkbox"] {
+      width: 17px; height: 17px;
+      margin-top: 1px;
+      cursor: pointer;
+      accent-color: var(--success);
+      flex-shrink: 0;
+    }
+    .task-item label {
+      font-size: 13px;
+      cursor: pointer;
+      line-height: 1.4;
+      color: var(--text);
+    }
+    .task-item.checked label {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    /* ── SUPPLIER CARD ── */
+    .supplier-section {
+      margin-top: 20px;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+    .supplier-section h4 { font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 12px; }
+
+    .supplier-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+
+    .supplier-card {
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      position: relative;
+    }
+    .supplier-card:hover { border-color: var(--accent); box-shadow: 0 2px 8px rgba(52,152,219,0.15); }
+    .supplier-card.selected { border-color: var(--success); background: #f0faf5; }
+
+    .supplier-selected-badge {
+      position: absolute;
+      top: 8px; right: 8px;
+      background: var(--success);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 99px;
+    }
+    .supplier-card h5 { font-size: 12px; font-weight: 700; margin-bottom: 4px; padding-right: 50px; }
+    .supplier-card .s-city { font-size: 11px; color: var(--text-muted); }
+    .supplier-card .s-spec { font-size: 11px; color: var(--accent); margin-top: 6px; }
+    .supplier-card .s-contact { font-size: 10px; color: var(--text-muted); margin-top: 4px; font-style: italic; }
+
+    /* ── SUPPLIER DIRECTORY ── */
+    .supplier-dir-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .supplier-dir-comp {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .supplier-dir-comp-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      background: var(--primary);
+      color: #fff;
+    }
+    .supplier-dir-comp-header .d-icon { font-size: 20px; }
+    .supplier-dir-comp-header h3 { font-size: 15px; font-weight: 700; flex: 1; }
+    .supplier-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .supplier-table th {
+      background: #f4f6f9;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      padding: 10px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .supplier-table td {
+      padding: 12px 16px;
+      font-size: 13px;
+      border-bottom: 1px solid #f0f4f8;
+      vertical-align: top;
+    }
+    .supplier-table tr:last-child td { border-bottom: none; }
+    .supplier-table tr:hover td { background: #f9fafb; }
+    .selected-row td { background: #f0faf5 !important; }
+    .s-name-cell { font-weight: 600; }
+    .s-check { color: var(--success); font-weight: 700; font-size: 16px; }
+
+    /* ── TIMELINE ── */
+    .timeline-table-wrap { overflow-x: auto; }
+    .timeline-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 700px;
+    }
+    .timeline-table th {
+      padding: 10px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #fff;
+      text-align: center;
+    }
+    .timeline-table th:first-child { text-align: left; background: var(--primary); }
+    .th-design    { background: #8e44ad; }
+    .th-rfq       { background: #2980b9; }
+    .th-sample    { background: #d35400; }
+    .th-prod      { background: #16a085; }
+    .th-qc        { background: #c0392b; }
+    .th-ship      { background: #27ae60; }
+
+    .timeline-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      text-align: center;
+    }
+    .timeline-table td:first-child { text-align: left; font-weight: 600; }
+    .timeline-table tr:last-child td { border-bottom: none; }
+    .timeline-table tr:hover td { background: #f9fafb; }
+
+    .tl-cell {
+      border-radius: 6px;
+      padding: 5px 8px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .tl-done    { background: #eafaf1; color: var(--success); }
+    .tl-active  { background: #fef9e7; color: var(--warning); }
+    .tl-todo    { background: #f4f6f9; color: var(--text-muted); }
+    .tl-na      { color: #d0d5dd; }
+
+    .tl-comp-name { display: flex; align-items: center; gap: 8px; }
+
+    /* ── UTILITIES ── */
+    .mt-4 { margin-top: 4px; }
+    .mt-8 { margin-top: 8px; }
+    .mt-16 { margin-top: 16px; }
+    .text-muted { color: var(--text-muted); font-size: 12px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-outline {
+      border-color: var(--border);
+      background: #fff;
+      color: var(--text);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    .btn-danger-outline {
+      border-color: #fcdede;
+      background: #fff;
+      color: var(--danger);
+      font-size: 12px;
+      padding: 6px 12px;
+    }
+    .btn-danger-outline:hover { background: #fef0f0; }
+
+    .actions-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      margin-top: 12px;
+    }
+
+    .info-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #eef5ff;
+      color: var(--accent);
+      border-radius: 99px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+    .empty p { margin-top: 8px; font-size: 13px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .header-top { padding: 16px; }
+      .header-progress { padding: 10px 16px 0; }
+      nav.tabs { padding: 0 16px; overflow-x: auto; }
+      main { padding: 20px 14px; }
+      .stage-pipeline { gap: 0; }
+      .stage-label { font-size: 9px; }
+    }
+
+    /* ── LOADING OVERLAY ── */
+    #loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      flex-direction: column;
+      gap: 16px;
+      transition: opacity 0.4s ease;
+    }
+    #loading-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid rgba(255,255,255,0.2);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── SYNC INDICATOR ── */
+    #sync-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      padding: 5px 12px;
+      border-radius: 99px;
+      font-weight: 600;
+      background: rgba(255,255,255,0.1);
+      white-space: nowrap;
+    }
+    #sync-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #27ae60;
+      flex-shrink: 0;
+    }
+    #sync-status.syncing #sync-dot { background: var(--warning); animation: pulse 1s ease infinite; }
+    #sync-status.offline #sync-dot { background: var(--danger); animation: none; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    /* ── PRINT ── */
+    @media print {
+      nav.tabs, .actions-row { display: none; }
+      .tab-section { display: block !important; }
+      .acc-body { display: block !important; }
+      .task-list { display: block !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── LOADING OVERLAY ── -->
+<div id="loading-overlay">
+  <div style="color:#fff;font-size:20px;font-weight:800;letter-spacing:1px;">BABIPOLY</div>
+  <div style="color:rgba(255,255,255,0.55);font-size:13px;">Connexion à la base de données...</div>
+  <div class="spinner"></div>
+</div>
+
+<header>
+  <div class="header-top">
+    <div class="header-brand">
+      <div class="brand-icon">&#127922;</div>
+      <div class="brand-text">
+        <h1>BABIPOLY</h1>
+        <p>Suivi de la Cha&icirc;ne d&apos;Approvisionnement &mdash; Production</p>
+      </div>
+    </div>
+    <div class="header-stats">
+      <div class="stat-pill">
+        <div class="val" id="hdr-pct">0%</div>
+        <div class="lbl">Progression globale</div>
+      </div>
+      <div class="stat-pill">
+        <div class="val" id="hdr-tasks">0/0</div>
+        <div class="lbl">T&acirc;ches termin&eacute;es</div>
+      </div>
+      <div class="stat-pill">
+        <div class="val" id="hdr-comps">0/8</div>
+        <div class="lbl">Composants actifs</div>
+      </div>
+      <div id="sync-status">
+        <div id="sync-dot"></div>
+        <span id="sync-label">En ligne</span>
+      </div>
+    </div>
+  </div>
+  <div class="header-progress">
+    <div class="progress-bar-row">
+      <span class="progress-label">Avancement total du projet</span>
+      <div class="progress-track">
+        <div class="progress-fill" id="global-bar" style="width:0%"></div>
+      </div>
+      <span class="progress-pct" id="global-pct">0%</span>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" id="main-tabs">
+  <button class="active" data-tab="overview">&#128202; Vue d&apos;ensemble</button>
+  <button data-tab="components">&#9881;&#65039; Composants</button>
+  <button data-tab="suppliers">&#127981; Fournisseurs</button>
+  <button data-tab="timeline">&#128197; Calendrier</button>
+</nav>
+
+<main>
+
+  <!-- ══ TAB: OVERVIEW ══ -->
+  <section class="tab-section active" id="tab-overview">
+    <div class="stats-row" id="stats-row">
+      <div class="stat-card s-total"><div class="num">8</div><div class="txt">Composants total</div></div>
+      <div class="stat-card s-active"><div class="num" id="stat-active">0</div><div class="txt">En cours</div></div>
+      <div class="stat-card s-done"><div class="num" id="stat-done">0</div><div class="txt">Termin&eacute;s</div></div>
+      <div class="stat-card s-tasks"><div class="num" id="stat-tasks">0%</div><div class="txt">T&acirc;ches valid&eacute;es</div></div>
+    </div>
+
+    <div class="section-title">&#127775; Statut par composant</div>
+    <div class="overview-grid" id="overview-grid"></div>
+  </section>
+
+  <!-- ══ TAB: COMPONENTS ══ -->
+  <section class="tab-section" id="tab-components">
+    <div class="section-title">&#9881;&#65039; Composants &amp; T&acirc;ches de production</div>
+    <div class="comp-accordion" id="comp-accordion"></div>
+  </section>
+
+  <!-- ══ TAB: SUPPLIERS ══ -->
+  <section class="tab-section" id="tab-suppliers">
+    <div class="section-title">&#127981; R&eacute;pertoire des fournisseurs (Chine)</div>
+    <div class="supplier-dir-grid" id="supplier-dir"></div>
+  </section>
+
+  <!-- ══ TAB: TIMELINE ══ -->
+  <section class="tab-section" id="tab-timeline">
+    <div class="section-title">&#128197; Tableau de bord &mdash; Avancement par &eacute;tape</div>
+    <div class="timeline-table-wrap">
+      <table class="timeline-table" id="timeline-table">
+        <thead>
+          <tr>
+            <th style="width:200px">Composant</th>
+            <th class="th-design">Design</th>
+            <th class="th-rfq">RFQ &amp; Devis</th>
+            <th class="th-sample">Prototype</th>
+            <th class="th-prod">Production</th>
+            <th class="th-qc">Contr&ocirc;le QC</th>
+            <th class="th-ship">Exp&eacute;dition</th>
+          </tr>
+        </thead>
+        <tbody id="timeline-body"></tbody>
+      </table>
+    </div>
+    <p class="text-muted mt-16">
+      <span class="tl-cell tl-done">&check; Termin&eacute;</span>&nbsp;
+      <span class="tl-cell tl-active">&#9654; En cours</span>&nbsp;
+      <span class="tl-cell tl-todo">&ndash; &Agrave; faire</span>
+    </p>
+  </section>
+
+</main>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════════════════════════════════
+
+const STAGES = [
+  { id: 'design',     label: 'Design',      icon: '✏️', color: '#8e44ad' },
+  { id: 'rfq',        label: 'RFQ & Devis', icon: '📋', color: '#2980b9' },
+  { id: 'sample',     label: 'Prototype',   icon: '🔬', color: '#d35400' },
+  { id: 'production', label: 'Production',  icon: '🏭', color: '#16a085' },
+  { id: 'qc',         label: 'Contrôle QC', icon: '✅', color: '#c0392b' },
+  { id: 'shipping',   label: 'Expédition',  icon: '🚢', color: '#27ae60' },
+];
+
+const COMPONENTS = [
+  {
+    id: 'board',
+    name: 'Plateau de Jeu',
+    nameEn: 'Game Board',
+    icon: '🗺️',
+    specs: '500×500mm ouvert — pliage 4x (croix) — greyboard 2mm — laminage mat',
+    category: 'print',
+    suppliers: [
+      {
+        name: 'Dongguan Shenghua Printing Co., Ltd',
+        city: 'Dongguan, Guangdong',
+        specialty: 'Spécialiste jeux de société, impression offset',
+        contact: 'sales@shenghuaprinting.com',
+        moq: '500 unités',
+      },
+      {
+        name: 'Guangzhou Raynna Paper Products Co., Ltd',
+        city: 'Guangzhou, Guangdong',
+        specialty: 'Jeux de plateau personnalisés & emballages',
+        contact: 'info@raynnaprinting.com',
+        moq: '300 unités',
+      },
+      {
+        name: 'Yancheng Wanlida Toy & Gift Co., Ltd',
+        city: 'Yancheng, Jiangsu',
+        specialty: 'Fabrication complète de jeux de société',
+        contact: 'wanlida@wanlida.cn',
+        moq: '500 unités',
+      },
+    ],
+    stages: [
+      {
+        id: 'design',
+        tasks: [
+          'Finaliser le design graphique du plateau 500×500mm',
+          'Préparer les fichiers d\'impression PDF haute résolution (CMYK, 300dpi)',
+          'Valider les zones de pliage 4x (structure en croix)',
+          'Envoyer les fichiers pour épreuve couleur (colour proof)',
+          'Approbation finale du design — signature',
+        ],
+      },
+      {
+        id: 'rfq',
+        tasks: [
+          'Envoyer le RFQ avec specs complètes à 3+ imprimeurs',
+          'Recevoir et comparer les devis (prix FOB, délais)',
+          'Négocier le prix et les conditions de paiement',
+          'Sélectionner le fournisseur final',
+          'Signer le bon de commande (PO)',
+        ],
+      },
+      {
+        id: 'sample',
+        tasks: [
+          'Commander un prototype d\'impression (pre-production sample)',
+          'Recevoir le prototype physique',
+          'Tester la solidité du pliage (pas de craquelures)',
+          'Vérifier la qualité d\'impression et du laminage mat',
+          'Approuver le prototype (ou demander corrections)',
+        ],
+      },
+      {
+        id: 'production',
+        tasks: [
+          'Verser l\'acompte de production (30-50%)',
+          'Confirmer le lancement de la production',
+          'Recevoir le rapport de suivi mi-production',
+          'Production terminée — recevoir la notification de l\'usine',
+        ],
+      },
+      {
+        id: 'qc',
+        tasks: [
+          'Mandater une inspection QC tierce partie (ex: QIMA, Bureau Veritas)',
+          'Recevoir et analyser le rapport d\'inspection',
+          'Vérifier : aucune craquelure aux plis du plateau',
+          'Vérifier : aucune bulle de laminage',
+          'Approuver l\'expédition',
+        ],
+      },
+      {
+        id: 'shipping',
+        tasks: [
+          'Réserver le transitaire / agent fret',
+          'Recevoir facture commerciale et liste de colisage',
+          'Confirmer le chargement des marchandises',
+          'Suivre l\'expédition (numéro de tracking)',
+          'Confirmer la livraison à l\'entrepôt destination',
+        ],
+      },
+    ],
+  },
+
+  {
+    id: 'cards',
+    name: 'Cartes de Jeu',
+    nameEn: 'Playing Cards',
+    icon: '🃏',
+    specs: '60 cartes (16 Chance + 16 Communauté + 28 Propriétés) — 63×88mm — 300gsm black core',
+    category: 'print',
+    suppliers: [
+      {
+        name: 'Wuhu Xinqi Printing & Packaging Co., Ltd',
+        city: 'Wuhu, Anhui',
+        specialty: 'Spécialiste cartes de jeu, black core, finition mat/brillant',
+        contact: 'xinqi@xinqiprint.com',
+        moq: '1000 jeux',
+      },
+      {
+        name: 'Shenzhen Goldensun Game & Gift Co., Ltd',
+        city: 'Shenzhen, Guangdong',
+        specialty: 'Jeux de cartes personnalisés & jeux de société complets',
+        contact: 'info@goldensungame.com',
+        moq: '500 jeux',
+      },
+      {
+        name: 'Hangzhou Heyuan Card Industry Co., Ltd',
+        city: 'Hangzhou, Zhejiang',
+        specialty: 'Cartes de jeu grand format & standard, black core',
+        contact: 'sales@heyuancard.com',
+        moq: '1000 jeux',
+      },
+    ],
+    stages: [
+      {
+        id: 'design',
+        tasks: [
+          'Finaliser l\'artwork des 3 types de cartes (16 Chance + 16 Communauté + 28 Propriétés)',
+          'Préparer les fichiers 63×88mm recto-verso avec fond perdu (bleed 3mm)',
+          'Valider tous les textes en français',
+          'Envoyer pour épreuve couleur',
+          'Approbation finale des designs',
+        ],
+      },
+      {
+        id: 'rfq',
+        tasks: [
+          'Envoyer RFQ: 60 cartes, 300gsm black core, finition mat, coins carrés',
+          'Préciser: impression recto-verso CMYK',
+          'Recevoir minimum 3 devis',
+          'Vérifier spécification "black core" (opacité totale)',
+          'Sélectionner fournisseur et envoyer le PO',
+        ],
+      },
+      {
+        id: 'sample',
+        tasks: [
+          'Commander 1 jeu sample complet (60 cartes)',
+          'Vérifier la netteté de coupe et les coins carrés',
+          'Tester l\'opacité du black core (pas de transparence)',
+          'Vérifier la finition mat et la qualité d\'impression',
+          'Approuver les samples',
+        ],
+      },
+      {
+        id: 'production',
+        tasks: [
+          'Verser l\'acompte de production',
+          'Lancer la production (60 cartes × quantité commandée)',
+          'Suivi de production — rapport usine',
+          'Production terminée — confirmée par l\'usine',
+        ],
+      },
+      {
+        id: 'qc',
+        tasks: [
+          'Inspection: vérifier coupe propre et alignement',
+          'Vérifier opacité du black core sur chaque type de carte',
+          'Compter les quantités exactes (16+16+28 par jeu)',
+          'Vérifier finition mat uniforme',
+          'Approuver l\'expédition',
+        ],
+      },
+      {
+        id: 'shipping',
+        tasks: [
+          'Grouper l\'expédition avec les autres composants imprimés',
+          'Réserver le transitaire',
+          'Documents d\'expédition prêts',
+          'Confirmer le chargement',
+          'Confirmer la livraison à l\'entrepôt',
+        ],
+      },
+    ],
+  },
+
+  {
+    id: 'money',
+    name: 'Billets de Banque',
+    nameEn: 'Paper Money',
+    icon: '💵',
+    specs: '240 billets — 4 coupures (1000F / 2000F / 5000F / 10000F) — 155×65mm — 80gsm offset',
+    category: 'print',
+    suppliers: [
+      {
+        name: 'Shenzhen Jinhao Printing Co., Ltd',
+        city: 'Shenzhen, Guangdong',
+        specialty: 'Impression spécialisée billets de jeu & accessoires',
+        contact: 'sales@jinhaoprint.com',
+        moq: '500 jeux',
+      },
+      {
+        name: 'Guangzhou Meijie Printing Co., Ltd',
+        city: 'Guangzhou, Guangdong',
+        specialty: 'Impression offset sur papier coloré, billets de jeu',
+        contact: 'meijie@meijieprint.com',
+        moq: '1000 jeux',
+      },
+      {
+        name: 'Yiwu Xishu Paper Products Co., Ltd',
+        city: 'Yiwu, Zhejiang',
+        specialty: 'Spécialiste billets de jeux de société',
+        contact: 'xishu@xishupp.com',
+        moq: '500 jeux',
+      },
+    ],
+    stages: [
+      {
+        id: 'design',
+        tasks: [
+          'Finaliser l\'artwork des 4 coupures (1000F, 2000F, 5000F, 10000F)',
+          'Format 155×65mm — impression recto sur papier de couleur',
+          'Valider les montants, textes français et éléments graphiques',
+          'Choisir les couleurs de fond pour chaque coupure',
+          'Approbation finale des billets',
+        ],
+      },
+      {
+        id: 'rfq',
+        tasks: [
+          'Envoyer RFQ: 240 billets, 4 coupures, 60 de chaque',
+          'Préciser papier 80gsm offset, fond coloré par coupure',
+          'Demander devis pour les 4 couleurs de papier',
+          'Recevoir minimum 3 devis',
+          'Sélectionner fournisseur et envoyer PO',
+        ],
+      },
+      {
+        id: 'sample',
+        tasks: [
+          'Commander un sample des 4 coupures',
+          'Vérifier la couleur du papier de fond pour chaque coupure',
+          'Vérifier la lisibilité des valeurs et textes',
+          'Vérifier la qualité de coupe (155×65mm)',
+          'Approuver les samples',
+        ],
+      },
+      {
+        id: 'production',
+        tasks: [
+          'Verser l\'acompte',
+          'Lancer production: 240 billets × quantité commandée',
+          'Confirmer la répartition des coupures (60×4)',
+          'Production terminée — confirmée',
+        ],
+      },
+      {
+        id: 'qc',
+        tasks: [
+          'Vérifier quantités exactes par coupure (60 × 4)',
+          'Vérifier qualité impression et couleurs de fond',
+          'Vérifier dimensions 155×65mm',
+          'Approuver l\'expédition',
+        ],
+      },
+      {
+        id: 'shipping',
+        tasks: [
+          'Grouper avec les autres composants imprimés',
+          'Documents d\'expédition prêts',
+          'Confirmer le chargement',
+          'Confirmer la livraison à l\'entrepôt',
+        ],
+      },
+    ],
+  },
+
+  {
+    id: 'pieces',
+    name: 'Maisons & Hôtels',
+    nameEn: 'Houses & Hotels',
+    icon: '🏠',
+    specs: '30 maisons vertes + 15 hôtels rouges — ABS plastique — injection moulée',
+    category: 'plastic',
+    suppliers: [
+      {
+        name: 'Dongguan Yisheng Plastic Products Co., Ltd',
+        city: 'Dongguan, Guangdong',
+        specialty: 'Pièces ABS injection moulées, accessoires jeux de société',
+        contact: 'sales@yishengplastic.com',
+        moq: '5000 pcs',
+      },
+      {
+        name: 'Shenzhen Junye Plastic Industrial Co., Ltd',
+        city: 'Shenzhen, Guangdong',
+        specialty: 'Petites pièces plastiques colorées pour jeux',
+        contact: 'junye@junyeplastic.com',
+        moq: '3000 pcs',
+      },
+      {
+        name: 'Guangdong Haicheng Plastic Industry Co., Ltd',
+        city: 'Foshan, Guangdong',
+        specialty: 'Fabrication pièces ABS petites dimensions',
+        contact: 'info@haichengplastic.com',
+        moq: '5000 pcs',
+      },
+    ],
+    stages: [
+      {
+        id: 'design',
+        tasks: [
+          'Valider les dimensions (équivalent Monopoly standard)',
+          'Confirmer que les hôtels sont plus grands que les maisons',
+          'Vérifier si un moule standard existant peut être utilisé',
+          'Finaliser la spécification couleur (vert / rouge vif)',
+        ],
+      },
+      {
+        id: 'rfq',
+        tasks: [
+          'Envoyer RFQ: 30 maisons vertes + 15 hôtels rouges, ABS, injection',
+          'Demander si moule existant disponible (économise coût)',
+          'Recevoir devis avec et sans coût de moule',
+          'Sélectionner fournisseur pièces plastiques',
+          'Envoyer PO avec spécifications couleur précises',
+        ],
+      },
+      {
+        id: 'sample',
+        tasks: [
+          'Commander samples maisons et hôtels',
+          'Vérifier dimensions et solidité de l\'ABS',
+          'Tester la stabilité des pièces sur le plateau de jeu',
+          'Vérifier les couleurs (vert / rouge)',
+          'Approuver ou demander corrections',
+        ],
+      },
+      {
+        id: 'production',
+        tasks: [
+          'Verser l\'acompte de production',
+          'Lancer la production injection moulage',
+          'Confirmer: 30 maisons × Q + 15 hôtels × Q par lot',
+          'Production terminée — confirmée',
+        ],
+      },
+      {
+        id: 'qc',
+        tasks: [
+          'Vérifier absence de bavures d\'injection',
+          'Vérifier conformité des couleurs (vert / rouge)',
+          'Compter les quantités (30 maisons + 15 hôtels par jeu)',
+          'Vérifier solidité des pièces (pas de cassures)',
+          'Approuver l\'expédition',
+        ],
+      },
+      {
+        id: 'shipping',
+        tasks: [
+          'Réserver transitaire (peut être combiné avec les tokens)',
+          'Documents d\'expédition prêts',
+          'Confirmer le chargement',
+          'Confirmer la livraison à l\'entrepôt',
+        ],
+      },
+    ],
+  },
+
+  {
+    id: 'tokens',
+    name: 'Pions Éléphants',
+    nameEn: 'Player Tokens',
+    icon: '🐘',
+    specs: '8 pions éléphant ABS — 20-25mm hauteur — 8 couleurs — moule sur mesure (propriété Babipoly)',
+    category: 'plastic',
+    suppliers: [
+      {
+        name: 'Dongguan Zhonghe Model Co., Ltd',
+        city: 'Dongguan, Guangdong',
+        specialty: 'Moules sur mesure & figurines plastiques pour jeux',
+        contact: 'sales@zhonghemold.com',
+        moq: 'Moule + 1000 jeux',
+      },
+      {
+        name: 'Shenzhen Weilian Plastic Technology Co., Ltd',
+        city: 'Shenzhen, Guangdong',
+        specialty: 'Conception et fabrication de moules ABS personnalisés',
+        contact: 'weilian@weilianplastic.com',
+        moq: 'Moule + 500 jeux',
+      },
+      {
+        name: 'Guangzhou Kaka Toys Co., Ltd',
+        city: 'Guangzhou, Guangdong',
+        specialty: 'Figurines et pions de jeux personnalisés',
+        contact: 'kaka@kakatoys.com',
+        moq: '1000 jeux',
+      },
+    ],
+    stages: [
+      {
+        id: 'design',
+        tasks: [
+          'Finaliser le design 3D du pion éléphant (20-25mm de hauteur)',
+          'Créer le fichier technique 3D (STL / STEP) ou dessin coté',
+          'Valider la liste des 8 couleurs ABS',
+          'Confirmer que le moule sera la propriété de Babipoly',
+          'Approbation finale du design 3D',
+        ],
+      },
+      {
+        id: 'rfq',
+        tasks: [
+          'Envoyer RFQ avec fichier 3D ou dessin technique',
+          'Demander devis moule sur mesure + coût par pion',
+          'Confirmer propriété légale du moule (clause contractuelle)',
+          'Recevoir minimum 3 devis',
+          'Sélectionner le fabricant de moule',
+          'Signer le contrat incluant la clause de propriété du moule',
+        ],
+      },
+      {
+        id: 'sample',
+        tasks: [
+          'Commander les samples T1 du moule (1ère passe)',
+          'Vérifier forme et proportions du pion éléphant',
+          'Tester les 8 couleurs sur les samples',
+          'Demander les corrections si nécessaire (T2, T3)',
+          'Approbation finale du moule — Green Light production',
+        ],
+      },
+      {
+        id: 'production',
+        tasks: [
+          'Verser l\'acompte de production',
+          'Lancer l\'injection des 8 couleurs',
+          'Confirmer: 8 pions par jeu (1 par couleur)',
+          'Production terminée — confirmée',
+        ],
+      },
+      {
+        id: 'qc',
+        tasks: [
+          'Vérifier absence de bavures sur chaque pion',
+          'Vérifier les 8 couleurs exactes',
+          'Compter les quantités par jeu (8 pions × Q jeux)',
+          'Vérifier la taille (20-25mm)',
+          'Approuver l\'expédition',
+        ],
+      },
+      {
+        id: 'shipping',
+        tasks: [
+          'Réserver transitaire',
+          'Documents avec déclaration du moule (si expédition séparée)',
+          'Confirmer le chargement',
+          'Confirmer la livraison à l\'entrepôt',
+        ],
+      },
+    ],
+  },
+
+  {
+    id: 'dice',
+    name: 'Dés',
+    nameEn: 'Dice',
+    icon: '🎲',
+    specs: '2 dés — 16mm — acrylique blanc — points noirs',
+    category: 'accessories',
+    suppliers: [
+      {
+        name: 'Dongguan Kaika Acrylic Products Co., Ltd',
+        city: 'Dongguan, Guangdong',
+        specialty: 'Dés acryliques standard et personnalisés',
+        contact: 'kaika@kaikaacrylic.com',
+        moq: '10 000 dés',
+      },
+      {
+        name: 'Ningbo Zhixin Toys Co., Ltd',
+        city: 'Ningbo, Zhejiang',
+        specialty: 'Accessoires jeux de société: dés, jetons, pièces',
+        contact: 'sales@zhixintoys.com',
+        moq: '5 000 dés',
+      },
+      {
+        name: 'Yiwu Diangong Toy Co., Ltd',
+        city: 'Yiwu, Zhejiang',
+        specialty: 'Dés et accessoires jeux — fabricant volume',
+        contact: 'diangong@diangongtoy.com',
+        moq: '5 000 dés',
+      },
+    ],
+    stages: [
+      {
+        id: 'design',
+        tasks: [
+          'Confirmer les specs: 16mm, acrylique, blanc avec points noirs',
+          'Valider qu\'aucun design personnalisé n\'est nécessaire (standard)',
+          'Confirmer la quantité: 2 dés par jeu × Q jeux',
+        ],
+      },
+      {
+        id: 'rfq',
+        tasks: [
+          'Envoyer RFQ: dés 16mm, acrylique blanc, points noirs',
+          'Demander à regrouper avec un autre fournisseur si possible',
+          'Comparer les devis (prix/unité)',
+          'Sélectionner le fournisseur',
+          'Envoyer le PO',
+        ],
+      },
+      {
+        id: 'sample',
+        tasks: [
+          'Commander un sample de dés 16mm acrylique',
+          'Tester l\'équilibre des dés (roulé aléatoire)',
+          'Vérifier la netteté des points noirs',
+          'Approuver les samples',
+        ],
+      },
+      {
+        id: 'production',
+        tasks: [
+          'Confirmer la commande (2 dés × Q jeux)',
+          'Lancer la production',
+          'Production terminée — confirmée',
+        ],
+      },
+      {
+        id: 'qc',
+        tasks: [
+          'Vérifier la netteté des points (1 à 6)',
+          'Vérifier la qualité acrylique (pas de bulles)',
+          'Compter les quantités (2 dés par jeu)',
+          'Approuver l\'expédition',
+        ],
+      },
+      {
+        id: 'shipping',
+        tasks: [
+          'Grouper avec les autres composants accessoires',
+          'Documents d\'expédition prêts',
+          'Confirmer le chargement',
+          'Confirmer la livraison à l\'entrepôt',
+        ],
+      },
+    ],
+  },
+
+  {
+    id: 'booklet',
+    name: 'Livret de Règles',
+    nameEn: 'Instruction Booklet',
+    icon: '📖',
+    specs: '4 pages A5 (148×210mm) — 157gsm art paper — CMYK recto-verso — reliure agrafée',
+    category: 'print',
+    suppliers: [
+      {
+        name: 'Shenzhen Jinhao Printing Co., Ltd',
+        city: 'Shenzhen, Guangdong',
+        specialty: 'Brochures, livrets et impressions de qualité',
+        contact: 'sales@jinhaoprint.com',
+        moq: '500 livrets',
+      },
+      {
+        name: 'Guangzhou Artron Color Printing Co., Ltd',
+        city: 'Guangzhou, Guangdong',
+        specialty: 'Impression couleur haute qualité, livrets et brochures',
+        contact: 'artron@artronprint.com',
+        moq: '1000 livrets',
+      },
+      {
+        name: 'Dongguan Tuosite Printing Co., Ltd',
+        city: 'Dongguan, Guangdong',
+        specialty: 'Livrets de jeux et brochures de présentation',
+        contact: 'sales@tuositeprint.com',
+        moq: '500 livrets',
+      },
+    ],
+    stages: [
+      {
+        id: 'design',
+        tasks: [
+          'Rédiger les règles complètes du jeu Babipoly en français',
+          'Mise en page A5 (148×210mm), 4 pages (2 feuilles agrafées)',
+          'Intégrer illustrations et design graphique',
+          'Relecture finale et validation des règles par l\'équipe',
+          'Approbation finale du livret',
+        ],
+      },
+      {
+        id: 'rfq',
+        tasks: [
+          'Envoyer RFQ: livret A5, 4pp, 157gsm art paper, CMYK recto-verso',
+          'Préciser: reliure agrafée (saddle stitch), finition mat',
+          'Peut être groupé avec le fournisseur du plateau',
+          'Recevoir minimum 2 devis',
+          'Sélectionner fournisseur — envoyer PO',
+        ],
+      },
+      {
+        id: 'sample',
+        tasks: [
+          'Commander un sample du livret imprimé',
+          'Vérifier la lisibilité des textes (taille police, contraste)',
+          'Vérifier la qualité des illustrations',
+          'Vérifier la reliure agrafée (solide)',
+          'Approuver le sample',
+        ],
+      },
+      {
+        id: 'production',
+        tasks: [
+          'Verser l\'acompte',
+          'Lancer la production des livrets',
+          'Production terminée — confirmée',
+        ],
+      },
+      {
+        id: 'qc',
+        tasks: [
+          'Vérifier la reliure agrafée sur un échantillon',
+          'Vérifier lisibilité et qualité couleur',
+          'Compter les quantités',
+          'Approuver l\'expédition',
+        ],
+      },
+      {
+        id: 'shipping',
+        tasks: [
+          'Grouper avec les composants imprimés',
+          'Documents d\'expédition prêts',
+          'Confirmer le chargement',
+          'Confirmer la livraison à l\'entrepôt',
+        ],
+      },
+    ],
+  },
+
+  {
+    id: 'packaging',
+    name: 'Boîte de Jeu',
+    nameEn: 'Game Box',
+    icon: '📦',
+    specs: '270×270×60mm — Boîte rigide télescope — greyboard 2mm — laminage mat — plateau thermoformé',
+    category: 'print',
+    suppliers: [
+      {
+        name: 'Shenzhen Yuto Packaging Technology Co., Ltd',
+        city: 'Shenzhen, Guangdong',
+        specialty: 'Boîtes rigides haut de gamme, emballage premium',
+        contact: 'sales@yutopackaging.com',
+        moq: '500 unités',
+      },
+      {
+        name: 'Dongguan Xianglee Printing & Packaging Co., Ltd',
+        city: 'Dongguan, Guangdong',
+        specialty: 'Packaging jeux de société: boîtes + plateaux thermoformés',
+        contact: 'xianglee@xiangleepack.com',
+        moq: '300 unités',
+      },
+      {
+        name: 'Shanghai Birdview Packaging Co., Ltd',
+        city: 'Shanghai',
+        specialty: 'Emballages premium rigides, boîtes jeux de qualité',
+        contact: 'info@birdviewpack.com',
+        moq: '500 unités',
+      },
+    ],
+    stages: [
+      {
+        id: 'design',
+        tasks: [
+          'Finaliser l\'artwork pour le couvercle et la base de la boîte',
+          'Format 270×270×60mm — boîte télescope (lid & base)',
+          'Concevoir le plateau thermoformé (calage de tous les composants)',
+          'Prévoir l\'espace pour le code-barres (EAN)',
+          'Approbation finale du design packaging',
+        ],
+      },
+      {
+        id: 'rfq',
+        tasks: [
+          'Envoyer RFQ: boîte rigide télescope 270×270×60mm, greyboard 2mm + papier 157gsm',
+          'Préciser: finition mat + shrink wrap + espace code-barres',
+          'Demander devis séparé pour le plateau thermoformé',
+          'Recevoir minimum 3 devis',
+          'Sélectionner fabricant packaging — envoyer PO',
+        ],
+      },
+      {
+        id: 'sample',
+        tasks: [
+          'Commander une maquette / sample de boîte complète',
+          'Vérifier la solidité de la structure (greyboard 2mm)',
+          'Tester le plateau thermoformé avec tous les composants physiques',
+          'Vérifier la fermeture du couvercle (télescope bien ajusté)',
+          'Vérifier la qualité du laminage mat et de l\'impression',
+          'Approuver le sample packaging',
+        ],
+      },
+      {
+        id: 'production',
+        tasks: [
+          'Verser l\'acompte',
+          'Lancer production boîtes + plateaux thermoformés',
+          'Recevoir rapport de suivi mi-production',
+          'Production terminée — confirmée',
+        ],
+      },
+      {
+        id: 'qc',
+        tasks: [
+          'Vérifier la structure solide (pas de déformation)',
+          'Vérifier: aucune bulle de laminage',
+          'Tester l\'assemblage complet du jeu dans la boîte',
+          'Vérifier le shrink wrap et la présence de l\'espace EAN',
+          'Approuver l\'expédition',
+        ],
+      },
+      {
+        id: 'shipping',
+        tasks: [
+          'Coordonner l\'assemblage final (tous composants dans la boîte)',
+          'Réserver le transitaire pour envoi final',
+          'Documents d\'expédition complets prêts',
+          'Confirmer le chargement du lot complet',
+          'Confirmer la livraison à l\'entrepôt destination',
+        ],
+      },
+    ],
+  },
+];
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  STATE — persisted in Firebase Realtime Database (see bottom of file)
+// ═══════════════════════════════════════════════════════════════════════════
+
+// state shape:
+// { board: { tasks: { design_0: true, ... }, supplier: 1 }, ... }
+let state = {};
+
+// saveState and the Firebase listener are defined at the bottom of the file
+// after the Firebase SDK is loaded. This stub prevents errors during init.
+function saveState() {}
+
+function ensureComp(id) {
+  if (!state[id]) state[id] = { tasks: {}, supplier: null };
+  if (!state[id].tasks) state[id].tasks = {};
+}
+
+// ─── TASK KEY ───
+function taskKey(stageId, taskIdx) { return `${stageId}_${taskIdx}`; }
+
+function isTaskDone(compId, stageId, taskIdx) {
+  ensureComp(compId);
+  return !!state[compId].tasks[taskKey(stageId, taskIdx)];
+}
+
+function toggleTask(compId, stageId, taskIdx) {
+  ensureComp(compId);
+  const k = taskKey(stageId, taskIdx);
+  state[compId].tasks[k] = !state[compId].tasks[k];
+  saveState();
+  updateAll();
+}
+
+function setSupplier(compId, idx) {
+  ensureComp(compId);
+  state[compId].supplier = (state[compId].supplier === idx) ? null : idx;
+  saveState();
+  updateAll();
+}
+
+function resetComp(compId) {
+  state[compId] = { tasks: {}, supplier: null };
+  saveState();
+  updateAll();
+}
+
+// ─── PROGRESS CALCULATIONS ───
+function compProgress(comp) {
+  let total = 0, done = 0;
+  comp.stages.forEach(st => {
+    st.tasks.forEach((_, i) => {
+      total++;
+      if (isTaskDone(comp.id, st.id, i)) done++;
+    });
+  });
+  return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
+}
+
+function stageProgress(comp, stageId) {
+  const st = comp.stages.find(s => s.id === stageId);
+  if (!st) return { total: 0, done: 0, pct: 0 };
+  let total = st.tasks.length, done = 0;
+  st.tasks.forEach((_, i) => { if (isTaskDone(comp.id, st.id, i)) done++; });
+  return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
+}
+
+// stage status: 'done' | 'active' | 'todo'
+function stageStatus(comp, stageId) {
+  const { total, done } = stageProgress(comp, stageId);
+  if (done === total && total > 0) return 'done';
+  if (done > 0) return 'active';
+  return 'todo';
+}
+
+// component status for card coloring
+function compStatus(comp) {
+  const { pct } = compProgress(comp);
+  if (pct === 0) return 'todo';
+  if (pct === 100) return 'done';
+  return 'active';
+}
+
+// active stage (first incomplete one)
+function activeStage(comp) {
+  for (const st of comp.stages) {
+    const { total, done } = stageProgress(comp, st.id);
+    if (done < total) return st.id;
+  }
+  return comp.stages[comp.stages.length - 1].id; // all done
+}
+
+function globalProgress() {
+  let total = 0, done = 0;
+  COMPONENTS.forEach(c => {
+    const p = compProgress(c);
+    total += p.total;
+    done += p.done;
+  });
+  return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  RENDERING
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ─── HEADER ───
+function updateHeader() {
+  const { total, done, pct } = globalProgress();
+  document.getElementById('global-bar').style.width = pct + '%';
+  document.getElementById('global-pct').textContent = pct + '%';
+  document.getElementById('hdr-pct').textContent = pct + '%';
+  document.getElementById('hdr-tasks').textContent = `${done}/${total}`;
+
+  let active = 0;
+  COMPONENTS.forEach(c => { if (compStatus(c) === 'active') active++; });
+  document.getElementById('hdr-comps').textContent = `${active}/8`;
+}
+
+// ─── STATS ROW ───
+function updateStats() {
+  let nActive = 0, nDone = 0;
+  COMPONENTS.forEach(c => {
+    const s = compStatus(c);
+    if (s === 'active') nActive++;
+    if (s === 'done') nDone++;
+  });
+  const { pct } = globalProgress();
+  document.getElementById('stat-active').textContent = nActive;
+  document.getElementById('stat-done').textContent = nDone;
+  document.getElementById('stat-tasks').textContent = pct + '%';
+}
+
+// ─── OVERVIEW GRID ───
+function renderOverviewGrid() {
+  const grid = document.getElementById('overview-grid');
+  grid.innerHTML = COMPONENTS.map(comp => {
+    const { pct } = compProgress(comp);
+    const status = compStatus(comp);
+    const aStage = STAGES.find(s => s.id === activeStage(comp));
+    const badgeClass = status === 'done' ? 'badge-done' : status === 'active' ? 'badge-active' : 'badge-todo';
+    const badgeText = status === 'done' ? '✓ Terminé' : status === 'active' ? `↗ ${aStage.label}` : '— À démarrer';
+    return `
+    <div class="comp-card status-${status}" onclick="switchToComp('${comp.id}')">
+      <div class="comp-card-header">
+        <div class="comp-icon">${comp.icon}</div>
+        <div class="comp-card-header-text">
+          <h3>${comp.name}</h3>
+          <p>${comp.nameEn}</p>
+        </div>
+      </div>
+      <div class="comp-card-progress">
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted)">
+          <span>Progression</span><strong style="color:var(--text)">${pct}%</strong>
+        </div>
+        <div class="mini-track"><div class="mini-fill" style="width:${pct}%"></div></div>
+      </div>
+      <div class="comp-card-meta">
+        <span class="text-muted">${comp.specs.split('—')[0].trim()}</span>
+        <span class="stage-badge ${badgeClass}">${badgeText}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function switchToComp(compId) {
+  // Switch to components tab and open that accordion
+  switchTab('components');
+  setTimeout(() => {
+    const el = document.getElementById(`acc-${compId}`);
+    if (el && !el.classList.contains('open')) {
+      el.classList.add('open');
+    }
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 50);
+}
+
+// ─── COMPONENT ACCORDION ───
+function renderAccordion() {
+  const container = document.getElementById('comp-accordion');
+  container.innerHTML = COMPONENTS.map(comp => {
+    const { pct, done, total } = compProgress(comp);
+    const status = compStatus(comp);
+    const aStageId = activeStage(comp);
+    return `
+    <div class="acc-item" id="acc-${comp.id}">
+      <div class="acc-header" onclick="toggleAcc('${comp.id}')">
+        <div class="acc-icon">${comp.icon}</div>
+        <div class="acc-title">
+          <h3>${comp.name}</h3>
+          <p>${comp.specs}</p>
+        </div>
+        <div class="acc-meta">
+          <span class="stage-badge ${status === 'done' ? 'badge-done' : status === 'active' ? 'badge-active' : 'badge-todo'}">
+            ${status === 'done' ? '✓ Terminé' : status === 'active' ? '↗ En cours' : '— À démarrer'}
+          </span>
+          <div class="acc-pct">${pct}%</div>
+          <div class="acc-chevron">▾</div>
+        </div>
+      </div>
+      <div class="acc-progress-bar">
+        <div class="acc-progress-fill" style="width:${pct}%"></div>
+      </div>
+      <div class="acc-body">
+        ${renderPipeline(comp, aStageId)}
+        ${renderTaskSections(comp)}
+        ${renderSupplierPicker(comp)}
+        <div class="actions-row">
+          <button class="btn btn-danger-outline" onclick="if(confirm('Réinitialiser ${comp.name} ?')) resetComp('${comp.id}')">
+            ✕ Réinitialiser
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleAcc(compId) {
+  const el = document.getElementById(`acc-${compId}`);
+  if (el) el.classList.toggle('open');
+}
+
+function renderPipeline(comp, activeStageId) {
+  return `<div class="stage-pipeline">
+    ${STAGES.map(st => {
+      const status = stageStatus(comp, st.id);
+      const { done, total } = stageProgress(comp, st.id);
+      const dot = status === 'done' ? '✓' : status === 'active' ? '▶' : st.icon;
+      return `
+      <div class="stage-step ${status}">
+        <div class="stage-dot">${dot}</div>
+        <div class="stage-label">${st.label}<br><span style="font-size:9px;opacity:0.8">${done}/${total}</span></div>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+function renderTaskSections(comp) {
+  return `<div class="tasks-grid">
+    ${comp.stages.map(st => {
+      const stage = STAGES.find(s => s.id === st.id);
+      const { done, total } = stageProgress(comp, st.id);
+      const status = stageStatus(comp, st.id);
+      const dotColor = status === 'done' ? 'var(--success)' : status === 'active' ? 'var(--warning)' : 'var(--border)';
+      const isOpen = status === 'active' ? ' open' : '';
+      return `
+      <div class="task-stage-block${isOpen}" id="tsb-${comp.id}-${st.id}">
+        <div class="task-stage-header" onclick="toggleTaskStage('${comp.id}','${st.id}')">
+          <div class="task-stage-dot" style="background:${dotColor}"></div>
+          <h4>${stage.icon} ${stage.label}</h4>
+          <span class="task-stage-count">${done}/${total} tâches</span>
+          <span class="task-stage-chevron">▾</span>
+        </div>
+        <div class="task-list">
+          ${st.tasks.map((task, i) => {
+            const checked = isTaskDone(comp.id, st.id, i);
+            return `
+            <div class="task-item ${checked ? 'checked' : ''}" id="ti-${comp.id}-${st.id}-${i}">
+              <input type="checkbox" id="cb-${comp.id}-${st.id}-${i}"
+                ${checked ? 'checked' : ''}
+                onchange="toggleTask('${comp.id}','${st.id}',${i})">
+              <label for="cb-${comp.id}-${st.id}-${i}">${task}</label>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+function toggleTaskStage(compId, stageId) {
+  const el = document.getElementById(`tsb-${compId}-${stageId}`);
+  if (el) el.classList.toggle('open');
+}
+
+function renderSupplierPicker(comp) {
+  ensureComp(comp.id);
+  const selected = state[comp.id].supplier;
+  return `
+  <div class="supplier-section">
+    <h4>🏭 Fournisseurs recommandés (Chine) &mdash; sélectionner le fournisseur retenu :</h4>
+    <div class="supplier-cards">
+      ${comp.suppliers.map((s, i) => `
+      <div class="supplier-card ${selected === i ? 'selected' : ''}"
+           onclick="setSupplier('${comp.id}', ${i})">
+        ${selected === i ? '<span class="supplier-selected-badge">✓ Retenu</span>' : ''}
+        <h5>${s.name}</h5>
+        <div class="s-city">📍 ${s.city}</div>
+        <div class="s-spec">${s.specialty}</div>
+        <div class="s-contact">✉ ${s.contact} &nbsp;|&nbsp; MOQ: ${s.moq}</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ─── SUPPLIER DIRECTORY ───
+function renderSupplierDir() {
+  const dir = document.getElementById('supplier-dir');
+  dir.innerHTML = COMPONENTS.map(comp => {
+    ensureComp(comp.id);
+    const selectedIdx = state[comp.id].supplier;
+    return `
+    <div class="supplier-dir-comp">
+      <div class="supplier-dir-comp-header">
+        <span class="d-icon">${comp.icon}</span>
+        <h3>${comp.name} <span style="opacity:0.6;font-weight:400;font-size:13px">(${comp.nameEn})</span></h3>
+        ${selectedIdx !== null ? `<span class="info-chip">✓ Fournisseur sélectionné</span>` : ''}
+      </div>
+      <table class="supplier-table">
+        <thead>
+          <tr>
+            <th>Fournisseur</th>
+            <th>Ville / Province</th>
+            <th>Spécialité</th>
+            <th>Contact</th>
+            <th>MOQ</th>
+            <th>Statut</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${comp.suppliers.map((s, i) => `
+          <tr class="${selectedIdx === i ? 'selected-row' : ''}">
+            <td class="s-name-cell">${s.name}</td>
+            <td>${s.city}</td>
+            <td style="color:var(--accent-dark)">${s.specialty}</td>
+            <td style="font-size:12px">${s.contact}</td>
+            <td>${s.moq}</td>
+            <td>${selectedIdx === i ? '<span class="s-check">✓ Retenu</span>' : '<span style="color:#ccc">—</span>'}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+  }).join('');
+}
+
+// ─── TIMELINE ───
+function renderTimeline() {
+  const tbody = document.getElementById('timeline-body');
+  tbody.innerHTML = COMPONENTS.map(comp => {
+    return `<tr>
+      <td><div class="tl-comp-name">${comp.icon} ${comp.name}</div></td>
+      ${STAGES.map(st => {
+        const status = stageStatus(comp, st.id);
+        const { done, total } = stageProgress(comp, st.id);
+        let cls = 'tl-todo', txt = '—';
+        if (status === 'done')   { cls = 'tl-done';   txt = `✓ ${done}/${total}`; }
+        if (status === 'active') { cls = 'tl-active';  txt = `▶ ${done}/${total}`; }
+        return `<td><span class="tl-cell ${cls}">${txt}</span></td>`;
+      }).join('')}
+    </tr>`;
+  }).join('');
+}
+
+// ─── MASTER UPDATE ───
+function updateAll() {
+  updateHeader();
+  updateStats();
+
+  // Patch overview cards (no full re-render to avoid flicker)
+  renderOverviewGrid();
+
+  // Patch accordion items — update progress bars, badges, pipelines, tasks in place
+  COMPONENTS.forEach(comp => {
+    const accEl = document.getElementById(`acc-${comp.id}`);
+    if (!accEl) return;
+    // Just re-render body content if open
+    const body = accEl.querySelector('.acc-body');
+    if (body) {
+      const { pct } = compProgress(comp);
+      const status = compStatus(comp);
+      const aStageId = activeStage(comp);
+      // update progress bar
+      const bar = accEl.querySelector('.acc-progress-fill');
+      if (bar) bar.style.width = pct + '%';
+      // update pct text
+      const pctEl = accEl.querySelector('.acc-pct');
+      if (pctEl) pctEl.textContent = pct + '%';
+      // update badge
+      const badge = accEl.querySelector('.acc-meta .stage-badge');
+      if (badge) {
+        badge.className = `stage-badge ${status === 'done' ? 'badge-done' : status === 'active' ? 'badge-active' : 'badge-todo'}`;
+        badge.textContent = status === 'done' ? '✓ Terminé' : status === 'active' ? '↗ En cours' : '— À démarrer';
+      }
+      // update individual checkboxes and task items
+      comp.stages.forEach(st => {
+        st.tasks.forEach((_, i) => {
+          const cb = document.getElementById(`cb-${comp.id}-${st.id}-${i}`);
+          if (cb) cb.checked = isTaskDone(comp.id, st.id, i);
+          const ti = document.getElementById(`ti-${comp.id}-${st.id}-${i}`);
+          if (ti) ti.className = `task-item ${isTaskDone(comp.id, st.id, i) ? 'checked' : ''}`;
+        });
+        // update stage task count
+        const { done, total } = stageProgress(comp, st.id);
+        const tsb = document.getElementById(`tsb-${comp.id}-${st.id}`);
+        if (tsb) {
+          const cnt = tsb.querySelector('.task-stage-count');
+          if (cnt) cnt.textContent = `${done}/${total} tâches`;
+          const dot = tsb.querySelector('.task-stage-dot');
+          if (dot) {
+            const sstatus = stageStatus(comp, st.id);
+            dot.style.background = sstatus === 'done' ? 'var(--success)' : sstatus === 'active' ? 'var(--warning)' : 'var(--border)';
+          }
+        }
+      });
+      // update supplier picker
+      const sp = body.querySelector('.supplier-section');
+      if (sp) sp.outerHTML = renderSupplierPicker(comp);
+    }
+  });
+
+  // Timeline
+  renderTimeline();
+  // Supplier dir
+  renderSupplierDir();
+}
+
+// ─── FULL INITIAL RENDER ───
+function fullRender() {
+  updateHeader();
+  updateStats();
+  renderOverviewGrid();
+  renderAccordion();
+  renderSupplierDir();
+  renderTimeline();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  TABS
+// ═══════════════════════════════════════════════════════════════════════════
+
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-section').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('#main-tabs button').forEach(btn => btn.classList.remove('active'));
+  const section = document.getElementById(`tab-${tabId}`);
+  if (section) section.classList.add('active');
+  const btn = document.querySelector(`#main-tabs button[data-tab="${tabId}"]`);
+  if (btn) btn.classList.add('active');
+}
+
+document.getElementById('main-tabs').addEventListener('click', e => {
+  const btn = e.target.closest('button[data-tab]');
+  if (btn) switchTab(btn.dataset.tab);
+});
+
+// fullRender() is called by the Firebase real-time listener once data loads.
+</script>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+// ── FIREBASE INIT ──────────────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyAHITJvSBgKrNYn9Cf3UvBflKbT0AgqPdQ",
+  authDomain: "supplychain-8269c.firebaseapp.com",
+  databaseURL: "https://supplychain-8269c-default-rtdb.firebaseio.com",
+  projectId: "supplychain-8269c",
+  storageBucket: "supplychain-8269c.firebasestorage.app",
+  messagingSenderId: "629685851701",
+  appId: "1:629685851701:web:0f8488620d800f841cc37c"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const stateRef = db.ref('babipoly_sc_v2');
+
+// ── SYNC STATUS UI ─────────────────────────────────────────────────────────
+function setSyncStatus(mode, label) {
+  const el = document.getElementById('sync-status');
+  const lbl = document.getElementById('sync-label');
+  if (el)  { el.className = ''; el.classList.add(mode); }
+  if (lbl) lbl.textContent = label;
+}
+
+db.ref('.info/connected').on('value', snap => {
+  if (snap.val()) {
+    setSyncStatus('online', 'En ligne');
+  } else {
+    setSyncStatus('offline', 'Hors ligne');
+  }
+});
+
+// ── DEBOUNCED SAVE ─────────────────────────────────────────────────────────
+let _saveTimer = null;
+function saveState() {
+  setSyncStatus('syncing', 'Sync...');
+  clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(() => {
+    stateRef.set(state)
+      .then(() => setSyncStatus('online', 'En ligne'))
+      .catch(() => setSyncStatus('offline', 'Erreur'));
+  }, 400);
+}
+
+// ── REAL-TIME LISTENER ─────────────────────────────────────────────────────
+let _firstLoad = true;
+stateRef.on('value', snapshot => {
+  state = snapshot.val() || {};
+
+  if (_firstLoad) {
+    _firstLoad = false;
+    // Migrate any existing localStorage data if Firebase is empty
+    if (Object.keys(state).length === 0) {
+      try {
+        const local = localStorage.getItem('babipoly_sc_v2');
+        if (local) {
+          state = JSON.parse(local);
+          stateRef.set(state); // push local data up to Firebase
+        }
+      } catch (e) {}
+    }
+    // Hide loading overlay
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) {
+      overlay.classList.add('hidden');
+      setTimeout(() => overlay.remove(), 450);
+    }
+    fullRender();
+  } else {
+    // Remote update from another device — re-render
+    updateAll();
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+{
+  "product": {
+    "name": "Babipoly",
+    "type": "Board Game",
+    "language": "French",
+    "theme": "Côte d’Ivoire - Abidjan territory & lifestyle",
+    "players": "2-8",
+    "target_age": "8+",
+    "artwork_status": "Artwork will be provided after quotation approval",
+    "rfq_purpose": "Structure and pricing quotation only"
+  },
+  "components": {
+    "game_board": {
+      "open_size_mm": "500x500",
+      "folded_size_mm": "250x250",
+      "fold_type": "4-fold (2x2 cross fold)",
+      "corners": "Square",
+      "core_material": "2mm greyboard",
+      "surface_paper": "157gsm art paper",
+      "finish": "Matte lamination",
+      "printing": "CMYK 4-color offset",
+      "backside_printed": "To be confirmed"
+    },
+    "cards": {
+      "total_quantity": 60,
+      "types": {
+        "chance_cards": 16,
+        "community_cards": 16,
+        "property_cards": 28
+      },
+      "size_mm": "63x88",
+      "paper": "300gsm black core",
+      "finish": "Matte",
+      "corners": "Squared",
+      "printing": "Double-sided CMYK"
+    },
+    "paper_money": {
+      "total_bills": 240,
+      "denominations": {
+        "1000": 60,
+        "2000": 60,
+        "5000": 60,
+        "10000": 60
+      },
+      "size_mm": "155x65",
+      "paper": "80gsm offset",
+      "printing": "Single-sided CMYK"
+    },
+    "plastic_houses_hotels": {
+      "green_houses": 30,
+      "red_hotels": 15,
+      "material": "ABS plastic",
+      "manufacturing": "Injection molded",
+      "size_reference": "Standard Monopoly equivalent size",
+      "note": "Red hotels are slightly bigger than green houses"
+    },
+    "player_tokens": {
+      "type": "Plastic elephant tokens",
+      "quantity": 8,
+      "material": "ABS plastic",
+      "manufacturing": "Injection molded",
+      "size_mm": "20-25 height",
+      "colors": [
+        "Red",
+        "Blue",
+        "Yellow",
+        "Green",
+        "Orange",
+        "Purple",
+        "Black",
+        "White"
+      ],
+      "mold": {
+        "existing_mold_available": "To be confirmed by factory",
+        "custom_mold_possible": true,
+        "mold_ownership": "Babipoly must own mold"
+      }
+    },
+    "dice": {
+      "quantity": 2,
+      "size_mm": 16,
+      "material": "Acrylic",
+      "color": "White with black dots"
+    },
+    "instruction_booklet": {
+      "pages": 4,
+      "size": "A5 (148x210mm)",
+      "paper": "157gsm art paper",
+      "printing": "Full color CMYK both sides",
+      "binding": "Saddle stitch (stapled)",
+      "finish": "Matte"
+    },
+    "packaging": {
+      "box_type": "Rigid telescope box (lid and base)",
+      "box_size_mm": "270x270x60",
+      "material": "2mm greyboard + 157gsm art paper",
+      "finish": "Matte lamination",
+      "insert": "Vacuum plastic tray",
+      "shrink_wrapped": true,
+      "barcode_space_required": true
+    }
+  },
+  "quotation_request": {
+    "moq_options": [500, 1000, 3000],
+    "required_information": [
+      "Unit price (FOB)",
+      "Mold cost (if applicable)",
+      "Sample cost",
+      "Production lead time",
+      "Carton size",
+      "Units per carton",
+      "Gross weight per carton",
+      "HS code"
+    ]
+  },
+  "quality_requirements": [
+    "No cracking on board folds",
+    "No lamination bubbling",
+    "Clean card cutting",
+    "Strong box structure",
+    "Safe packaging"
+  ],
+  "legal_note": "Babipoly is an original localized board game with original artwork, French content, and Abidjan-themed properties. No copyrighted Monopoly content will be used."
+}

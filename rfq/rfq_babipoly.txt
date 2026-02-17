@@ -1,0 +1,147 @@
+
+================================================================================
+                    REQUEST FOR QUOTATION
+================================================================================
+
+RFQ Number: BABI-20260216-001
+Date: February 16, 2026
+
+================================================================================
+PRODUCT INFORMATION
+================================================================================
+
+Product Name:        Babipoly
+Product Type:        Board Game
+Language:            French
+Theme:               Côte d’Ivoire - Abidjan territory & lifestyle
+Number of Players:   2-8
+Target Age:          8+
+
+IMPORTANT NOTE:
+Artwork will be provided after quotation approval
+Purpose: Structure and pricing quotation only
+
+================================================================================
+COMPONENT SPECIFICATIONS
+================================================================================
+
+1. GAME BOARD
+--------------------------------------------------------------------------------
+   Open Size Mm.................. 500x500
+   Folded Size Mm................ 250x250
+   Fold Type..................... 4-fold (2x2 cross fold)
+   Corners....................... Square
+   Core Material................. 2mm greyboard
+   Surface Paper................. 157gsm art paper
+   Finish........................ Matte lamination
+   Printing...................... CMYK 4-color offset
+   Backside Printed.............. To be confirmed
+
+2. PLAYING CARDS (Total: 60 cards)
+--------------------------------------------------------------------------------
+   Types:
+      - Chance Cards: 16 cards
+      - Community Cards: 16 cards
+      - Property Cards: 28 cards
+
+   Specifications:
+   Size Mm....................... 63x88
+   Paper......................... 300gsm black core
+   Finish........................ Matte
+   Corners....................... Squared
+   Printing...................... Double-sided CMYK
+
+3. PAPER MONEY (Total: 240 bills)
+--------------------------------------------------------------------------------
+   Denominations:
+      - 1000 F: 60 bills
+      - 2000 F: 60 bills
+      - 5000 F: 60 bills
+      - 10000 F: 60 bills
+
+   Specifications:
+   Size Mm....................... 155x65
+   Paper......................... 80gsm offset
+   Printing...................... Single-sided CMYK
+   Note:......................... Monochrome printed on colored paper
+
+4. HOUSES & HOTELS
+--------------------------------------------------------------------------------
+   Green Houses.................. 30
+   Red Hotels.................... 15
+   Material...................... ABS plastic
+   Manufacturing................. Injection molded
+   Size Reference................ Standard Monopoly equivalent size
+   Note.......................... Red hotels are slightly bigger than green houses
+
+5. PLAYER TOKENS
+--------------------------------------------------------------------------------
+   Type.......................... Plastic elephant tokens
+   Quantity...................... 8
+   Material...................... ABS plastic
+   Manufacturing................. Injection molded
+   Size Mm....................... 20-25 height
+   Colors: Red, Blue, Yellow, Green, Orange, Purple, Black, White
+
+6. DICE
+--------------------------------------------------------------------------------
+   Quantity...................... 2
+   Size Mm....................... 16
+   Material...................... Acrylic
+   Color......................... White with black dots
+
+7. INSTRUCTION BOOKLET
+--------------------------------------------------------------------------------
+   Pages......................... 4
+   Size.......................... A5 (148x210mm)
+   Paper......................... 157gsm art paper
+   Printing...................... Full color CMYK both sides
+   Binding....................... Saddle stitch (stapled)
+   Finish........................ Matte
+
+8. PACKAGING
+--------------------------------------------------------------------------------
+   Box Type...................... Rigid telescope box (lid and base)
+   Box Size Mm................... 270x270x60
+   Material...................... 2mm greyboard + 157gsm art paper
+   Finish........................ Matte lamination
+   Insert........................ Vacuum plastic tray
+   Shrink Wrapped................ True
+   Barcode Space Required........ True
+
+================================================================================
+QUOTATION REQUIREMENTS
+================================================================================
+
+Please provide pricing for the following MOQ levels:
+   - 500 units
+   - 1,000 units
+   - 3,000 units
+
+Required Information for Each MOQ:
+   • Unit price (FOB)
+   • Mold cost (if applicable)
+   • Sample cost
+   • Production lead time
+   • Carton size
+   • Units per carton
+   • Gross weight per carton
+   • HS code
+
+================================================================================
+QUALITY REQUIREMENTS
+================================================================================
+   ✓ No cracking on board folds
+   ✓ No lamination bubbling
+   ✓ Clean card cutting
+   ✓ Strong box structure
+   ✓ Safe packaging
+
+================================================================================
+LEGAL NOTICE
+================================================================================
+Babipoly is an original localized board game with original artwork, French content, and Abidjan-themed properties. No copyrighted Monopoly content will be used.
+
+================================================================================
+Generated on February 16, 2026
+================================================================================
