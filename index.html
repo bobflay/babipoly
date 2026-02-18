@@ -678,6 +678,127 @@
     #sync-status.offline #sync-dot { background: var(--danger); animation: none; }
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 
+    /* ── SIMULATION TAB ── */
+    .sim-section-hd {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 22px;
+      background: linear-gradient(135deg, #1a2332, #2c3e50);
+      color: #fff;
+      border-radius: 10px 10px 0 0;
+    }
+    .sim-section-num {
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; min-width: 36px;
+      background: var(--accent); color: #fff;
+      font-size: 1rem; font-weight: 900; border-radius: 50%;
+    }
+    .sim-section-title { font-size: 1.05rem; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
+    .sim-block { background: var(--card); border-radius: 10px; box-shadow: var(--shadow); margin-bottom: 22px; overflow: hidden; }
+    .sim-block-body { padding: 20px 22px; }
+    .sim-sub-title {
+      font-size: 0.78rem; font-weight: 800; color: var(--primary);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 12px; padding-bottom: 5px;
+      border-bottom: 2px solid var(--accent); display: inline-block;
+    }
+    .sim-stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px,1fr)); gap: 14px; margin-top: 8px; }
+    .sim-stat-card { border-radius: 8px; padding: 14px; text-align: center; }
+    .sim-stat-card.red    { background:#fff0f0; border:1px solid #ffcccc; }
+    .sim-stat-card.amber  { background:#fff8e1; border:1px solid #ffe082; }
+    .sim-stat-card.green  { background:#f0fff4; border:1px solid #b2dfdb; }
+    .sim-stat-card.blue   { background:#e8f4fd; border:1px solid #90caf9; }
+    .sim-stat-card .sv    { font-size: 1.5rem; font-weight: 900; line-height: 1; }
+    .sim-stat-card.red   .sv  { color: #c62828; }
+    .sim-stat-card.amber .sv  { color: #e65100; }
+    .sim-stat-card.green .sv  { color: #2e7d32; }
+    .sim-stat-card.blue  .sv  { color: #1565c0; }
+    .sim-stat-card .sl    { font-size: 0.7rem; font-weight: 700; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 5px; }
+
+    .sim-complete-tbl { width:100%; border-collapse:collapse; font-size:0.85rem; }
+    .sim-complete-tbl th { background:#f5f5f5; padding:8px 11px; text-align:left; font-weight:700; font-size:0.73rem; text-transform:uppercase; letter-spacing:0.5px; color:#666; border-bottom:2px solid #e0e0e0; }
+    .sim-complete-tbl td { padding:9px 11px; border-bottom:1px solid #f0f0f0; vertical-align:middle; }
+    .sim-complete-tbl tr:last-child td { border-bottom:none; }
+    .bar-w { display:flex; align-items:center; gap:8px; }
+    .bar-t { flex:1; height:9px; background:#e0e0e0; border-radius:5px; overflow:hidden; }
+    .bar-f { height:100%; border-radius:5px; }
+    .bar-f.bg-good { background:#66bb6a; } .bar-f.bg-warn { background:#ffa726; } .bar-f.bg-bad { background:#ef5350; }
+    .bv { font-weight:700; font-size:0.82rem; min-width:34px; text-align:right; }
+    .bv.good{color:#2e7d32;} .bv.warn{color:#e65100;} .bv.bad{color:#c62828;}
+    .sim-pill { display:inline-block; padding:2px 9px; border-radius:12px; font-size:0.72rem; font-weight:700; }
+    .sim-pill.red   { background:#ffcdd2; color:#b71c1c; }
+    .sim-pill.amber { background:#ffe0b2; color:#e65100; }
+    .sim-pill.green { background:#c8e6c9; color:#1b5e20; }
+
+    .sim-flow { display:flex; align-items:stretch; border-radius:8px; overflow:hidden; border:1px solid #e0e0e0; margin-top:12px; }
+    .sim-flow-box { flex:1; padding:14px 10px; text-align:center; }
+    .sim-flow-box .fl  { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; color:#888; }
+    .sim-flow-box .fv  { font-size:1.2rem; font-weight:900; margin:3px 0 2px; }
+    .sim-flow-box .fs  { font-size:0.72rem; color:#666; }
+    .sim-flow-box.bank   { background:#e8f4fd; } .sim-flow-box.bank .fv   { color:#1565c0; }
+    .sim-flow-box.rent   { background:#f3e5f5; } .sim-flow-box.rent .fv   { color:#6a1b9a; }
+    .sim-flow-box.danger { background:#fff3e0; } .sim-flow-box.danger .fv { color:#e65100; }
+    .sim-flow-sep { display:flex; align-items:center; padding:0 6px; background:#f5f5f5; font-size:1rem; color:#aaa; }
+
+    .sim-note { border-radius:7px; padding:12px 16px; font-size:0.84rem; line-height:1.6; margin-top:11px; }
+    .sim-note.warn  { background:#fff8e1; border-left:4px solid #ffa726; color:#5d3a00; }
+    .sim-note.info  { background:#e8f4fd; border-left:4px solid #42a5f5; color:#0d2c4d; }
+    .sim-note.good  { background:#f1f8e9; border-left:4px solid #66bb6a; color:#1b3a10; }
+    .sim-note.error { background:#ffebee; border-left:4px solid #ef5350; color:#4a0000; }
+
+    .sim-fix-card { border:1px solid #e8e8e8; border-radius:8px; overflow:hidden; margin-bottom:12px; }
+    .sim-fix-hd { display:flex; align-items:center; justify-content:space-between; padding:9px 15px; background:#f9f9f9; border-bottom:1px solid #e8e8e8; flex-wrap:wrap; gap:6px; }
+    .sim-fix-title { font-weight:800; font-size:0.9rem; color:var(--primary); }
+    .sim-pri { display:inline-block; padding:2px 9px; border-radius:20px; font-size:0.68rem; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; }
+    .sim-pri.p1 { background:#b71c1c; color:#fff; } .sim-pri.p2 { background:#e65100; color:#fff; }
+    .sim-pri.p3 { background:#f9a825; color:#fff; } .sim-pri.p4 { background:#558b2f; color:#fff; }
+    .sim-fix-body { padding:13px 15px; }
+    .sim-ba { display:flex; gap:10px; margin-top:9px; flex-wrap:wrap; }
+    .sim-ba-box { flex:1; min-width:110px; padding:9px 12px; border-radius:6px; text-align:center; }
+    .sim-ba-box.before { background:#fff3f3; border:1px solid #ffcdd2; }
+    .sim-ba-box.after  { background:#f0fff4; border:1px solid #c8e6c9; }
+    .sim-ba-box .bl { font-size:0.67rem; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; }
+    .sim-ba-box.before .bl { color:#c62828; } .sim-ba-box.after .bl { color:#2e7d32; }
+    .sim-ba-box .bv2 { font-size:1.05rem; font-weight:900; margin-top:2px; }
+    .sim-ba-box.before .bv2 { color:#c62828; } .sim-ba-box.after .bv2 { color:#2e7d32; }
+    .sim-ba-arrow { display:flex; align-items:center; padding-top:22px; font-size:1.1rem; color:#aaa; }
+    .sim-impact { display:inline-block; margin-top:7px; padding:3px 9px; border-radius:4px; font-size:0.72rem; font-weight:700; background:#e8f4fd; color:#1565c0; border:1px solid #90caf9; }
+
+    .sim-cmp-tbl { width:100%; border-collapse:collapse; font-size:0.84rem; }
+    .sim-cmp-tbl thead th { padding:9px 13px; text-align:center; font-weight:700; font-size:0.73rem; text-transform:uppercase; letter-spacing:0.4px; }
+    .sim-cmp-tbl thead th:first-child { text-align:left; }
+    .sim-cmp-tbl th.col-c  { background:#fafafa; color:#888; border-bottom:3px solid #ccc; }
+    .sim-cmp-tbl th.col-a  { background:#fff8e1; color:#e65100; border-bottom:3px solid #ffa726; }
+    .sim-cmp-tbl th.col-r  { background:#e8f5e9; color:#2e7d32; border-bottom:3px solid #66bb6a; }
+    .sim-cmp-tbl tbody td { padding:9px 13px; border-bottom:1px solid #f0f0f0; vertical-align:middle; }
+    .sim-cmp-tbl tbody tr:last-child td { border-bottom:none; }
+    .sim-cmp-tbl tbody td:first-child { font-weight:700; color:#333; background:#fafafa; }
+    .sim-cmp-tbl td.col-c  { text-align:center; color:#666; background:#fafafa; }
+    .sim-cmp-tbl td.col-a  { text-align:center; color:#e65100; background:#fff8e1; font-weight:700; }
+    .sim-cmp-tbl td.col-r  { text-align:center; color:#2e7d32; background:#f1f8e9; font-weight:700; }
+    .sim-cmp-tbl td.unch   { color:#aaa; font-style:italic; font-weight:400 !important; text-align:center; }
+
+    .sim-roi-tbl { width:100%; border-collapse:collapse; font-size:0.84rem; }
+    .sim-roi-tbl th { padding:7px 11px; text-align:left; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; color:#666; background:#f5f5f5; border-bottom:2px solid #e0e0e0; }
+    .sim-roi-tbl td { padding:8px 11px; border-bottom:1px solid #f0f0f0; vertical-align:middle; }
+    .sim-roi-tbl tr:last-child td { border-bottom:none; }
+    .gdot { display:inline-block; width:11px; height:11px; border-radius:50%; margin-right:7px; vertical-align:middle; }
+    .roi-bw { display:flex; align-items:center; gap:7px; }
+    .roi-bt { width:90px; height:7px; background:#e0e0e0; border-radius:4px; overflow:hidden; }
+    .roi-bf { height:100%; border-radius:4px; }
+    .sim-flag { font-size:0.75rem; color:#c62828; font-weight:700; }
+
+    .sim-steps { list-style:none; padding:0; }
+    .sim-steps li { display:flex; gap:12px; padding:9px 0; border-bottom:1px solid #f0f0f0; align-items:flex-start; }
+    .sim-steps li:last-child { border-bottom:none; }
+    .sim-step-num { display:flex; align-items:center; justify-content:center; min-width:26px; height:26px; background:var(--accent); color:#fff; font-size:0.8rem; font-weight:900; border-radius:50%; margin-top:2px; }
+    .sim-step-title { font-weight:800; color:var(--primary); font-size:0.88rem; }
+    .sim-step-desc  { font-size:0.82rem; color:#555; margin-top:2px; }
+    code { background:#f0f4f8; padding:1px 5px; border-radius:3px; font-size:0.82rem; }
+
+    @media (max-width:540px) { .sim-stat-grid { grid-template-columns:1fr 1fr; } .sim-ba { flex-direction:column; } .sim-ba-arrow { display:none; } }
+
     /* ── PRINT ── */
     @media print {
       nav.tabs, .actions-row { display: none; }
@@ -863,6 +984,7 @@
   <a href="cards/chance_community_cards.html">&#127922; Chance &amp; Vie</a>
   <a href="billets/index.html">&#128181; Billets</a>
   <a href="guide/guide.html">&#128214; Guide</a>
+  <button data-tab="simulation">&#128202; Simulation</button>
 </nav>
 
 <main>
@@ -916,6 +1038,236 @@
       <span class="tl-cell tl-active">&#9654; In Progress</span>&nbsp;
       <span class="tl-cell tl-todo">&ndash; To Do</span>
     </p>
+  </section>
+
+
+  <!-- ══ TAB: SIMULATION ══ -->
+  <section class="tab-section" id="tab-simulation">
+
+    <!-- ─ Block 1: Key Findings ─ -->
+    <div class="sim-block">
+      <div class="sim-section-hd">
+        <div class="sim-section-num">1</div>
+        <div class="sim-section-title">Key Findings from Simulation</div>
+      </div>
+      <div class="sim-block-body">
+
+        <div class="sim-sub-title">Game Completion Rate &mdash; current rules, 250,000 FCFA start</div>
+        <table class="sim-complete-tbl">
+          <thead><tr><th>Players</th><th>Completion Rate</th><th>Median (finished)</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>2 players</strong></td>
+              <td><div class="bar-w"><div class="bar-t"><div class="bar-f bg-good" style="width:72%"></div></div><span class="bv good">72%</span></div></td>
+              <td>~106 rounds</td>
+              <td><span class="sim-pill green">Acceptable</span></td>
+            </tr>
+            <tr>
+              <td><strong>4 players</strong></td>
+              <td><div class="bar-w"><div class="bar-t"><div class="bar-f bg-warn" style="width:25%"></div></div><span class="bv warn">25%</span></div></td>
+              <td>~368 rounds</td>
+              <td><span class="sim-pill amber">Mostly timeout</span></td>
+            </tr>
+            <tr>
+              <td><strong>6 players</strong></td>
+              <td><div class="bar-w"><div class="bar-t"><div class="bar-f bg-bad" style="width:12%"></div></div><span class="bv bad">12%</span></div></td>
+              <td>~735 rounds</td>
+              <td><span class="sim-pill red">Games never end</span></td>
+            </tr>
+            <tr>
+              <td><strong>8 players</strong></td>
+              <td><div class="bar-w"><div class="bar-t"><div class="bar-f bg-bad" style="width:12%"></div></div><span class="bv bad">12%</span></div></td>
+              <td>~602 rounds</td>
+              <td><span class="sim-pill red">Games never end</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="sim-note warn" style="margin-top:12px"><strong>Target:</strong> &ge;80% of games should finish naturally within 60&ndash;150 rounds. Only 2-player games meet this today.</div>
+
+        <div class="sim-sub-title" style="margin-top:20px">Root Cause &mdash; Bank injects more than rent extracts</div>
+        <p style="font-size:0.85rem;color:#555;margin-bottom:8px">In a typical 4-player game the bank pumps money via GO at a rate that exceeds all rent collected combined, keeping every player solvent indefinitely.</p>
+        <div class="sim-flow">
+          <div class="sim-flow-box bank">
+            <div class="fl">GO Rewards (bank &rarr; players)</div>
+            <div class="fv">~60M FCFA</div>
+            <div class="fs">per game &mdash; bank injection</div>
+          </div>
+          <div class="sim-flow-sep">vs</div>
+          <div class="sim-flow-box rent">
+            <div class="fl">Total Rent (player &rarr; player)</div>
+            <div class="fv">~44M FCFA</div>
+            <div class="fs">per game &mdash; redistribution</div>
+          </div>
+          <div class="sim-flow-sep">=</div>
+          <div class="sim-flow-box danger">
+            <div class="fl">Net surplus per game</div>
+            <div class="fv">+16M FCFA</div>
+            <div class="fs">bank keeps players liquid</div>
+          </div>
+        </div>
+        <div class="sim-note error" style="margin-top:10px"><strong>Core problem:</strong> Max possible rent (58,000 FCFA &mdash; Grand Bassam hotel) is only <strong>23%</strong> of starting money. Classic Monopoly equivalent is <strong>133%</strong>. A single bad landing cannot endanger a player.</div>
+
+        <div class="sim-sub-title" style="margin-top:20px">Quick Stats</div>
+        <div class="sim-stat-grid">
+          <div class="sim-stat-card amber"><div class="sv">23%</div><div class="sl">Max rent / starting money</div></div>
+          <div class="sim-stat-card red"><div class="sv">4.0%</div><div class="sl">GO reward / starting money</div></div>
+          <div class="sim-stat-card red"><div class="sv">75%</div><div class="sl">4P games that time out</div></div>
+          <div class="sim-stat-card green"><div class="sv">72%</div><div class="sl">2P completion rate</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─ Block 2: ROI ─ -->
+    <div class="sim-block">
+      <div class="sim-section-hd">
+        <div class="sim-section-num">2</div>
+        <div class="sim-section-title">Property Group ROI Analysis</div>
+      </div>
+      <div class="sim-block-body">
+        <p style="font-size:0.84rem;color:#555;margin-bottom:12px">ROI = avg hotel rent &divide; (avg price + 5 &times; house cost). Higher = group pays back faster. Groups with structural anomalies are flagged.</p>
+        <table class="sim-roi-tbl">
+          <thead><tr><th>Group</th><th>Props</th><th>Avg Price</th><th>House Cost</th><th>Avg Hotel Rent</th><th>ROI</th><th>Issue</th></tr></thead>
+          <tbody>
+            <tr><td><span class="gdot" style="background:#F5C518"></span><strong>Yellow</strong></td><td>2</td><td>3,000</td><td>1,000</td><td>10,000</td><td><div class="roi-bw"><div class="roi-bt"><div class="roi-bf" style="width:100%;background:#66bb6a"></div></div><span>125%</span></div></td><td class="sim-flag">Hotel = GO reward</td></tr>
+            <tr><td><span class="gdot" style="background:#CC0000"></span><strong>Red</strong></td><td>3</td><td>5,333</td><td>2,000</td><td>16,000</td><td><div class="roi-bw"><div class="roi-bt"><div class="roi-bf" style="width:100%;background:#66bb6a"></div></div><span>104%</span></div></td><td style="color:#aaa">&mdash;</td></tr>
+            <tr><td><span class="gdot" style="background:#F7941D"></span><strong>Orange</strong></td><td>3</td><td>6,667</td><td>3,000</td><td>22,667</td><td><div class="roi-bw"><div class="roi-bt"><div class="roi-bf" style="width:100%;background:#66bb6a"></div></div><span>105%</span></div></td><td style="color:#aaa">&mdash;</td></tr>
+            <tr><td><span class="gdot" style="background:#8B4513"></span><strong>Brown</strong></td><td>2</td><td>9,500</td><td>4,000</td><td>29,500</td><td><div class="roi-bw"><div class="roi-bt"><div class="roi-bf" style="width:100%;background:#66bb6a"></div></div><span>100%</span></div></td><td style="color:#aaa">&mdash;</td></tr>
+            <tr><td><span class="gdot" style="background:#00A651"></span><strong>Green</strong></td><td>3</td><td>11,333</td><td>5,000</td><td>34,000</td><td><div class="roi-bw"><div class="roi-bt"><div class="roi-bf" style="width:93%;background:#66bb6a"></div></div><span>94%</span></div></td><td style="color:#aaa">&mdash;</td></tr>
+            <tr><td><span class="gdot" style="background:#29ABE2"></span><strong>Light Blue</strong></td><td>3</td><td>13,333</td><td>6,000</td><td>40,333</td><td><div class="roi-bw"><div class="roi-bt"><div class="roi-bf" style="width:93%;background:#66bb6a"></div></div><span>93%</span></div></td><td style="color:#aaa">&mdash;</td></tr>
+            <tr style="background:#fff8f8"><td><span class="gdot" style="background:#1B1464"></span><strong>Dark Blue</strong></td><td>3</td><td>12,000</td><td>7,000</td><td>36,000</td><td><div class="roi-bw"><div class="roi-bt"><div class="roi-bf" style="width:77%;background:#ffa726"></div></div><span>77%</span></div></td><td class="sim-flag">Yamoussoukro anomaly</td></tr>
+            <tr><td><span class="gdot" style="background:#662D91"></span><strong>Purple</strong></td><td>2</td><td>18,750</td><td>10,000</td><td>54,000</td><td><div class="roi-bw"><div class="roi-bt"><div class="roi-bf" style="width:79%;background:#ffa726"></div></div><span>79%</span></div></td><td style="color:#aaa">&mdash;</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ─ Block 3: Fixes ─ -->
+    <div class="sim-block">
+      <div class="sim-section-hd">
+        <div class="sim-section-num">3</div>
+        <div class="sim-section-title">Proposed Fixes &mdash; Priority Order</div>
+      </div>
+      <div class="sim-block-body">
+
+        <div class="sim-fix-card">
+          <div class="sim-fix-hd"><span class="sim-fix-title">Fix 1 &mdash; Reduce GO Reward</span><span class="sim-pri p1">Priority 1 &mdash; Critical</span></div>
+          <div class="sim-fix-body">
+            <p style="font-size:0.84rem;color:#444">GO reward is the primary driver of infinite games. Every round the bank injects 10,000 FCFA per player, collectively outpacing all rent income. Cutting it in half immediately reduces bank-side money supply.</p>
+            <div class="sim-ba">
+              <div class="sim-ba-box before"><div class="bl">Current</div><div class="bv2">10,000 FCFA</div></div>
+              <div class="sim-ba-arrow">&#8594;</div>
+              <div class="sim-ba-box after"><div class="bl">Proposed</div><div class="bv2">5,000 FCFA</div></div>
+            </div>
+            <div class="sim-impact">Impact: reduces bank injection from ~60M &rarr; ~30M FCFA per 4P game</div>
+          </div>
+        </div>
+
+        <div class="sim-fix-card">
+          <div class="sim-fix-hd"><span class="sim-fix-title">Fix 2 &mdash; Yamoussoukro Anomaly (pos 31, Dark Blue)</span><span class="sim-pri p1">Priority 1 &mdash; Critical</span></div>
+          <div class="sim-fix-body">
+            <p style="font-size:0.84rem;color:#444">Yamoussoukro's house cost (7,000 FCFA) <em>exceeds</em> its purchase price (5,000 FCFA). A full hotel development costs 35,000 FCFA but yields only 19,000 FCFA rent &mdash; negative ROI. Nobody will ever develop this property, making Dark Blue partially unplayable.</p>
+            <div class="sim-ba">
+              <div class="sim-ba-box before"><div class="bl">House cost (current)</div><div class="bv2">7,000 FCFA</div></div>
+              <div class="sim-ba-arrow">&#8594;</div>
+              <div class="sim-ba-box after"><div class="bl">House cost (proposed)</div><div class="bv2">4,000 FCFA</div></div>
+            </div>
+            <p style="font-size:0.78rem;color:#888;margin-top:8px;font-style:italic">Alternative: raise Yamoussoukro price 5,000 &rarr; 12,000 FCFA to match peers (Sassandra 15k, San Pedro 16k).</p>
+            <div class="sim-impact">Impact: Dark Blue group becomes developable and competitive</div>
+          </div>
+        </div>
+
+        <div class="sim-fix-card">
+          <div class="sim-fix-hd"><span class="sim-fix-title">Fix 3 &mdash; Reduce Starting Money</span><span class="sim-pri p2">Priority 2 &mdash; High</span></div>
+          <div class="sim-fix-body">
+            <p style="font-size:0.84rem;color:#444">With 250,000 FCFA, even the most expensive hotel (58,000 FCFA) leaves 192,000 FCFA &mdash; far from bankruptcy. Reducing starting money makes each rent proportionally more dangerous. <strong>Must be combined with Fix 1 for full effect.</strong></p>
+            <div class="sim-ba">
+              <div class="sim-ba-box before"><div class="bl">Current</div><div class="bv2">250,000 FCFA</div></div>
+              <div class="sim-ba-arrow">&#8594;</div>
+              <div class="sim-ba-box after"><div class="bl">Proposed</div><div class="bv2">60,000 FCFA</div></div>
+            </div>
+            <div class="sim-note info" style="margin-top:10px">Starting money alone does not fix infinite games. Even at 20,000 FCFA, 4P games only complete 46% of the time because GO rewards keep refilling wallets. Fix 1 must accompany this.</div>
+          </div>
+        </div>
+
+        <div class="sim-fix-card">
+          <div class="sim-fix-hd"><span class="sim-fix-title">Fix 4 &mdash; Raise Yellow Group Rents</span><span class="sim-pri p3">Priority 3 &mdash; Medium</span></div>
+          <div class="sim-fix-body">
+            <p style="font-size:0.84rem;color:#444">Yellow hotel rent (10,000 FCFA) equals the GO reward. Landing on a fully-developed Yellow group is no worse than passing GO &mdash; it has zero threat as the first color group on the board.</p>
+            <div class="sim-ba">
+              <div class="sim-ba-box before"><div class="bl">Hotel rent (current)</div><div class="bv2">10,000 FCFA</div></div>
+              <div class="sim-ba-arrow">&#8594;</div>
+              <div class="sim-ba-box after"><div class="bl">Hotel rent (proposed)</div><div class="bv2">18,000 FCFA</div></div>
+            </div>
+            <div class="sim-impact">Impact: Yellow monopoly becomes a real early-game threat</div>
+          </div>
+        </div>
+
+        <div class="sim-fix-card">
+          <div class="sim-fix-hd"><span class="sim-fix-title">Fix 5 &mdash; Increase Taxe Choco</span><span class="sim-pri p4">Priority 4 &mdash; Nice to Have</span></div>
+          <div class="sim-fix-body">
+            <p style="font-size:0.84rem;color:#444">Taxe Choco (pos 38) charges 5,000 FCFA &mdash; half of one GO reward. Raising it adds a meaningful drain that scales with higher starting money scenarios.</p>
+            <div class="sim-ba">
+              <div class="sim-ba-box before"><div class="bl">Current tax</div><div class="bv2">5,000 FCFA</div></div>
+              <div class="sim-ba-arrow">&#8594;</div>
+              <div class="sim-ba-box after"><div class="bl">Proposed tax</div><div class="bv2">8,000 FCFA</div></div>
+            </div>
+            <div class="sim-impact">Impact: minor drain reducing excess mid-game cash</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─ Block 4: Parameter Table ─ -->
+    <div class="sim-block">
+      <div class="sim-section-hd">
+        <div class="sim-section-num">4</div>
+        <div class="sim-section-title">Complete Parameter Comparison</div>
+      </div>
+      <div class="sim-block-body">
+        <table class="sim-cmp-tbl">
+          <thead>
+            <tr>
+              <th style="text-align:left">Parameter</th>
+              <th class="col-c">Current Rules</th>
+              <th class="col-a">Option A<br><small>(minimal)</small></th>
+              <th class="col-r">Option C<br><small>(recommended)</small></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Starting money</td><td class="col-c">250,000 FCFA</td><td class="col-a">40,000 FCFA</td><td class="col-r">60,000 FCFA</td></tr>
+            <tr><td>GO reward</td><td class="col-c">10,000 FCFA</td><td class="col-a">4,000 FCFA</td><td class="col-r">5,000 FCFA</td></tr>
+            <tr><td>Rent multiplier</td><td class="col-c">1&times;</td><td class="col-a">1&times;</td><td class="col-r">1.5&times;</td></tr>
+            <tr><td>Jail bail</td><td class="col-c">5,000 FCFA</td><td class="col-a">1,000 FCFA</td><td class="col-r">1,500 FCFA</td></tr>
+            <tr><td>Yellow hotel rent</td><td class="col-c">10,000 FCFA</td><td class="unch">unchanged</td><td class="col-r">18,000 FCFA</td></tr>
+            <tr><td>Yamoussoukro house cost</td><td class="col-c">7,000 FCFA</td><td class="unch">unchanged</td><td class="col-r">4,000 FCFA</td></tr>
+            <tr><td>Dark Blue house cost</td><td class="col-c">7,000 FCFA</td><td class="unch">unchanged</td><td class="col-r">5,000 FCFA</td></tr>
+            <tr><td>Taxe Choco</td><td class="col-c">5,000 FCFA</td><td class="col-a">1,000 FCFA</td><td class="col-r">8,000 FCFA</td></tr>
+            <tr><td>Utility rent (1 owned)</td><td class="col-c">4&times; dice</td><td class="unch">unchanged</td><td class="col-r">2,000 FCFA flat</td></tr>
+            <tr><td>Utility rent (2 owned)</td><td class="col-c">10&times; dice</td><td class="unch">unchanged</td><td class="col-r">8,000 FCFA flat</td></tr>
+          </tbody>
+        </table>
+        <div class="sim-note good" style="margin-top:14px"><strong>Option C rationale:</strong> The 1.5&times; rent multiplier means all existing printed rent values increase proportionally. Flat utility rents replace the dice-multiplier which currently produces negligible amounts (avg 28&ndash;70 FCFA per landing). Full proposal: <a href="simulation/balance_proposals.html" style="color:var(--accent)">simulation/balance_proposals.html</a></div>
+      </div>
+    </div>
+
+    <!-- ─ Block 5: How to Test ─ -->
+    <div class="sim-block">
+      <div class="sim-section-hd">
+        <div class="sim-section-num">5</div>
+        <div class="sim-section-title">How to Test These Changes</div>
+      </div>
+      <div class="sim-block-body">
+        <ul class="sim-steps">
+          <li><div class="sim-step-num">1</div><div><div class="sim-step-title">Edit constants in babipoly_sim.py</div><div class="sim-step-desc">Change <code>STARTING_MONEY</code> and <code>GO_REWARD</code> at the top of the file. For rent multiplier, multiply each value in the rent arrays.</div></div></li>
+          <li><div class="sim-step-num">2</div><div><div class="sim-step-title">Run the main simulator</div><div class="sim-step-desc"><code>python simulation/babipoly_sim.py --games 500 --seed 42</code><br>Target: &ge;80% completion rate, median 60&ndash;150 rounds.</div></div></li>
+          <li><div class="sim-step-num">3</div><div><div class="sim-step-title">Run the multi-scenario analysis</div><div class="sim-step-desc"><code>python simulation/run_analysis.py --games 200</code><br>Compares 5 starting-money configurations and ranks the best for each player count.</div></div></li>
+          <li><div class="sim-step-num">4</div><div><div class="sim-step-title">Check first-player bias</div><div class="sim-step-desc">Win rate by player order is shown in the output. First player should win within &plusmn;5% of expected (50% for 2P, 25% for 4P, etc.).</div></div></li>
+          <li><div class="sim-step-num">5</div><div><div class="sim-step-title">View full balance proposals</div><div class="sim-step-desc">Open <a href="simulation/balance_proposals.html" style="color:var(--accent)">simulation/balance_proposals.html</a> for a printable detailed report.</div></div></li>
+        </ul>
+      </div>
+    </div>
+
   </section>
 
 </main>
