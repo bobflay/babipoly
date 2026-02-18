@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Babipoly — Plateau de Jeu</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:   #1a2332;
+      --primary-l: #253545;
+      --accent:    #F7941D;
+      --border:    #2e4055;
+      --text:      #e2e8f0;
+      --muted:     #94a3b8;
+      --radius:    8px;
+
+      /* group strip colors */
+      --jaune:      #F5C518;
+      --rouge:      #CC0000;
+      --orange:     #F7941D;
+      --marron:     #8B4513;
+      --vert:       #00A651;
+      --bleu-clair: #29ABE2;
+      --bleu-fonce: #1B1464;
+      --violet:     #662D91;
+    }
+
+    body {
+      background: var(--primary);
+      color: var(--text);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ───────────────────────────────────────────────────── */
+    header {
+      background: linear-gradient(135deg, #111c28 0%, var(--primary-l) 100%);
+      border-bottom: 2px solid var(--accent);
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand img { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; }
+    .brand h1 { font-size: 20px; font-weight: 700; color: #fff; }
+    .brand p  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+    }
+    nav a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    nav .active { color: var(--accent); font-weight: 600; }
+    nav { display: flex; gap: 4px; align-items: center; }
+
+    /* ── MAIN LAYOUT ──────────────────────────────────────────────── */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 24px;
+      padding: 28px 24px 40px;
+      flex-wrap: wrap;
+    }
+
+    /* ── BOARD CONTAINER ──────────────────────────────────────────── */
+    .board-wrap {
+      flex-shrink: 0;
+    }
+
+    /* ── THE BOARD GRID ───────────────────────────────────────────── */
+    .board {
+      display: grid;
+      grid-template-columns: 90px repeat(9, 60px) 90px;
+      grid-template-rows:    90px repeat(9, 60px) 90px;
+      width:  720px;
+      height: 720px;
+      border: 3px solid #222;
+      background: #fff;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    }
+
+    /* ── BOARD CENTER ─────────────────────────────────────────────── */
+    .board-center {
+      grid-column: 2 / 11;
+      grid-row:    2 / 11;
+      background: radial-gradient(ellipse at center, #e8f5ec 0%, #c8e6cf 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .board-center::before {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border: 2px solid rgba(0,0,0,0.12);
+      border-radius: 4px;
+      pointer-events: none;
+    }
+    .board-center img.center-logo {
+      width: 180px;
+      max-width: 60%;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.25));
+    }
+    .center-title {
+      font-family: 'Arial Black', Arial, sans-serif;
+      font-size: 26px;
+      font-weight: 900;
+      color: #1a2332;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+    .center-subtitle {
+      font-size: 10px;
+      color: #556;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: -6px;
+    }
+    .color-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      justify-content: center;
+      margin-top: 6px;
+    }
+    .legend-chip {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 9px;
+      color: #333;
+      background: rgba(255,255,255,0.7);
+      padding: 2px 6px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    .legend-chip:hover { transform: scale(1.05); }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .center-stats {
+      display: flex;
+      gap: 14px;
+      margin-top: 4px;
+    }
+    .c-stat { text-align: center; }
+    .c-stat .v { font-size: 15px; font-weight: 700; color: #1a2332; }
+    .c-stat .l { font-size: 8px; color: #556; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* ── GENERIC SQUARE ───────────────────────────────────────────── */
+    .sq {
+      border: 1px solid #999;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: filter 0.15s;
+    }
+    .sq:hover { filter: brightness(0.88); }
+    .sq.active { outline: 3px solid var(--accent); outline-offset: -3px; }
+
+    /* ── INNER DIV (rotatable portrait cell) ─────────────────────── */
+    .sq-inner {
+      position: absolute;
+      width:  60px;
+      height: 90px;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+    }
+
+    /* Bottom row: no rotation, fill cell naturally */
+    .sq.bottom .sq-inner {
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Top row: rotate 180° */
+    .sq.top .sq-inner {
+      width:  60px;
+      height: 90px;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) rotate(180deg);
+    }
+
+    /* Left column: rotate -90° (strip faces right = toward center) */
+    .sq.left .sq-inner {
+      width:  60px;
+      height: 90px;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) rotate(-90deg);
+    }
+
+    /* Right column: rotate 90° (strip faces left = toward center) */
+    .sq.right .sq-inner {
+      width:  60px;
+      height: 90px;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) rotate(90deg);
+    }
+
+    /* Color strip at top of inner div */
+    .sq-strip {
+      flex-shrink: 0;
+      height: 16px;
+      width: 100%;
+    }
+
+    /* Content area */
+    .sq-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2px 3px;
+      text-align: center;
+      gap: 2px;
+      overflow: hidden;
+    }
+
+    .sq-name {
+      font-size: 7.5px;
+      font-weight: 600;
+      color: #111;
+      line-height: 1.2;
+      word-break: break-word;
+      hyphens: auto;
+      text-align: center;
+    }
+    .sq-price {
+      font-size: 7px;
+      color: #444;
+      font-weight: 500;
+    }
+    .sq-icon {
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    /* ── CORNER SQUARES ───────────────────────────────────────────── */
+    .sq.corner {
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .sq.corner .corner-content {
+      text-align: center;
+      padding: 6px;
+    }
+    .sq.corner .c-icon  { font-size: 24px; line-height: 1; display: block; }
+    .sq.corner .c-name  { font-size: 8px; font-weight: 700; color: #111; margin-top: 3px; line-height: 1.2; }
+    .sq.corner .c-sub   { font-size: 7px; color: #555; margin-top: 1px; }
+
+    /* ── SPECIAL SQUARE BACKGROUNDS ──────────────────────────────── */
+    .sq.type-go      { background: #d4f0d4; }
+    .sq.type-jail    { background: #f5f5dc; }
+    .sq.type-parking { background: #fff3cd; }
+    .sq.type-gotojail{ background: #ffe0e0; }
+    .sq.type-tax     { background: #ffe0e0; }
+    .sq.type-chance  { background: #fff9c4; }
+    .sq.type-chest   { background: #e8f4fd; }
+    .sq.type-station { background: #f0f0f0; }
+    .sq.type-utility { background: #f0e8f8; }
+
+    /* Special inner-less squares (corners + chance/chest/tax shown differently) */
+    .sq-special {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4px 3px;
+      gap: 2px;
+    }
+    .sq-special .sq-icon  { font-size: 14px; }
+    .sq-special .sq-name  { font-size: 7px; font-weight: 600; color: #111; line-height: 1.2; }
+    .sq-special .sq-price { font-size: 6.5px; color: #555; }
+
+    /* ── INFO PANEL ───────────────────────────────────────────────── */
+    .info-panel {
+      width: 340px;
+      min-width: 280px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 28px;
+    }
+    .info-card {
+      background: var(--primary-l);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      min-height: 300px;
+    }
+    .info-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .info-color-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+    .info-title { font-size: 18px; font-weight: 700; color: #fff; line-height: 1.2; }
+    .info-group { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+    .info-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 200px;
+      text-align: center;
+      gap: 10px;
+    }
+    .info-placeholder .ph-icon { font-size: 40px; opacity: 0.3; }
+    .info-placeholder p { font-size: 13px; color: var(--muted); }
+
+    .info-body { font-size: 13px; line-height: 1.7; }
+
+    .info-section-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--muted);
+      margin: 14px 0 6px;
+    }
+
+    .rent-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .rent-table th {
+      text-align: left;
+      color: var(--muted);
+      font-weight: 500;
+      padding: 3px 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    .rent-table td {
+      padding: 4px 6px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: var(--text);
+    }
+    .rent-table tr:last-child td { border-bottom: none; }
+    .rent-table td:last-child { text-align: right; font-weight: 500; }
+    .rent-table tr.highlight td { color: var(--accent); font-weight: 600; }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 13px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-row .lbl { color: var(--muted); }
+    .info-row .val { font-weight: 600; color: #fff; }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .badge-station  { background: #334; color: #aabbdd; }
+    .badge-utility  { background: #3d2b5a; color: #c9a0dc; }
+    .badge-special  { background: #1a3322; color: #6dca8a; }
+
+    /* ── LEGEND PANEL ─────────────────────────────────────────────── */
+    .legend-panel {
+      background: var(--primary-l);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-top: 14px;
+    }
+    .legend-panel h3 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .lg-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0;
+      font-size: 12px;
+      color: var(--text);
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.15s;
+    }
+    .lg-row:hover { background: rgba(255,255,255,0.05); }
+    .lg-swatch {
+      width: 14px; height: 14px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .lg-info { margin-left: auto; color: var(--muted); font-size: 11px; }
+
+    /* ── RESPONSIVE ───────────────────────────────────────────────── */
+    @media (max-width: 1100px) {
+      .info-panel { width: 100%; max-width: 720px; position: static; }
+      main { flex-direction: column; align-items: center; }
+    }
+    @media (max-width: 760px) {
+      .board-wrap { overflow-x: auto; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="brand">
+    <img src="cards/babipoly-logo.png" alt="Babipoly Logo">
+    <div>
+      <h1>Babipoly</h1>
+      <p>Plateau de Jeu Interactif</p>
+    </div>
+  </div>
+  <nav>
+    <a href="index.html">🏠 Accueil</a>
+    <a href="guide/guide.html">📖 Guide</a>
+    <a href="simulation/balance_proposals.html">📊 Simulation</a>
+    <span class="active">🎲 Plateau</span>
+  </nav>
+</header>
+
+<!-- ── MAIN ── -->
+<main>
+
+  <!-- BOARD -->
+  <div class="board-wrap">
+    <div class="board" id="board">
+
+      <!-- Center decoration -->
+      <div class="board-center">
+        <img src="cards/babipoly-logo.png" alt="Babipoly" class="center-logo">
+        <div class="center-title">BABIPOLY</div>
+        <div class="center-subtitle">Côte d'Ivoire · 40 Cases</div>
+        <div class="color-legend" id="color-legend"></div>
+        <div class="center-stats">
+          <div class="c-stat"><div class="v">28</div><div class="l">Propriétés</div></div>
+          <div class="c-stat"><div class="v">4</div><div class="l">Gares</div></div>
+          <div class="c-stat"><div class="v">4</div><div class="l">Services</div></div>
+          <div class="c-stat"><div class="v">8</div><div class="l">Groupes</div></div>
+        </div>
+      </div>
+
+      <!-- Squares injected by JS -->
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="info-panel">
+    <div class="info-card" id="info-card">
+      <div class="info-placeholder" id="info-placeholder">
+        <div class="ph-icon">🎲</div>
+        <p>Cliquez sur une case<br>pour afficher ses détails</p>
+      </div>
+      <div id="info-content" style="display:none"></div>
+    </div>
+
+    <div class="legend-panel">
+      <h3>Groupes de Couleur</h3>
+      <div id="legend-list"></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+/* ════════════════════════════════════════════════════════════════════
+   BOARD DATA
+   ════════════════════════════════════════════════════════════════════ */
+
+const GROUPS = {
+  jaune:      { name: 'Jaune',      color: '#F5C518', text: '#333', houseCost: 1000,  positions: [1,3]        },
+  rouge:      { name: 'Rouge',      color: '#CC0000', text: '#fff', houseCost: 2000,  positions: [6,8,9]      },
+  orange:     { name: 'Orange',     color: '#F7941D', text: '#fff', houseCost: 3000,  positions: [13,15,16]   },
+  marron:     { name: 'Marron',     color: '#8B4513', text: '#fff', houseCost: 4000,  positions: [18,19]      },
+  vert:       { name: 'Vert',       color: '#00A651', text: '#fff', houseCost: 5000,  positions: [21,23,24]   },
+  bleu_clair: { name: 'Bleu Clair', color: '#29ABE2', text: '#fff', houseCost: 6000,  positions: [26,27,29]   },
+  bleu_fonce: { name: 'Bleu Foncé', color: '#1B1464', text: '#fff', houseCost: 7000,  positions: [31,33,34]   },
+  violet:     { name: 'Violet',     color: '#662D91', text: '#fff', houseCost: 10000, positions: [37,39]      },
+};
+
+const SQUARES = [
+  // pos 0 – GO
+  { pos:0, type:'go', name:'AKWABA', sub:'Départ', icon:'🏠', desc:'Recevez 10 000 FCFA à chaque passage ou en atterrissant dessus.' },
+
+  // Bottom row (pos 1-9)
+  { pos:1,  type:'property', name:'Plateau',     group:'jaune',  price:3000,  mortgage:1000, rent:[1000,2000,4000,6000,8000,10000] },
+  { pos:2,  type:'chest',    name:'Caisse Comm.', icon:'📦' },
+  { pos:3,  type:'property', name:'Cocody',       group:'jaune',  price:3000,  mortgage:1000, rent:[1000,2000,4000,6000,8000,10000] },
+  { pos:4,  type:'utility',  name:'Petit Café',   icon:'☕',      price:10000, mortgage:5000 },
+  { pos:5,  type:'station',  name:'Pinasse de Vridi', icon:'⛵', price:10000, mortgage:5000 },
+  { pos:6,  type:'property', name:'Marcory',      group:'rouge',  price:5000,  mortgage:2000, rent:[1000,3000,6000,9000,12000,15000] },
+  { pos:7,  type:'chance',   name:'Chance',       icon:'❓' },
+  { pos:8,  type:'property', name:'Zone 4',       group:'rouge',  price:6000,  mortgage:3000, rent:[1000,3000,7000,10000,14000,18000] },
+  { pos:9,  type:'property', name:'Treichville',  group:'rouge',  price:5000,  mortgage:2000, rent:[1000,3000,6000,9000,12000,15000] },
+
+  // pos 10 – Jail
+  { pos:10, type:'jail',    name:'Passage Libre', sub:'/ Prison', icon:'⛓️', desc:'En visite: rien à payer. Envoyé en prison: payez 5 000 FCFA de caution ou attendez 3 tours.' },
+
+  // Left column (pos 11-19)
+  { pos:11, type:'utility',  name:'Threesixty Gym', icon:'💪', price:10000, mortgage:5000 },
+  { pos:12, type:'utility',  name:'CIE',          icon:'💡', price:7500,  mortgage:4000 },
+  { pos:13, type:'property', name:'Bouaké',        group:'orange', price:7000,  mortgage:3000, rent:[2000,4000,8000,12000,17000,23000] },
+  { pos:14, type:'station',  name:'Gare de Gbôkas', icon:'🚂', price:10000, mortgage:5000 },
+  { pos:15, type:'property', name:'Korhogo',       group:'orange', price:8000,  mortgage:4000, rent:[2000,5000,9000,14000,19000,26000] },
+  { pos:16, type:'property', name:'Man',           group:'orange', price:5000,  mortgage:2000, rent:[1000,3000,6000,10000,14000,19000] },
+  { pos:17, type:'chance',   name:'Chance',        icon:'❓' },
+  { pos:18, type:'property', name:'Daloa',         group:'marron', price:9000,  mortgage:4000, rent:[2000,5000,10000,15000,21000,28000] },
+  { pos:19, type:'property', name:'Abobo',         group:'marron', price:10000, mortgage:5000, rent:[2000,6000,11000,17000,23000,31000] },
+
+  // pos 20 – Free Parking
+  { pos:20, type:'parking',  name:'Forêt du Banco', sub:'Promenade Gratuite', icon:'🌳', desc:'Aucune règle spéciale. Promenade gratuite, rien ne se passe.' },
+
+  // Top row (pos 21-29)
+  { pos:21, type:'property', name:'Yopougon',    group:'vert',       price:11000, mortgage:5000, rent:[2000,6000,12000,17000,24000,33000] },
+  { pos:22, type:'chest',    name:'Caisse Comm.', icon:'📦' },
+  { pos:23, type:'property', name:'Koumassi',    group:'vert',       price:11000, mortgage:5000, rent:[2000,6000,12000,17000,24000,33000] },
+  { pos:24, type:'property', name:'Adjamé',      group:'vert',       price:12000, mortgage:6000, rent:[2000,7000,13000,19000,26000,36000] },
+  { pos:25, type:'station',  name:"Gare UTB d'Adjamé", icon:'🚂',   price:10000, mortgage:5000 },
+  { pos:26, type:'property', name:'Bingerville', group:'bleu_clair',  price:13000, mortgage:6000, rent:[2000,7000,14000,21000,28000,39000] },
+  { pos:27, type:'property', name:'Duékoué',     group:'bleu_clair',  price:13000, mortgage:6000, rent:[2000,7000,14000,21000,28000,39000] },
+  { pos:28, type:'utility',  name:'SODECI',      icon:'💧',          price:7500,  mortgage:4000 },
+  { pos:29, type:'property', name:'Gagnoa',      group:'bleu_clair',  price:14000, mortgage:7000, rent:[2000,8000,15000,23000,31000,43000] },
+
+  // pos 30 – Go to Jail
+  { pos:30, type:'gotojail', name:'Allez en Prison', sub:'Forêt!', icon:'🚔', desc:'Allez directement en prison. Ne passez pas par AKWABA. Ne recevez pas 10 000 FCFA.' },
+
+  // Right column (pos 31-39)
+  { pos:31, type:'property', name:'Yamoussoukro', group:'bleu_fonce', price:5000,  mortgage:2000, rent:[1000,3000,6000,10000,14000,19000] },
+  { pos:32, type:'chest',    name:'Caisse Comm.',  icon:'📦' },
+  { pos:33, type:'property', name:'Sassandra',    group:'bleu_fonce', price:15000, mortgage:7000, rent:[2000,8000,16000,23000,31000,43000] },
+  { pos:34, type:'property', name:'San Pedro',    group:'bleu_fonce', price:16000, mortgage:8000, rent:[2000,9000,17000,25000,34000,46000] },
+  { pos:35, type:'station',  name:'Aéroport HB',  icon:'✈️',         price:10000, mortgage:5000 },
+  { pos:36, type:'chance',   name:'Chance',        icon:'❓' },
+  { pos:37, type:'property', name:'Assinie',       group:'violet',    price:17500, mortgage:9000, rent:[2000,10000,18000,27000,37000,50000] },
+  { pos:38, type:'tax',      name:'Taxe Choco',    icon:'💰',         amount:5000 },
+  { pos:39, type:'property', name:'Grand Bassam',  group:'violet',    price:20000, mortgage:10000, rent:[2000,11000,21000,31000,42000,58000] },
+];
+
+/* ════════════════════════════════════════════════════════════════════
+   GRID POSITION MAP
+   ════════════════════════════════════════════════════════════════════ */
+
+// Returns { col, row, edge } for each position
+function gridPos(pos) {
+  if (pos === 0)  return { col: 11, row: 11, edge: 'corner' }; // GO
+  if (pos === 10) return { col:  1, row: 11, edge: 'corner' }; // Jail
+  if (pos === 20) return { col:  1, row:  1, edge: 'corner' }; // Free Parking
+  if (pos === 30) return { col: 11, row:  1, edge: 'corner' }; // Go to Jail
+  if (pos >= 1  && pos <= 9)  return { col: 11 - pos,     row: 11, edge: 'bottom' };
+  if (pos >= 11 && pos <= 19) return { col:  1,           row: 11 - (pos - 10), edge: 'left' };
+  if (pos >= 21 && pos <= 29) return { col:  pos - 19,   row:  1, edge: 'top' };
+  if (pos >= 31 && pos <= 39) return { col: 11,           row:  pos - 29, edge: 'right' };
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   BUILD BOARD
+   ════════════════════════════════════════════════════════════════════ */
+
+const board = document.getElementById('board');
+
+SQUARES.forEach(sq => {
+  const gp = gridPos(sq.pos);
+  const el = document.createElement('div');
+
+  // Determine type class
+  const typeClass = {
+    go:'type-go', jail:'type-jail', parking:'type-parking',
+    gotojail:'type-gotojail', tax:'type-tax', chance:'type-chance',
+    chest:'type-chest', station:'type-station', utility:'type-utility',
+    property:''
+  }[sq.type] || '';
+
+  el.className = `sq ${gp.edge} ${typeClass}`.trim();
+  el.style.gridColumn = gp.col;
+  el.style.gridRow    = gp.row;
+  el.dataset.pos = sq.pos;
+
+  if (gp.edge === 'corner') {
+    el.innerHTML = buildCorner(sq);
+  } else if (sq.type === 'property') {
+    el.innerHTML = buildPropertyCell(sq, gp.edge);
+  } else {
+    el.innerHTML = buildSpecialCell(sq, gp.edge);
+  }
+
+  el.addEventListener('click', () => showInfo(sq));
+  board.appendChild(el);
+});
+
+function buildCorner(sq) {
+  return `<div class="corner-content">
+    <span class="c-icon">${sq.icon}</span>
+    <div class="c-name">${sq.name}</div>
+    ${sq.sub ? `<div class="c-sub">${sq.sub}</div>` : ''}
+  </div>`;
+}
+
+function buildPropertyCell(sq, edge) {
+  const g = GROUPS[sq.group];
+  const shortName = sq.name.length > 9 ? sq.name.substring(0,9)+'…' : sq.name;
+  return `<div class="sq-inner">
+    <div class="sq-strip" style="background:${g.color}"></div>
+    <div class="sq-content">
+      <div class="sq-name">${shortName}</div>
+      <div class="sq-price">${fmt(sq.price)}</div>
+    </div>
+  </div>`;
+}
+
+function buildSpecialCell(sq, edge) {
+  const shortName = sq.name.length > 10 ? sq.name.substring(0,10)+'…' : sq.name;
+  if (sq.type === 'station') {
+    return `<div class="sq-inner">
+      <div class="sq-strip" style="background:#555"></div>
+      <div class="sq-content">
+        <div class="sq-icon">${sq.icon}</div>
+        <div class="sq-name">${shortName}</div>
+        <div class="sq-price">${fmt(sq.price)}</div>
+      </div>
+    </div>`;
+  }
+  if (sq.type === 'utility') {
+    return `<div class="sq-inner">
+      <div class="sq-strip" style="background:#662D91"></div>
+      <div class="sq-content">
+        <div class="sq-icon">${sq.icon}</div>
+        <div class="sq-name">${shortName}</div>
+        <div class="sq-price">${fmt(sq.price)}</div>
+      </div>
+    </div>`;
+  }
+  // chance, chest, tax — simple centered content
+  return `<div class="sq-inner" style="justify-content:center">
+    <div class="sq-content" style="height:100%">
+      <div class="sq-icon">${sq.icon || ''}</div>
+      <div class="sq-name">${shortName}</div>
+      ${sq.amount ? `<div class="sq-price">${fmt(sq.amount)}</div>` : ''}
+    </div>
+  </div>`;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   INFO PANEL
+   ════════════════════════════════════════════════════════════════════ */
+
+function showInfo(sq) {
+  // Highlight active cell
+  document.querySelectorAll('.sq.active').forEach(e => e.classList.remove('active'));
+  document.querySelector(`[data-pos="${sq.pos}"]`).classList.add('active');
+
+  const placeholder = document.getElementById('info-placeholder');
+  const content     = document.getElementById('info-content');
+  placeholder.style.display = 'none';
+  content.style.display     = 'block';
+
+  let html = '';
+
+  if (sq.type === 'property') {
+    const g = GROUPS[sq.group];
+    const hcost = g.houseCost;
+    html = `
+      <div class="info-header">
+        <div class="info-color-dot" style="background:${g.color}"></div>
+        <div>
+          <div class="info-title">${sq.name}</div>
+          <div class="info-group">Groupe ${g.name} · Case ${sq.pos}</div>
+        </div>
+      </div>
+      <div class="info-body">
+        <div class="info-row"><span class="lbl">Prix d'achat</span><span class="val">${fmt(sq.price)} FCFA</span></div>
+        <div class="info-row"><span class="lbl">Hypothèque</span><span class="val">${fmt(sq.mortgage)} FCFA</span></div>
+        <div class="info-row"><span class="lbl">Coût maison/hôtel</span><span class="val">${fmt(hcost)} FCFA</span></div>
+        ${sq.pos === 31 ? '<div class="info-row" style="color:#f59e0b"><span class="lbl">⚠ Anomalie</span><span class="val">Maison &gt; Prix!</span></div>' : ''}
+
+        <div class="info-section-title">Loyers</div>
+        <table class="rent-table">
+          <tr><th>Situation</th><th>Loyer</th></tr>
+          <tr><td>Base</td><td>${fmt(sq.rent[0])} FCFA</td></tr>
+          <tr><td>1 maison</td><td>${fmt(sq.rent[1])} FCFA</td></tr>
+          <tr><td>2 maisons</td><td>${fmt(sq.rent[2])} FCFA</td></tr>
+          <tr><td>3 maisons</td><td>${fmt(sq.rent[3])} FCFA</td></tr>
+          <tr><td>4 maisons</td><td>${fmt(sq.rent[4])} FCFA</td></tr>
+          <tr class="highlight"><td>🏨 Hôtel</td><td>${fmt(sq.rent[5])} FCFA</td></tr>
+        </table>
+
+        <div class="info-section-title">Rentabilité</div>
+        <div class="info-row">
+          <span class="lbl">Invest. hôtel total</span>
+          <span class="val">${fmt(sq.price + hcost * 5)} FCFA</span>
+        </div>
+        <div class="info-row">
+          <span class="lbl">ROI hôtel</span>
+          <span class="val">${(sq.rent[5] / (sq.price + hcost * 5) * 100).toFixed(1)}%</span>
+        </div>
+      </div>`;
+  }
+  else if (sq.type === 'station') {
+    html = `
+      <div class="info-header">
+        <div class="info-color-dot" style="background:#555"></div>
+        <div>
+          <div class="info-title">${sq.name}</div>
+          <div class="info-group"><span class="badge badge-station">Gare / Transport</span> · Case ${sq.pos}</div>
+        </div>
+      </div>
+      <div class="info-body">
+        <div class="info-row"><span class="lbl">Prix d'achat</span><span class="val">${fmt(sq.price)} FCFA</span></div>
+        <div class="info-row"><span class="lbl">Hypothèque</span><span class="val">${fmt(sq.mortgage)} FCFA</span></div>
+        <div class="info-section-title">Loyers selon stations détenues</div>
+        <table class="rent-table">
+          <tr><th>Stations</th><th>Loyer</th></tr>
+          <tr><td>1 station</td><td>3 000 FCFA</td></tr>
+          <tr><td>2 stations</td><td>6 000 FCFA</td></tr>
+          <tr><td>3 stations</td><td>12 000 FCFA</td></tr>
+          <tr class="highlight"><td>4 stations</td><td>24 000 FCFA</td></tr>
+        </table>
+      </div>`;
+  }
+  else if (sq.type === 'utility') {
+    html = `
+      <div class="info-header">
+        <div class="info-color-dot" style="background:#662D91"></div>
+        <div>
+          <div class="info-title">${sq.name}</div>
+          <div class="info-group"><span class="badge badge-utility">Service / Utilité</span> · Case ${sq.pos}</div>
+        </div>
+      </div>
+      <div class="info-body">
+        <div class="info-row"><span class="lbl">Prix d'achat</span><span class="val">${fmt(sq.price)} FCFA</span></div>
+        <div class="info-row"><span class="lbl">Hypothèque</span><span class="val">${fmt(sq.mortgage)} FCFA</span></div>
+        <div class="info-section-title">Règle de loyer</div>
+        <div class="info-row"><span class="lbl">1 service détenu</span><span class="val">4× les dés</span></div>
+        <div class="info-row"><span class="lbl">2 services détenus</span><span class="val">10× les dés</span></div>
+      </div>`;
+  }
+  else if (sq.type === 'tax') {
+    html = `
+      <div class="info-header">
+        <div class="info-color-dot" style="background:#e74c3c"></div>
+        <div>
+          <div class="info-title">${sq.name}</div>
+          <div class="info-group"><span class="badge" style="background:#4a1010;color:#ff9a9a">Taxe</span> · Case ${sq.pos}</div>
+        </div>
+      </div>
+      <div class="info-body">
+        <div class="info-row"><span class="lbl">Montant fixe</span><span class="val">${fmt(sq.amount)} FCFA</span></div>
+        <p style="margin-top:10px;font-size:12px;color:var(--muted)">Payez cette somme directement à la banque.</p>
+      </div>`;
+  }
+  else {
+    // GO, jail, parking, gotojail, chance, chest
+    const icons = { go:'🏠', jail:'⛓️', parking:'🌳', gotojail:'🚔', chance:'❓', chest:'📦' };
+    const colors = { go:'#00A651', jail:'#888', parking:'#e6a817', gotojail:'#e74c3c', chance:'#f39c12', chest:'#3498db' };
+    html = `
+      <div class="info-header">
+        <div class="info-color-dot" style="background:${colors[sq.type]||'#555'}"></div>
+        <div>
+          <div class="info-title">${sq.name}</div>
+          <div class="info-group"><span class="badge badge-special">Case spéciale</span> · Case ${sq.pos}</div>
+        </div>
+      </div>
+      <div class="info-body">
+        <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-top:4px">
+          ${sq.desc || descDefault(sq.type)}
+        </p>
+      </div>`;
+  }
+
+  content.innerHTML = html;
+}
+
+function descDefault(type) {
+  if (type === 'chance') return 'Piochez une carte Chance et suivez les instructions.';
+  if (type === 'chest')  return 'Piochez une carte Caisse de Communauté et suivez les instructions.';
+  return '';
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   COLOR LEGEND (center + sidebar)
+   ════════════════════════════════════════════════════════════════════ */
+
+const legendCenter = document.getElementById('color-legend');
+const legendList   = document.getElementById('legend-list');
+
+Object.entries(GROUPS).forEach(([id, g]) => {
+  // Center chips
+  const chip = document.createElement('div');
+  chip.className = 'legend-chip';
+  chip.innerHTML = `<div class="legend-dot" style="background:${g.color}"></div>${g.name}`;
+  chip.addEventListener('click', () => highlightGroup(id));
+  legendCenter.appendChild(chip);
+
+  // Sidebar rows
+  const roi = avgROI(g);
+  const row = document.createElement('div');
+  row.className = 'lg-row';
+  row.innerHTML = `<div class="lg-swatch" style="background:${g.color}"></div>
+    <span>${g.name}</span>
+    <span class="lg-info">ROI ${roi}% · Maison ${fmt(g.houseCost)}</span>`;
+  row.addEventListener('click', () => highlightGroup(id));
+  legendList.appendChild(row);
+});
+
+function highlightGroup(groupId) {
+  document.querySelectorAll('.sq.active').forEach(e => e.classList.remove('active'));
+  GROUPS[groupId].positions.forEach(p => {
+    document.querySelector(`[data-pos="${p}"]`).classList.add('active');
+  });
+  // Show first property info
+  const firstSq = SQUARES.find(s => s.group === groupId);
+  if (firstSq) showInfo(firstSq);
+}
+
+function avgROI(g) {
+  const props = SQUARES.filter(s => s.group && GROUPS[s.group] === g);
+  if (!props.length) return 0;
+  const total = props.reduce((sum, s) => sum + s.rent[5] / (s.price + g.houseCost * 5) * 100, 0);
+  return (total / props.length).toFixed(1);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   HELPERS
+   ════════════════════════════════════════════════════════════════════ */
+
+function fmt(n) {
+  return new Intl.NumberFormat('fr-FR').format(n);
+}
+</script>
+</body>
+</html>
