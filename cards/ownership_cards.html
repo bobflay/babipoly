@@ -100,27 +100,11 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 2mm 4mm 2mm;
+      padding: 3mm 4mm 2mm;
       text-align: center;
     }
 
-    .card-front .color-header .logo-badge {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.92);
-      overflow: hidden;
-      margin-bottom: 1.5mm;
-      flex-shrink: 0;
-    }
-    .card-front .color-header .logo-badge img {
-      width: 18px;
-      height: 18px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .card-front .color-header .group-label {
+.card-front .color-header .group-label {
       font-size: 6pt;
       font-weight: bold;
       letter-spacing: 2px;
@@ -298,15 +282,11 @@
       text-align: center;
     }
 
-    .card-back .back-logo {
-      width: 28px;
-      height: 28px;
-      object-fit: cover;
-      border-radius: 8px;
-      filter: brightness(0) invert(1);
-      opacity: 0.9;
-      margin-bottom: 3mm;
-      display: block;
+    .card-back .back-logo-img {
+      width: 100%;
+      max-height: 65mm;
+      object-fit: contain;
+      margin-bottom: 2mm;
     }
 
     .card-back .back-brand {
@@ -459,7 +439,6 @@ const data = {
   ],
 
   utilities: [
-    { pos: 4,  name: "Petit Café\npour Autorité", price: 10000, mortgage: 5000, icon: "☕" },
     { pos: 11, name: "Threesixty Gym",            price: 10000, mortgage: 5000, icon: "🏋️" },
     { pos: 12, name: "CIE",                       price: 7500,  mortgage: 4000, icon: "⚡" },
     { pos: 28, name: "SODECI",                    price: 7500,  mortgage: 4000, icon: "💧" }
@@ -484,31 +463,6 @@ function darken(hex, amount = 40) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   COLOR FILTER — converts a hex color to a CSS filter string
-   so the logo image adopts the group color
-═══════════════════════════════════════════════════════════════ */
-function colorFilter(hex) {
-  const r = parseInt(hex.slice(1,3), 16) / 255;
-  const g = parseInt(hex.slice(3,5), 16) / 255;
-  const b = parseInt(hex.slice(5,7), 16) / 255;
-  const max = Math.max(r,g,b), min = Math.min(r,g,b);
-  const l = (max + min) / 2;
-  const d = max - min;
-  const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
-  let h = 0;
-  if (d !== 0) {
-    if (max === r) h = ((g - b) / d + (g < b ? 6 : 0));
-    else if (max === g) h = (b - r) / d + 2;
-    else h = (r - g) / d + 4;
-    h = Math.round(h * 60);
-  }
-  const hRot = h - 30; // sepia baseline is ~30 deg
-  const sat  = Math.min(Math.round(s * 500), 500);
-  const brt  = Math.round(l * 350);
-  return `brightness(0) saturate(100%) sepia(1) hue-rotate(${hRot}deg) saturate(${sat}%) brightness(${brt}%)`;
-}
-
-/* ═══════════════════════════════════════════════════════════════
    CARD FRONT — PROPERTY
 ═══════════════════════════════════════════════════════════════ */
 function makePropertyFront(prop, group) {
@@ -518,10 +472,6 @@ function makePropertyFront(prop, group) {
   return `
     <div class="card card-front">
       <div class="color-header" style="background: ${color};">
-        <div class="logo-badge">
-          <img src="../rfq/logo.jpg" alt="" style="filter:${colorFilter(color)}">
-        </div>
-        <div class="group-label" style="color: ${textColor};">${groupName}</div>
         <div class="prop-name" style="color: ${textColor};">${name}</div>
       </div>
       <div class="card-body">
@@ -634,18 +584,19 @@ function makeUtilityFront(utility) {
 /* ═══════════════════════════════════════════════════════════════
    CARD BACK
 ═══════════════════════════════════════════════════════════════ */
-function makeBack(name, bgColor, groupLabel) {
+function makeBack(name, bgColor, groupLabel, logoSrc) {
   const displayName = name.replace(/\n/g, '<br>');
+  const brandHTML = logoSrc
+    ? `<img src="${logoSrc}" class="back-logo-img" alt="Babipoly">`
+    : `<div class="back-brand">BABIPOLY</div>`;
   return `
     <div class="card card-back" style="background: ${bgColor};">
       <div class="back-content" style="text-align:center;">
-        <img src="../rfq/logo.jpg" class="back-logo" alt="Babipoly">
-        <div class="back-brand">BABIPOLY</div>
+        ${brandHTML}
         <div class="back-divider"></div>
         <div class="back-prop-name" style="font-size:10pt;font-weight:bold;color:rgba(255,255,255,0.9);line-height:1.25;text-shadow:0 1px 3px rgba(0,0,0,0.3);">
           ${displayName}
         </div>
-        ${groupLabel ? `<div class="back-group-label" style="font-size:6.5pt;font-weight:bold;color:rgba(255,255,255,0.6);letter-spacing:2px;margin-top:3mm;text-transform:uppercase;">${groupLabel}</div>` : ''}
       </div>
     </div>`;
 }
@@ -686,7 +637,9 @@ function render() {
 
     for (const prop of group.properties) {
       const front = makePropertyFront(prop, group);
-      const back  = makeBack(prop.name, group.color, `Groupe ${group.name}`);
+      const logoMap = { jaune: '../billets/colored_logo/yellow_transparent.png', rouge: '../billets/colored_logo/red_transparent.png', orange: '../billets/colored_logo/orange_transparent.png', marron: '../billets/colored_logo/marron_transparent.png', vert: '../billets/colored_logo/green_transparent.png', bleu_clair: '../billets/colored_logo/baby_blue_transparent.png', bleu_fonce: '../billets/colored_logo/dark_blue_transparent.png', violet: '../billets/colored_logo/violet_transparent.png' };
+      const logoSrc = logoMap[group.id] || null;
+      const back  = makeBack(prop.name, group.color, `Groupe ${group.name}`, logoSrc);
       html += makeCardPair(front, back);
     }
 
@@ -704,7 +657,7 @@ function render() {
 
   for (const station of data.transportStations) {
     const front = makeTransportFront(station);
-    const back  = makeBack(station.name, '#2C2C2C', station.type);
+    const back  = makeBack(station.name, '#2C2C2C', station.type, '../billets/colored_logo/black_transparent.png');
     html += makeCardPair(front, back);
   }
 
@@ -721,7 +674,7 @@ function render() {
 
   for (const utility of data.utilities) {
     const front = makeUtilityFront(utility);
-    const back  = makeBack(utility.name, '#555555', 'Compagnie');
+    const back  = makeBack(utility.name, '#555555', 'Compagnie', '../billets/colored_logo/grey_transparent.png');
     html += makeCardPair(front, back);
   }
 
